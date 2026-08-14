@@ -146,8 +146,9 @@
     <label for="preco">Preço</label>
     <input type="text" id="preco" placeholder="Ex: R$ 49,90">
 
-    <label for="link">Link do produto (com sua tag de afiliado)</label>
-    <input type="text" id="link" placeholder="https://www.amazon.com.br/dp/XXXXXXXXXX?tag=soubarcos-20">
+    <label for="link">Link normal do produto (colado da Amazon)</label>
+    <input type="text" id="link" placeholder="https://www.amazon.com.br/algum-produto/dp/XXXXXXXXXX">
+    <div id="linkPreview" style="font-size:0.82rem; color:#7C8CA3; margin-top:6px; font-family:'Space Mono',monospace;"></div>
 
     <label for="imagem">Link da imagem (opcional)</label>
     <input type="text" id="imagem" placeholder="https://...">
@@ -164,6 +165,31 @@
 
 <script>
   const $ = (id) => document.getElementById(id);
+
+  // Extrai o ASIN (código do produto) de qualquer link da Amazon
+  // e monta automaticamente o link de afiliado com a tag soubarcos-20.
+  const AFFILIATE_TAG = 'soubarcos-20';
+
+  function extrairLinkAfiliado(urlOriginal) {
+    const match = urlOriginal.match(/\/(dp|gp\/product)\/([A-Z0-9]{10})/i);
+    if (!match) return null;
+    const asin = match[2];
+    return `https://www.amazon.com.br/dp/${asin}?tag=${AFFILIATE_TAG}`;
+  }
+
+  $('link').addEventListener('input', () => {
+    const preview = $('linkPreview');
+    const original = $('link').value.trim();
+    if (!original) { preview.textContent = ''; return; }
+
+    const afiliado = extrairLinkAfiliado(original);
+    if (afiliado) {
+      preview.textContent = 'Link de afiliado gerado: ' + afiliado;
+    } else {
+      preview.textContent = 'Não consegui identificar o código do produto nesse link — cole o link direto da página do produto (com /dp/ no meio).';
+    }
+  });
+
 
   // Guarda o endereço da API e a senha localmente, pra não digitar toda vez
   $('apiUrl').value = localStorage.getItem('soubarcos_api_url') || '';
@@ -233,7 +259,8 @@
 
     const titulo = $('titulo').value.trim();
     const preco = $('preco').value.trim();
-    const link = $('link').value.trim();
+    const linkOriginal = $('link').value.trim();
+    const link = extrairLinkAfiliado(linkOriginal) || linkOriginal;
     const imagem = $('imagem').value.trim();
 
     if (!titulo || !preco || !link) {
