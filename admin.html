@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SouBarcos — Administração</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0B2545;
+    --ocean: #13315C;
+    --foam: #F7F9FB;
+    --sand: #E8A33D;
+    --slate: #45566B;
+    --slate-light: #7C8CA3;
+    --line: rgba(11,37,69,0.12);
+    --danger: #B3261E;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: var(--foam);
+    color: var(--navy);
+    font-family: 'Work Sans', sans-serif;
+    line-height: 1.6;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  h1{
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 1.7rem;
+    margin-bottom: 6px;
+  }
+  .sub{ color: var(--slate); margin-bottom: 40px; font-size: 0.95rem; }
+
+  .card{
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  label{
+    display:block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    margin-bottom: 6px;
+    margin-top: 18px;
+  }
+  label:first-of-type{ margin-top: 0; }
+  input{
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--navy);
+    background: var(--foam);
+  }
+  input:focus{ outline: 2px solid var(--sand); outline-offset: 1px; }
+
+  button{
+    margin-top: 24px;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 3px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+  }
+  button:hover{ background: var(--ocean); }
+  button:disabled{ opacity: 0.5; cursor: not-allowed; }
+
+  .msg{
+    margin-top: 16px;
+    font-size: 0.88rem;
+    padding: 10px 12px;
+    border-radius: 3px;
+    display: none;
+  }
+  .msg.ok{ display:block; background: rgba(96,153,102,0.12); color: #2f6b37; }
+  .msg.err{ display:block; background: rgba(179,38,30,0.08); color: var(--danger); }
+
+  .list-head{
+    font-family: 'Spectral', serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin: 40px 0 16px;
+  }
+  .item{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .item-title{ font-size: 0.92rem; }
+  .item-price{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--sand-dark, #96631a);
+    white-space: nowrap;
+  }
+  .item-del{
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--danger);
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    margin-top: 0;
+  }
+  .item-del:hover{ background: rgba(179,38,30,0.06); }
+
+  .config-note{
+    font-size: 0.85rem;
+    color: var(--slate-light);
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Administração — SouBarcos</h1>
+  <p class="sub">Cole o link do produto e o preço. Ele aparece automaticamente na página pública.</p>
+
+  <div class="card">
+    <label for="apiUrl">Endereço da API (uma vez só)</label>
+    <input type="text" id="apiUrl" placeholder="https://soubarcos-api.onrender.com">
+
+    <label for="adminPassword">Senha de administrador</label>
+    <input type="password" id="adminPassword" placeholder="a senha que você definiu no Render">
+
+    <label for="titulo">Título do produto</label>
+    <input type="text" id="titulo" placeholder="Ex: Protetor solar facial FPS 60">
+
+    <label for="preco">Preço</label>
+    <input type="text" id="preco" placeholder="Ex: R$ 49,90">
+
+    <label for="link">Link do produto (com sua tag de afiliado)</label>
+    <input type="text" id="link" placeholder="https://www.amazon.com.br/dp/XXXXXXXXXX?tag=soubarcos-20">
+
+    <label for="imagem">Link da imagem (opcional)</label>
+    <input type="text" id="imagem" placeholder="https://...">
+
+    <button id="btnSalvar">Adicionar produto</button>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <div class="list-head">Produtos cadastrados</div>
+  <div id="lista"></div>
+
+  <p class="config-note">O endereço da API e a senha ficam salvos só neste navegador (não são enviados a mais ninguém).</p>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  // Guarda o endereço da API e a senha localmente, pra não digitar toda vez
+  $('apiUrl').value = localStorage.getItem('soubarcos_api_url') || '';
+  $('adminPassword').value = localStorage.getItem('soubarcos_admin_pw') || '';
+
+  function apiUrl() { return $('apiUrl').value.replace(/\/$/, ''); }
+  function adminPw() { return $('adminPassword').value; }
+
+  function showMsg(text, ok) {
+    const el = $('msg');
+    el.textContent = text;
+    el.className = 'msg ' + (ok ? 'ok' : 'err');
+  }
+
+  async function carregarLista() {
+    if (!apiUrl()) return;
+    try {
+      const res = await fetch(apiUrl() + '/api/products');
+      const data = await res.json();
+      const lista = $('lista');
+      lista.innerHTML = '';
+
+      if (!data.resultados || data.resultados.length === 0) {
+        lista.innerHTML = '<p style="color:#7C8CA3; font-size:0.9rem;">Nenhum produto cadastrado ainda.</p>';
+        return;
+      }
+
+      data.resultados.forEach((p) => {
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = `
+          <div>
+            <div class="item-title">${p.titulo}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <span class="item-price">${p.preco}</span>
+            <button class="item-del" data-id="${p.id}">Remover</button>
+          </div>
+        `;
+        lista.appendChild(row);
+      });
+
+      document.querySelectorAll('.item-del').forEach((btn) => {
+        btn.addEventListener('click', () => removerProduto(btn.dataset.id));
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function removerProduto(id) {
+    try {
+      const res = await fetch(apiUrl() + '/api/products/' + id, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': adminPw() },
+      });
+      if (!res.ok) throw new Error('Falha ao remover');
+      carregarLista();
+    } catch (e) {
+      showMsg('Não foi possível remover o produto.', false);
+    }
+  }
+
+  $('btnSalvar').addEventListener('click', async () => {
+    localStorage.setItem('soubarcos_api_url', apiUrl());
+    localStorage.setItem('soubarcos_admin_pw', adminPw());
+
+    const titulo = $('titulo').value.trim();
+    const preco = $('preco').value.trim();
+    const link = $('link').value.trim();
+    const imagem = $('imagem').value.trim();
+
+    if (!titulo || !preco || !link) {
+      showMsg('Preencha ao menos título, preço e link.', false);
+      return;
+    }
+
+    $('btnSalvar').disabled = true;
+    try {
+      const res = await fetch(apiUrl() + '/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': adminPw(),
+        },
+        body: JSON.stringify({ titulo, preco, link, imagem }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Erro ao salvar');
+      }
+
+      showMsg('Produto adicionado com sucesso.', true);
+      $('titulo').value = '';
+      $('preco').value = '';
+      $('link').value = '';
+      $('imagem').value = '';
+      carregarLista();
+    } catch (e) {
+      showMsg(e.message, false);
+    } finally {
+      $('btnSalvar').disabled = false;
+    }
+  });
+
+  carregarLista();
+</script>
+</body>
+</html>
