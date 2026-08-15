@@ -349,6 +349,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 18px;
+    justify-content: center;
   }
   .product-card{
     border: 1px solid var(--line);
@@ -357,12 +358,15 @@
     padding: 18px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 10px;
   }
   .product-card img{
     width: 100%;
     height: 140px;
     object-fit: contain;
+    object-position: center;
     background: var(--foam);
     border-radius: 2px;
   }
@@ -429,25 +433,46 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    gap: 16px;
-    margin-top: 22px;
+    gap: 18px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
   }
   .pager-btn{
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    padding: 7px 14px;
-    border-radius: 3px;
-    border: 1px solid var(--line);
-    background: #fff;
-    color: var(--navy);
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: 1px solid var(--navy);
+    background: var(--navy);
+    color: #fff;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease, transform 0.1s ease;
   }
-  .pager-btn:hover:not(:disabled){ border-color: var(--sand); }
-  .pager-btn:disabled{ opacity: 0.35; cursor: default; }
+  .pager-btn:hover:not(:disabled){
+    background: var(--sand);
+    border-color: var(--sand);
+    color: var(--navy);
+  }
+  .pager-btn:active:not(:disabled){ transform: scale(0.97); }
+  .pager-btn:disabled{
+    opacity: 0.3;
+    cursor: default;
+    background: #fff;
+    color: var(--slate-light);
+    border-color: var(--line);
+  }
   .pager-info{
     font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--slate-light);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--navy);
+    min-width: 110px;
+    text-align: center;
   }
   .filter-pill{
     display:flex;
@@ -913,9 +938,15 @@
         </div>
         ${totalPaginas > 1 ? `
           <div class="category-pager">
-            <button class="pager-btn" data-cat="${categoria}" data-dir="-1" ${pagina === 1 ? 'disabled' : ''}>‹ Anterior</button>
+            <button class="pager-btn" data-cat="${categoria}" data-dir="-1" ${pagina === 1 ? 'disabled' : ''}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+              Anterior
+            </button>
             <span class="pager-info">Página ${pagina} de ${totalPaginas}</span>
-            <button class="pager-btn" data-cat="${categoria}" data-dir="1" ${pagina === totalPaginas ? 'disabled' : ''}>Próxima ›</button>
+            <button class="pager-btn" data-cat="${categoria}" data-dir="1" ${pagina === totalPaginas ? 'disabled' : ''}>
+              Próxima
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
           </div>
         ` : ''}
       </div>
