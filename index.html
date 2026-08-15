@@ -35,9 +35,9 @@
   a{ color: inherit; }
 
   .wrap{
-    max-width: 1040px;
+    max-width: 1240px;
     margin: 0 auto;
-    padding: 0 28px;
+    padding: 0 32px;
   }
 
   /* ---------- header ---------- */
@@ -157,9 +157,9 @@
   h1{
     font-family: 'Spectral', serif;
     font-weight: 600;
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
-    line-height: 1.15;
-    max-width: 15ch;
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    line-height: 1.12;
+    max-width: 24ch;
     color: var(--navy);
   }
   .hero-sub{
@@ -629,7 +629,7 @@
 <section class="hero">
   <div class="wrap">
     <div class="hero-eyebrow">soubarcos.com.br — projeto em desenvolvimento</div>
-    <h1>Um só lugar para boas indicações — de ofertas, de ajuda, de conhecimento.</h1>
+    <h1>Boas indicações, reunidas em um só lugar.</h1>
     <p class="hero-sub">Este site ainda está sendo construído, peça por peça, à vista. Abaixo você encontra exatamente o que está planejado e em que estágio cada parte se encontra.</p>
 
     <div class="route">
@@ -832,40 +832,61 @@
     'telefone': '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
     'inform': '<rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8"/><path d="M12 16v4"/>',
     'comput': '<rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8"/><path d="M12 16v4"/>',
-    'beleza': '<circle cx="12" cy="12" r="8"/><path d="M12 8v1"/><path d="M12 15v1"/><path d="M8 12h1"/><path d="M15 12h1"/>',
-    'cuidado': '<circle cx="12" cy="12" r="8"/><path d="M12 8v1"/><path d="M12 15v1"/><path d="M8 12h1"/><path d="M15 12h1"/>',
+    'beleza': '<circle cx="12" cy="12" r="7.5"/><path d="M12 6.5v2"/><path d="M12 15.5v2"/><path d="M6.5 12h2"/><path d="M15.5 12h2"/><circle cx="12" cy="12" r="2.2"/>',
+    'cuidado': '<circle cx="12" cy="12" r="7.5"/><path d="M12 6.5v2"/><path d="M12 15.5v2"/><path d="M6.5 12h2"/><path d="M15.5 12h2"/><circle cx="12" cy="12" r="2.2"/>',
     'pet': '<circle cx="7" cy="8" r="1.4"/><circle cx="12" cy="6" r="1.4"/><circle cx="17" cy="8" r="1.4"/><path d="M8 16c0-3 2-4 4-4s4 1 4 4c0 2-2 3-4 3s-4-1-4-3z"/>',
     'casa': '<path d="M4 11l8-6 8 6"/><path d="M6 10v10h12V10"/>',
     'cozinha': '<path d="M5 3v18"/><path d="M5 3c0 3 3 3 3 6s-3 3-3 3"/><path d="M19 3v18"/>',
     'moda': '<path d="M8 4l4 3 4-3 2 4-3 2v11H9V10L6 8z"/>',
     'esporte': '<circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4c3 3 3 13 0 16"/>',
     'ferramenta': '<path d="M14 7l3 3-8 8H6v-3z"/><path d="M17 4l3 3-2 2-3-3z"/>',
-    'livro': '<path d="M4 5c3-1 6-1 8 0v14c-2-1-5-1-8 0z"/><path d="M20 5c-3-1-6-1-8 0v14c2-1 5-1 8 0z"/>',
+    'livro': '<path d="M4 5c3-1 6-1 8 0v14c-2-1-5-1-8 0z"/><path d="M20 5c-3-1-6-1-8 0v14c2-1 5-1 8 0z"/><path d="M12 5v14"/>',
     'brinquedo': '<circle cx="12" cy="8" r="3"/><path d="M7 20l2-6h6l2 6"/>',
+    'automot': '<path d="M3.5 12.5l1.3-4.3A2 2 0 016.7 6.8h10.6a2 2 0 011.9 1.4l1.3 4.3"/><rect x="3" y="12.5" width="18" height="4.5" rx="1.2"/><circle cx="7.2" cy="17.5" r="1.4"/><circle cx="16.8" cy="17.5" r="1.4"/>',
+    'suplement': '<rect x="2" y="9.5" width="3" height="5" rx="0.8"/><rect x="19" y="9.5" width="3" height="5" rx="0.8"/><path d="M6.5 12h11"/><rect x="6" y="10.3" width="2" height="3.4" rx="0.4"/><rect x="16" y="10.3" width="2" height="3.4" rx="0.4"/>',
+    'curso': '<path d="M2 9.5l10-4 10 4-10 4z"/><path d="M6 11.3v3.6c0 1.4 2.5 2.7 6 2.7s6-1.3 6-2.7v-3.6"/><path d="M22 9.5v5.5"/>',
+    'corrida': '<path d="M4 16.5c0-2 1.8-3 3.6-3l2.7-2.7 4.5 1 3.6 2.7c1 .5 1.6 1.4 1.6 2.5v.5H5c-.5 0-1-.4-1-1z"/><path d="M8 13.8l1.8 2.7"/><path d="M11.5 10.5l1.5-1.5"/>',
+    'gamer': '<rect x="3" y="9" width="18" height="8" rx="4"/><path d="M8 11.3v3.4"/><path d="M6.3 13h3.4"/><circle cx="15.7" cy="12" r="1"/><circle cx="17.7" cy="14" r="1"/>',
+    'game': '<rect x="3" y="9" width="18" height="8" rx="4"/><path d="M8 11.3v3.4"/><path d="M6.3 13h3.4"/><circle cx="15.7" cy="12" r="1"/><circle cx="17.7" cy="14" r="1"/>',
   };
   const ICONE_PADRAO = '<rect x="4" y="6" width="16" height="12" rx="1"/><path d="M4 10h16"/>';
 
   function iconeParaCategoria(nome) {
-    const chave = nome.toLowerCase();
+    const chave = (nome || '').toLowerCase();
     for (const termo in ICONES_CATEGORIA) {
       if (chave.includes(termo)) return ICONES_CATEGORIA[termo];
     }
     return ICONE_PADRAO;
   }
 
-  function montarFiltros() {
-    const categorias = [...new Set(todosProdutos.map((p) => p.categoria || 'Geral'))];
-    const container = document.getElementById('categoryFilters');
+  // Normaliza nome de categoria pra evitar duplicatas por espaço/maiúscula ("Suplementos" x "suplementos ")
+  function chaveCategoria(nome) {
+    return (nome || 'Geral').trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+  function nomeExibicaoCategoria(nome) {
+    const limpa = (nome || 'Geral').trim().replace(/\s+/g, ' ');
+    return limpa.charAt(0).toUpperCase() + limpa.slice(1);
+  }
 
-    const pills = ['Todas', ...categorias];
-    container.innerHTML = pills.map((cat) => {
-      const svgInner = cat === 'Todas'
+  function montarFiltros() {
+    const mapaCategorias = {};
+    todosProdutos.forEach((p) => {
+      const chave = chaveCategoria(p.categoria);
+      if (!mapaCategorias[chave]) mapaCategorias[chave] = nomeExibicaoCategoria(p.categoria);
+    });
+
+    const container = document.getElementById('categoryFilters');
+    const chaves = ['Todas', ...Object.keys(mapaCategorias)];
+
+    container.innerHTML = chaves.map((chave) => {
+      const label = chave === 'Todas' ? 'Todas' : mapaCategorias[chave];
+      const svgInner = chave === 'Todas'
         ? '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'
-        : iconeParaCategoria(cat);
+        : iconeParaCategoria(label);
       return `
-        <button class="filter-pill${cat === categoriaAtiva ? ' active' : ''}" data-categoria="${cat}">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${svgInner}</svg>
-          <span>${cat}</span>
+        <button class="filter-pill${chave === categoriaAtiva ? ' active' : ''}" data-categoria="${chave}">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${svgInner}</svg>
+          <span>${label}</span>
         </button>
       `;
     }).join('');
@@ -886,7 +907,7 @@
     let filtrados = todosProdutos;
 
     if (categoriaAtiva !== 'Todas') {
-      filtrados = filtrados.filter((p) => (p.categoria || 'Geral') === categoriaAtiva);
+      filtrados = filtrados.filter((p) => chaveCategoria(p.categoria) === categoriaAtiva);
     }
 
     if (termoBusca) {
@@ -898,21 +919,21 @@
       return;
     }
 
-    // Agrupa os produtos filtrados por categoria
+    // Agrupa os produtos filtrados por categoria (normalizada, evita duplicatas por espaço/maiúscula)
     const porCategoria = {};
     filtrados.forEach((p) => {
-      const cat = p.categoria || 'Geral';
-      if (!porCategoria[cat]) porCategoria[cat] = [];
-      porCategoria[cat].push(p);
+      const chave = chaveCategoria(p.categoria);
+      if (!porCategoria[chave]) porCategoria[chave] = { label: nomeExibicaoCategoria(p.categoria), itens: [] };
+      porCategoria[chave].itens.push(p);
     });
 
-    grid.innerHTML = Object.keys(porCategoria).map((categoria) => {
-      const itensDaCategoria = porCategoria[categoria];
+    grid.innerHTML = Object.keys(porCategoria).map((chave) => {
+      const { label, itens: itensDaCategoria } = porCategoria[chave];
       const totalPaginas = Math.max(1, Math.ceil(itensDaCategoria.length / PRODUTOS_POR_PAGINA));
 
-      if (!paginaAtualPorCategoria[categoria]) paginaAtualPorCategoria[categoria] = 1;
-      if (paginaAtualPorCategoria[categoria] > totalPaginas) paginaAtualPorCategoria[categoria] = totalPaginas;
-      const pagina = paginaAtualPorCategoria[categoria];
+      if (!paginaAtualPorCategoria[chave]) paginaAtualPorCategoria[chave] = 1;
+      if (paginaAtualPorCategoria[chave] > totalPaginas) paginaAtualPorCategoria[chave] = totalPaginas;
+      const pagina = paginaAtualPorCategoria[chave];
 
       const inicio = (pagina - 1) * PRODUTOS_POR_PAGINA;
       const itensDaPagina = itensDaCategoria.slice(inicio, inicio + PRODUTOS_POR_PAGINA);
@@ -920,8 +941,8 @@
       return `
       <div class="category-block">
         <div class="category-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; vertical-align:-3px; margin-right:6px;">${iconeParaCategoria(categoria)}</svg>
-          ${categoria}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; vertical-align:-3px; margin-right:6px;">${iconeParaCategoria(label)}</svg>
+          ${label}
           <span style="font-weight:400; color:var(--slate-light); font-size:0.8rem; text-transform:none; letter-spacing:0;"> — ${itensDaCategoria.length} ${itensDaCategoria.length === 1 ? 'oferta' : 'ofertas'}</span>
         </div>
         <div class="products-grid">
@@ -938,12 +959,12 @@
         </div>
         ${totalPaginas > 1 ? `
           <div class="category-pager">
-            <button class="pager-btn" data-cat="${categoria}" data-dir="-1" ${pagina === 1 ? 'disabled' : ''}>
+            <button class="pager-btn" data-cat="${chave}" data-dir="-1" ${pagina === 1 ? 'disabled' : ''}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
               Anterior
             </button>
             <span class="pager-info">Página ${pagina} de ${totalPaginas}</span>
-            <button class="pager-btn" data-cat="${categoria}" data-dir="1" ${pagina === totalPaginas ? 'disabled' : ''}>
+            <button class="pager-btn" data-cat="${chave}" data-dir="1" ${pagina === totalPaginas ? 'disabled' : ''}>
               Próxima
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
             </button>
