@@ -149,6 +149,8 @@
     <label for="link">Link normal do produto (colado da Amazon)</label>
     <input type="text" id="link" placeholder="https://www.amazon.com.br/algum-produto/dp/XXXXXXXXXX">
     <div id="linkPreview" style="font-size:0.82rem; color:#7C8CA3; margin-top:6px; font-family:'Space Mono',monospace;"></div>
+    <button type="button" id="btnBuscar" style="margin-top:10px; background:#fff; color:#0B2545; border:1px solid var(--line);">Buscar informações automaticamente</button>
+    <div id="buscaMsg" style="font-size:0.82rem; margin-top:8px;"></div>
 
     <label for="imagem">Link da imagem (opcional)</label>
     <input type="text" id="imagem" placeholder="https://...">
@@ -187,6 +189,47 @@
       preview.textContent = 'Link de afiliado gerado: ' + afiliado;
     } else {
       preview.textContent = 'Não consegui identificar o código do produto nesse link — cole o link direto da página do produto (com /dp/ no meio).';
+    }
+  });
+
+  $('btnBuscar').addEventListener('click', async () => {
+    const original = $('link').value.trim();
+    const buscaMsg = $('buscaMsg');
+
+    if (!original) {
+      buscaMsg.textContent = 'Cole o link do produto primeiro.';
+      buscaMsg.style.color = '#B3261E';
+      return;
+    }
+    if (!apiUrl() || !adminPw()) {
+      buscaMsg.textContent = 'Preencha o endereço da API e a senha antes.';
+      buscaMsg.style.color = '#B3261E';
+      return;
+    }
+
+    buscaMsg.textContent = 'Buscando...';
+    buscaMsg.style.color = '#7C8CA3';
+    $('btnBuscar').disabled = true;
+
+    try {
+      const res = await fetch(apiUrl() + '/api/preview?url=' + encodeURIComponent(original), {
+        headers: { 'x-admin-password': adminPw() },
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || 'Falha ao buscar.');
+
+      if (data.titulo) $('titulo').value = data.titulo;
+      if (data.imagem) $('imagem').value = data.imagem;
+      if (data.preco) $('preco').value = data.preco;
+
+      buscaMsg.textContent = 'Informações preenchidas — confira antes de salvar (o preço pode não ter vindo certo).';
+      buscaMsg.style.color = '#2f6b37';
+    } catch (e) {
+      buscaMsg.textContent = 'Não foi possível buscar automaticamente. Preencha manualmente.';
+      buscaMsg.style.color = '#B3261E';
+    } finally {
+      $('btnBuscar').disabled = false;
     }
   });
 
