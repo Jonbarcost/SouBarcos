@@ -52,6 +52,16 @@
     flex-wrap: wrap;
     gap: 12px;
   }
+  .wordmark-group{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+  .logo-mark{
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
   .wordmark{
     font-family: 'Spectral', serif;
     font-weight: 700;
@@ -59,6 +69,50 @@
     letter-spacing: 0.01em;
   }
   .wordmark span{ color: var(--sand); }
+  .user-nav{
+    display:flex;
+    align-items:center;
+    gap: 26px;
+    font-size: 0.85rem;
+  }
+  .user-nav a{
+    color: var(--slate);
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 3px;
+    transition: color 0.18s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .user-nav a::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--sand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.22s ease;
+  }
+  .user-nav a:hover{
+    color: var(--navy);
+  }
+  .user-nav a:hover::after{
+    transform: scaleX(1);
+  }
+  .user-nav-cta{
+    color: #fff !important;
+    background: var(--navy);
+    padding: 7px 14px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .user-nav-cta::after{ display:none; }
+  .user-nav-cta:hover{ background: var(--sand) !important; color: var(--navy) !important; }
   .status-pill{
     font-family: 'Space Mono', monospace;
     font-size: 0.68rem;
@@ -390,13 +444,120 @@
     color: #fff;
     border-color: var(--navy);
   }
+
+  .hideable{
+    display: none;
+  }
+  .hideable.open{
+    display: block;
+  }
+  .userzone{
+    padding: 64px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .userzone-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .card-block{
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 26px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card-block.highlight{
+    border-color: var(--sand);
+    box-shadow: 0 0 0 3px rgba(232,163,61,0.18);
+  }
+  .card-block label{
+    display:block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+  .card-block label:first-of-type{ margin-top:0; }
+  .card-block input,
+  .card-block select,
+  .card-block textarea{
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.92rem;
+    color: var(--navy);
+    background: var(--foam);
+  }
+  .card-block button{
+    margin-top: 18px;
+    width: 100%;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 11px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .card-block button:hover{ background: var(--ocean); }
+
+  .prof-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .prof-card{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 16px 18px;
+    font-family: 'Spectral', serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--navy);
+  }
+  .prof-card-more{
+    justify-content: center;
+    color: var(--slate-light);
+    font-family: 'Space Mono', monospace;
+    font-weight: 400;
+    font-size: 0.82rem;
+    border-style: dashed;
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap header-row">
-    <div class="wordmark">Sou<span>Barcos</span></div>
+    <div class="wordmark-group">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+          <path d="M50 62 L50 12 L86 44 Z"/>
+          <path d="M50 62 L50 12 L14 44 Z"/>
+        </g>
+      </svg>
+      <div class="wordmark">Sou<span>Barcos</span></div>
+    </div>
+    <nav class="user-nav">
+      <a href="#areaProfissionais" data-target="areaProfissionais">Área profissionais</a>
+      <a href="#cardMensagem" data-categoria="Suporte" data-target="cardMensagem">Suporte</a>
+      <a href="#cardMensagem" data-categoria="Seja associado" data-target="cardMensagem">Seja associado</a>
+      <a href="#cardMensagem" data-categoria="Sugestão" data-target="cardMensagem">Sugestões</a>
+      <a href="#conta" class="user-nav-cta" data-target="conta">Criar conta</a>
+    </nav>
     <div class="status-pill">Em construção</div>
   </div>
 </header>
@@ -404,7 +565,7 @@
 <section class="hero">
   <div class="wrap">
     <div class="hero-eyebrow">soubarcos.com.br — projeto em desenvolvimento</div>
-    <h1>Um só lugar para encontrar o melhor caminho — de preço, de ajuda, de conhecimento.</h1>
+    <h1>Um só lugar para boas indicações — de ofertas, de ajuda, de conhecimento.</h1>
     <p class="hero-sub">Este site ainda está sendo construído, peça por peça, à vista. Abaixo você encontra exatamente o que está planejado e em que estágio cada parte se encontra.</p>
 
     <div class="route">
@@ -494,6 +655,73 @@
   </div>
 </section>
 
+<section class="userzone hideable" id="areaProfissionais">
+  <div class="wrap">
+    <div class="manifest-head">
+      <h2>Área de profissionais</h2>
+      <p>Especialidades que pretendemos conectar aos usuários do SouBarcos. Em construção — mais serão adicionadas com o tempo.</p>
+    </div>
+    <div class="prof-grid">
+      <div class="prof-card"><span>Médicos</span><span class="tag planned">Em breve</span></div>
+      <div class="prof-card"><span>Educador físico</span><span class="tag planned">Em breve</span></div>
+      <div class="prof-card"><span>Dentista</span><span class="tag planned">Em breve</span></div>
+      <div class="prof-card"><span>Nutricionista</span><span class="tag planned">Em breve</span></div>
+      <div class="prof-card"><span>Psicólogo</span><span class="tag planned">Em breve</span></div>
+      <div class="prof-card"><span>Serviços sociais e cultura</span><span class="tag planned">Em breve</span></div>
+      <div class="prof-card"><span>Esportes, lazer e educação</span><span class="tag planned">Em breve</span></div>
+      <div class="prof-card"><span>Cursos gratuitos</span><span class="tag planned">Em breve</span></div>
+      <div class="prof-card prof-card-more">+ Novas especialidades em breve</div>
+    </div>
+  </div>
+</section>
+
+<section class="userzone hideable" id="contato">
+  <div class="wrap">
+    <div class="manifest-head">
+      <h2>Fale com a gente</h2>
+      <p>Suporte, sugestões ou interesse em ser associado — escolha o assunto e envie.</p>
+    </div>
+
+    <div class="userzone-grid">
+      <div class="card-block" id="cardMensagem">
+        <label for="msgCategoria">Assunto</label>
+        <select id="msgCategoria">
+          <option>Suporte</option>
+          <option>Seja associado</option>
+          <option>Sugestão</option>
+        </select>
+
+        <label for="msgNome">Seu nome</label>
+        <input type="text" id="msgNome" placeholder="Como podemos te chamar">
+
+        <label for="msgEmail">Seu e-mail</label>
+        <input type="email" id="msgEmail" placeholder="seu@email.com">
+
+        <label for="msgTexto">Mensagem</label>
+        <textarea id="msgTexto" rows="4" placeholder="Escreva aqui..."></textarea>
+
+        <button id="btnEnviarMsg">Enviar mensagem</button>
+        <div id="msgFeedback" class="compare-empty" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="card-block" id="conta">
+        <label style="margin-top:0;">Criar conta</label>
+        <p style="font-size:0.88rem; color:var(--slate); margin-bottom:14px;">Crie uma conta para acompanhar suas mensagens e futuras vantagens de associado.</p>
+
+        <input type="email" id="contaEmail" placeholder="seu@email.com" style="margin-bottom:10px;">
+        <input type="password" id="contaSenha" placeholder="Senha (mínimo 6 caracteres)">
+
+        <div style="display:flex; gap:10px; margin-top:14px;">
+          <button id="btnCriarConta" style="flex:1;">Criar conta</button>
+          <button id="btnEntrar" style="flex:1; background:#fff; color:var(--navy); border:1px solid var(--line);">Entrar</button>
+        </div>
+        <div id="contaFeedback" class="compare-empty" style="margin-top:10px;"></div>
+        <div id="contaLogada" style="display:none; margin-top:10px; font-size:0.88rem; color:var(--slate);"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap footer-row">
     <div class="footer-wordmark">SouBarcos</div>
@@ -501,6 +729,7 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Depois de publicar o backend no Render, troque a linha abaixo
   // pela URL real, ex: 'https://soubarcos-api.onrender.com'
@@ -596,6 +825,118 @@
   document.getElementById('searchInput').addEventListener('input', renderizarProdutos);
 
   carregarProdutos();
+
+  // ---------- Área do usuário: conta e mensagens ----------
+  // Preencha com os dados reais do seu projeto Supabase (Project URL e Publishable key)
+  const SUPABASE_URL = 'https://rrymtjzsekmjplyuoqef.supabase.co';
+  const SUPABASE_KEY = 'COLE_AQUI_SUA_PUBLISHABLE_KEY';
+
+  let supabaseClient = null;
+  try {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } catch (e) {
+    console.error('Supabase não configurado ainda.', e);
+  }
+
+  // Ao clicar em cada item do menu, abre a seção escondida certa e destaca a parte relevante
+  document.querySelectorAll('.user-nav a[data-target]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      if (link.dataset.categoria) {
+        document.getElementById('msgCategoria').value = link.dataset.categoria;
+      }
+
+      const target = document.getElementById(link.dataset.target);
+      if (!target) return;
+
+      // Fecha qualquer outra seção aberta, abre só a que foi clicada
+      document.querySelectorAll('.hideable.open').forEach((el) => el.classList.remove('open'));
+      const hideableSection = target.closest('.hideable') || target;
+      hideableSection.classList.add('open');
+
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (target !== hideableSection) {
+          target.classList.add('highlight');
+          setTimeout(() => target.classList.remove('highlight'), 1800);
+        }
+
+        const firstField = target.querySelector('input, select, textarea');
+        if (firstField) setTimeout(() => firstField.focus(), 400);
+      }, 30);
+    });
+  });
+
+  document.getElementById('btnEnviarMsg').addEventListener('click', async () => {
+    const categoria = document.getElementById('msgCategoria').value;
+    const nome = document.getElementById('msgNome').value.trim();
+    const email = document.getElementById('msgEmail').value.trim();
+    const mensagem = document.getElementById('msgTexto').value.trim();
+    const feedback = document.getElementById('msgFeedback');
+
+    if (!mensagem) {
+      feedback.textContent = 'Escreva uma mensagem antes de enviar.';
+      return;
+    }
+
+    feedback.textContent = 'Enviando...';
+    try {
+      const res = await fetch(API_URL + '/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categoria, nome, email, mensagem }),
+      });
+      if (!res.ok) throw new Error();
+      feedback.textContent = 'Mensagem enviada — obrigado pelo contato!';
+      document.getElementById('msgNome').value = '';
+      document.getElementById('msgEmail').value = '';
+      document.getElementById('msgTexto').value = '';
+    } catch (e) {
+      feedback.textContent = 'Não foi possível enviar agora. Tente novamente.';
+    }
+  });
+
+  document.getElementById('btnCriarConta').addEventListener('click', async () => {
+    const email = document.getElementById('contaEmail').value.trim();
+    const senha = document.getElementById('contaSenha').value;
+    const feedback = document.getElementById('contaFeedback');
+
+    if (!email || senha.length < 6) {
+      feedback.textContent = 'Informe um e-mail e uma senha com pelo menos 6 caracteres.';
+      return;
+    }
+    if (!supabaseClient) {
+      feedback.textContent = 'Conta ainda não está disponível — volte em breve.';
+      return;
+    }
+
+    feedback.textContent = 'Criando conta...';
+    const { error } = await supabaseClient.auth.signUp({ email, password: senha });
+    feedback.textContent = error ? error.message : 'Conta criada! Confira seu e-mail para confirmar.';
+  });
+
+  document.getElementById('btnEntrar').addEventListener('click', async () => {
+    const email = document.getElementById('contaEmail').value.trim();
+    const senha = document.getElementById('contaSenha').value;
+    const feedback = document.getElementById('contaFeedback');
+
+    if (!supabaseClient) {
+      feedback.textContent = 'Conta ainda não está disponível — volte em breve.';
+      return;
+    }
+
+    feedback.textContent = 'Entrando...';
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: senha });
+    if (error) {
+      feedback.textContent = error.message;
+      return;
+    }
+    feedback.textContent = '';
+    document.getElementById('contaLogada').style.display = 'block';
+    document.getElementById('contaLogada').textContent = 'Conectado como ' + data.user.email;
+    document.getElementById('msgEmail').value = data.user.email;
+  });
 </script>
 </body>
 </html>
