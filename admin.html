@@ -212,6 +212,12 @@
     $('link').value = dadosBookmarklet.link;
     mostrarPreview(dadosBookmarklet);
 
+    // Mostra o link de afiliado já gerado, com sua tag (soubarcos-20)
+    const afiliado = extrairLinkAfiliado(dadosBookmarklet.link);
+    $('linkPreview').textContent = afiliado
+      ? 'Link de afiliado gerado: ' + afiliado
+      : 'Não consegui identificar o código do produto nesse link.';
+
     // Limpa a URL para não reenviar os mesmos dados se a página for recarregada
     window.history.replaceState({}, '', window.location.pathname);
   }
