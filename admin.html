@@ -133,6 +133,17 @@
   <h1>Administração — SouBarcos</h1>
   <p class="sub">Cole o link do produto. As demais informações são buscadas automaticamente.</p>
 
+  <div class="card" id="bookmarkletCard">
+    <label style="margin-top:0;">Método recomendado — arraste para os favoritos</label>
+    <p style="font-size:0.9rem; color:var(--slate); margin-bottom:14px;">
+      Abra o produto normalmente na Amazon, clique nesse botão salvo nos favoritos, e ele já manda os dados certos pra cá — sem risco de bloqueio.
+    </p>
+    <a id="bookmarkletLink" href="#" style="display:inline-block; background:var(--sand); color:#1a1200; font-weight:700; padding:10px 18px; border-radius:3px; text-decoration:none; font-size:0.9rem;" onclick="return false;">+ SouBarcos</a>
+    <p style="font-size:0.78rem; color:var(--slate-light); margin-top:10px;">
+      Arraste o botão acima para a barra de favoritos do navegador (não clique — arraste).
+    </p>
+  </div>
+
   <div class="card">
     <label for="apiUrl">Endereço da API (uma vez só)</label>
     <input type="text" id="apiUrl" placeholder="https://soubarcos.onrender.com">
@@ -140,9 +151,16 @@
     <label for="adminPassword">Senha de administrador</label>
     <input type="password" id="adminPassword" placeholder="a senha que você definiu no Render">
 
-    <label for="link">Link do produto (colado da Amazon)</label>
+    <label for="link">Ou cole o link do produto aqui (menos confiável)</label>
     <input type="text" id="link" placeholder="https://www.amazon.com.br/algum-produto/dp/XXXXXXXXXX">
     <div id="linkPreview" style="font-size:0.82rem; color:#7C8CA3; margin-top:6px; font-family:'Space Mono',monospace;"></div>
+
+    <div id="previewCard" style="display:none; margin-top:16px; padding:14px; border:1px solid var(--line); border-radius:3px; background:var(--foam);">
+      <img id="previewImg" style="max-width:80px; max-height:80px; object-fit:contain; float:left; margin-right:12px;">
+      <div id="previewTitulo" style="font-weight:600; font-size:0.9rem;"></div>
+      <div id="previewPreco" style="font-family:'Space Mono',monospace; color:#96631a; margin-top:4px;"></div>
+      <div style="clear:both;"></div>
+    </div>
 
     <button id="btnSalvar">Adicionar oferta</button>
     <div id="msg" class="msg"></div>
@@ -156,6 +174,61 @@
 
 <script>
   const $ = (id) => document.getElementById(id);
+
+  // ---------- Bookmarklet ----------
+  // Lê os dados direto da página que o usuário já está vendo na Amazon
+  // (título, imagem, preço) e manda pra cá via parâmetros na URL.
+  // Não faz nenhuma requisição automática à Amazon — só lê o DOM já carregado.
+  const bookmarkletCode = `
+    (function(){
+      var t = document.getElementById('productTitle');
+      t = t ? t.innerText.trim() : document.title;
+      var imgEl = document.getElementById('landingImage') || document.querySelector('#imgTagWrapperId img') || document.querySelector('#imageBlock img');
+      var img = imgEl ? (imgEl.src || imgEl.getAttribute('data-old-hires') || '') : '';
+      var precoEl = document.querySelector('.a-price .a-offscreen') || document.getElementById('priceblock_ourprice') || document.getElementById('priceblock_dealprice') || document.querySelector('.a-price-whole');
+      var preco = precoEl ? precoEl.innerText.trim() : '';
+      var link = window.location.href.split('?')[0];
+      var destino = 'https://jonbarcost.github.io/SouBarcos/admin.html?titulo=' + encodeURIComponent(t) + '&preco=' + encodeURIComponent(preco) + '&imagem=' + encodeURIComponent(img) + '&link=' + encodeURIComponent(link);
+      window.open(destino, '_blank');
+    })();
+  `.replace(/\s+/g, ' ').trim();
+
+  $('bookmarkletLink').setAttribute('href', 'javascript:' + encodeURIComponent(bookmarkletCode));
+
+  // Guarda os dados vindos do bookmarklet (se houver) para usar ao salvar
+  let dadosBookmarklet = null;
+
+  function processarParametrosDaURL() {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('link')) return;
+
+    dadosBookmarklet = {
+      titulo: params.get('titulo') || '',
+      preco: params.get('preco') || '',
+      imagem: params.get('imagem') || '',
+      link: params.get('link') || '',
+    };
+
+    $('link').value = dadosBookmarklet.link;
+    mostrarPreview(dadosBookmarklet);
+
+    // Limpa a URL para não reenviar os mesmos dados se a página for recarregada
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+
+  function mostrarPreview(dados) {
+    const card = $('previewCard');
+    if (!dados.titulo && !dados.imagem && !dados.preco) {
+      card.style.display = 'none';
+      return;
+    }
+    $('previewImg').src = dados.imagem || '';
+    $('previewImg').style.display = dados.imagem ? 'block' : 'none';
+    $('previewTitulo').textContent = dados.titulo || '(sem título)';
+    $('previewPreco').textContent = dados.preco || '(sem preço)';
+    card.style.display = 'block';
+  }
+
 
   // Extrai o ASIN (código do produto) de qualquer link da Amazon
   // e monta automaticamente o link de afiliado com a tag soubarcos-20.
@@ -253,7 +326,7 @@
     const link = extrairLinkAfiliado(linkOriginal) || linkOriginal;
 
     if (!linkOriginal) {
-      showMsg('Cole o link do produto primeiro.', false);
+      showMsg('Cole o link do produto primeiro (ou use o bookmarklet).', false);
       return;
     }
     if (!apiUrl() || !adminPw()) {
@@ -262,24 +335,35 @@
     }
 
     $('btnSalvar').disabled = true;
-    showMsg('Buscando informações do produto...', true);
 
     try {
-      // 1. Busca título, imagem e preço automaticamente a partir do link
-      const previewRes = await fetch(
-        apiUrl() + '/api/preview?url=' + encodeURIComponent(linkOriginal),
-        { headers: { 'x-admin-password': adminPw() } }
-      );
-      const preview = await previewRes.json();
+      let titulo, preco, imagem, descricao;
 
-      if (!previewRes.ok || !preview.titulo) {
-        throw new Error('Não consegui buscar as informações desse produto automaticamente. Tente outro link.');
+      if (dadosBookmarklet && dadosBookmarklet.link === linkOriginal) {
+        // Já temos os dados vindos do bookmarklet — não precisa buscar de novo
+        titulo = dadosBookmarklet.titulo || 'Produto sem título';
+        preco = dadosBookmarklet.preco || 'Preço não encontrado';
+        imagem = dadosBookmarklet.imagem || '';
+        descricao = '';
+      } else {
+        // Sem dados do bookmarklet: tenta buscar automaticamente pelo servidor
+        // (menos confiável — a Amazon pode bloquear essa tentativa)
+        showMsg('Buscando informações do produto...', true);
+        const previewRes = await fetch(
+          apiUrl() + '/api/preview?url=' + encodeURIComponent(linkOriginal),
+          { headers: { 'x-admin-password': adminPw() } }
+        );
+        const preview = await previewRes.json();
+
+        if (!previewRes.ok || !preview.titulo) {
+          throw new Error('Não consegui buscar automaticamente. Use o bookmarklet acima, que é mais confiável.');
+        }
+
+        titulo = preview.titulo;
+        preco = preview.preco || 'Preço não encontrado';
+        imagem = preview.imagem || '';
+        descricao = preview.descricao || '';
       }
-
-      const titulo = preview.titulo;
-      const preco = preview.preco || 'Preço não encontrado';
-      const imagem = preview.imagem || '';
-      const descricao = preview.descricao || '';
 
       // 2. Salva a oferta já com os dados encontrados
       const res = await fetch(apiUrl() + '/api/products', {
@@ -299,6 +383,8 @@
       showMsg('Oferta adicionada com sucesso.', true);
       $('link').value = '';
       $('linkPreview').textContent = '';
+      $('previewCard').style.display = 'none';
+      dadosBookmarklet = null;
       carregarLista();
     } catch (e) {
       showMsg(e.message, false);
@@ -308,6 +394,7 @@
   });
 
 
+  processarParametrosDaURL();
   carregarLista();
 </script>
 </body>
