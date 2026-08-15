@@ -126,6 +126,43 @@
     color: var(--slate-light);
     margin-top: 24px;
   }
+  .msg-tab{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: #fff;
+  }
+  .msg-tab.inactive{ opacity: 0.45; }
+  .msg-tab[data-cat="Vendas"]{ background: #96631a; }
+  .msg-tab[data-cat="Suporte"]{ background: #13315C; }
+  .msg-tab[data-cat="Seja associado"]{ background: #4a7c59; }
+  .msg-tab[data-cat="Sugestão"]{ background: #6b4a8a; }
+  .msg-tab[data-cat="Todas"]{ background: var(--navy); }
+  .msg-item{
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--line);
+    border-radius: 3px;
+    padding: 14px;
+    margin-bottom: 10px;
+    background: #fff;
+  }
+  .msg-item.cat-Vendas{ border-left-color: #96631a; }
+  .msg-item.cat-Suporte{ border-left-color: #13315C; }
+  .msg-item.cat-Seja-associado{ border-left-color: #4a7c59; }
+  .msg-item.cat-Sugestão{ border-left-color: #6b4a8a; }
+  .msg-item-head{
+    display:flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--slate-light);
+    margin-bottom: 8px;
+  }
+  .msg-item-body{ font-size: 0.9rem; color: var(--navy); }
 </style>
 </head>
 <body>
@@ -134,13 +171,24 @@
   <p class="sub">Cole o link do produto. As demais informações são buscadas automaticamente.</p>
 
   <div class="card" id="bookmarkletCard">
-    <label style="margin-top:0;">Método recomendado — arraste para os favoritos</label>
+    <label style="margin-top:0;">Método 1 — um produto por vez</label>
     <p style="font-size:0.9rem; color:var(--slate); margin-bottom:14px;">
       Abra o produto normalmente na Amazon, clique nesse botão salvo nos favoritos, e ele já manda os dados certos pra cá — sem risco de bloqueio.
     </p>
     <a id="bookmarkletLink" href="#" style="display:inline-block; background:var(--sand); color:#1a1200; font-weight:700; padding:10px 18px; border-radius:3px; text-decoration:none; font-size:0.9rem;" onclick="return false;">+ SouBarcos</a>
     <p style="font-size:0.78rem; color:var(--slate-light); margin-top:10px;">
       Arraste o botão acima para a barra de favoritos do navegador (não clique — arraste).
+    </p>
+  </div>
+
+  <div class="card" id="bulkBookmarkletCard">
+    <label style="margin-top:0;">Método 2 — vários produtos de uma vez (por categoria)</label>
+    <p style="font-size:0.9rem; color:var(--slate); margin-bottom:14px;">
+      Vá na Amazon e pesquise ou abra uma categoria (ex: "eletrodomésticos"), até aparecer a grade de vários produtos. Clique nesse botão salvo nos favoritos — ele pega todos os produtos visíveis na página de uma vez e já pergunta a categoria antes de salvar.
+    </p>
+    <a id="bulkBookmarkletLink" href="#" style="display:inline-block; background:var(--navy); color:#fff; font-weight:700; padding:10px 18px; border-radius:3px; text-decoration:none; font-size:0.9rem;" onclick="return false;">+ SouBarcos (vários)</a>
+    <p style="font-size:0.78rem; color:var(--slate-light); margin-top:10px;">
+      Arraste este botão também para a barra de favoritos (não clique — arraste).
     </p>
   </div>
 
@@ -173,6 +221,10 @@
   <div class="list-head">Ofertas cadastradas</div>
   <div id="lista"></div>
 
+  <div class="list-head" style="margin-top:56px;">Mensagens recebidas</div>
+  <div id="msgTabs" style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;"></div>
+  <div id="listaMensagens"></div>
+
   <p class="config-note">O endereço da API e a senha ficam salvos só neste navegador (não são enviados a mais ninguém).</p>
 </div>
 
@@ -198,6 +250,55 @@
   `.replace(/\s+/g, ' ').trim();
 
   $('bookmarkletLink').setAttribute('href', 'javascript:' + encodeURIComponent(bookmarkletCode));
+
+  // ---------- Bookmarklet de lote (vários produtos de uma página de busca/categoria) ----------
+  const bulkBookmarkletCode = `
+    (function(){
+      var API = 'https://soubarcos.onrender.com';
+      var cards = document.querySelectorAll('[data-component-type="s-search-result"]');
+      if (!cards.length) { alert('Não encontrei uma grade de produtos nesta página. Use isso numa página de busca/categoria da Amazon.'); return; }
+
+      var produtos = [];
+      cards.forEach(function(card){
+        var asin = card.getAttribute('data-asin');
+        if (!asin) return;
+        var tituloEl = card.querySelector('h2 a span') || card.querySelector('.a-text-normal');
+        var titulo = tituloEl ? tituloEl.innerText.trim() : null;
+        var imgEl = card.querySelector('img.s-image');
+        var imagem = imgEl ? imgEl.src : '';
+        var precoEl = card.querySelector('.a-price .a-offscreen');
+        var preco = precoEl ? precoEl.innerText.trim() : '';
+        if (!titulo) return;
+        var link = 'https://www.amazon.com.br/dp/' + asin + '?tag=soubarcos-20';
+        produtos.push({ titulo: titulo, imagem: imagem, preco: preco, link: link });
+      });
+
+      if (!produtos.length) { alert('Nenhum produto identificado nesta página.'); return; }
+
+      var categoria = prompt('Qual categoria para estes ' + produtos.length + ' produtos?', '');
+      if (categoria === null) return;
+
+      var senha = prompt('Senha de administrador do SouBarcos:', '');
+      if (senha === null) return;
+
+      fetch(API + '/api/products/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-password': senha },
+        body: JSON.stringify({ categoria: categoria, produtos: produtos })
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.adicionados) {
+          alert(data.adicionados + ' produtos adicionados na categoria "' + categoria + '"!');
+        } else {
+          alert('Erro: ' + (data.error || 'não foi possível salvar.'));
+        }
+      })
+      .catch(function(){ alert('Não foi possível conectar à API.'); });
+    })();
+  `.replace(/\s+/g, ' ').trim();
+
+  $('bulkBookmarkletLink').setAttribute('href', 'javascript:' + encodeURIComponent(bulkBookmarkletCode));
 
   // Guarda os dados vindos do bookmarklet (se houver) para usar ao salvar
   let dadosBookmarklet = null;
@@ -426,6 +527,66 @@
   processarParametrosDaURL();
   carregarLista();
   carregarCategorias();
+
+  // ---------- Mensagens ----------
+  let todasMensagens = [];
+  let categoriaMsgAtiva = 'Todas';
+
+  async function carregarMensagens() {
+    if (!apiUrl() || !adminPw()) return;
+    try {
+      const res = await fetch(apiUrl() + '/api/messages', {
+        headers: { 'x-admin-password': adminPw() },
+      });
+      const data = await res.json();
+      todasMensagens = data.resultados || [];
+      montarAbasMensagens();
+      renderizarMensagens();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function montarAbasMensagens() {
+    const categorias = [...new Set(todasMensagens.map((m) => m.categoria || 'Suporte'))];
+    const pills = ['Todas', ...categorias];
+    const container = $('msgTabs');
+    container.innerHTML = pills.map((cat) => `
+      <button class="msg-tab${cat !== categoriaMsgAtiva ? ' inactive' : ''}" data-cat="${cat}">${cat}</button>
+    `).join('');
+    container.querySelectorAll('.msg-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        categoriaMsgAtiva = btn.dataset.cat;
+        montarAbasMensagens();
+        renderizarMensagens();
+      });
+    });
+  }
+
+  function renderizarMensagens() {
+    const lista = $('listaMensagens');
+    let filtradas = todasMensagens;
+    if (categoriaMsgAtiva !== 'Todas') {
+      filtradas = filtradas.filter((m) => (m.categoria || 'Suporte') === categoriaMsgAtiva);
+    }
+
+    if (filtradas.length === 0) {
+      lista.innerHTML = '<p style="color:#7C8CA3; font-size:0.9rem;">Nenhuma mensagem por aqui.</p>';
+      return;
+    }
+
+    lista.innerHTML = filtradas.map((m) => `
+      <div class="msg-item cat-${(m.categoria || 'Suporte').replace(' ', '-')}">
+        <div class="msg-item-head">
+          <span>${m.categoria || 'Suporte'} · ${m.nome || 'Anônimo'}${m.email ? ' · ' + m.email : ''}</span>
+          <span>${new Date(m.created_at).toLocaleDateString('pt-BR')}</span>
+        </div>
+        <div class="msg-item-body">${m.mensagem}</div>
+      </div>
+    `).join('');
+  }
+
+  carregarMensagens();
 </script>
 </body>
 </html>

@@ -116,6 +116,55 @@ app.get('/api/categorias', async (req, res) => {
   res.json({ categorias });
 });
 
+// Recebe mensagens do formulário público (contato, seja associado, sugestão)
+app.post('/api/messages', async (req, res) => {
+  const { nome, email, categoria, mensagem } = req.body;
+
+  if (!mensagem) {
+    return res.status(400).json({ error: 'Escreva uma mensagem.' });
+  }
+
+  const { data, error } = await supabase
+    .from('messages')
+    .insert([{ nome: nome || null, email: email || null, categoria: categoria || 'Suporte', mensagem }])
+    .select();
+
+  if (error) {
+    console.error('Erro ao salvar mensagem:', error.message);
+    return res.status(500).json({ error: 'Não foi possível enviar sua mensagem agora.' });
+  }
+
+  res.status(201).json({ ok: true });
+});
+
+// Lista as mensagens recebidas — usado no admin.html
+app.get('/api/messages', checkAdmin, async (req, res) => {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    return res.status(500).json({ error: 'Não foi possível carregar as mensagens.' });
+  }
+
+  res.json({ resultados: data });
+});
+
+// Marca uma mensagem como atendida
+app.patch('/api/messages/:id', checkAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { atendida } = req.body;
+
+  const { error } = await supabase.from('messages').update({ atendida }).eq('id', id);
+
+  if (error) {
+    return res.status(500).json({ error: 'Não foi possível atualizar a mensagem.' });
+  }
+
+  res.json({ ok: true });
+});
+
 // Adiciona um novo produto — usado pela página /admin.html
 app.post('/api/products', checkAdmin, async (req, res) => {
   const { titulo, preco, link, imagem, loja, descricao, categoria } = req.body;
@@ -135,6 +184,39 @@ app.post('/api/products', checkAdmin, async (req, res) => {
   }
 
   res.status(201).json({ produto: data[0] });
+});
+
+// Adiciona vários produtos de uma vez — usado pelo bookmarklet de categoria
+app.post('/api/products/bulk', checkAdmin, async (req, res) => {
+  const { categoria, produtos } = req.body;
+
+  if (!Array.isArray(produtos) || produtos.length === 0) {
+    return res.status(400).json({ error: 'Nenhum produto recebido.' });
+  }
+
+  const linhas = produtos
+    .filter((p) => p.titulo && p.link)
+    .map((p) => ({
+      titulo: p.titulo,
+      preco: p.preco || 'Preço não encontrado',
+      link: p.link,
+      imagem: p.imagem || null,
+      loja: 'Amazon',
+      categoria: categoria || 'Geral',
+    }));
+
+  if (linhas.length === 0) {
+    return res.status(400).json({ error: 'Nenhum produto válido para salvar.' });
+  }
+
+  const { data, error } = await supabase.from('products').insert(linhas).select();
+
+  if (error) {
+    console.error('Erro ao salvar produtos em lote:', error.message);
+    return res.status(500).json({ error: 'Não foi possível salvar os produtos.' });
+  }
+
+  res.status(201).json({ adicionados: data.length });
 });
 
 // Remove um produto — usado pela página /admin.html
