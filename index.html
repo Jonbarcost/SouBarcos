@@ -425,6 +425,30 @@
     padding-bottom: 10px;
     margin-bottom: 20px;
   }
+  .category-pager{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 16px;
+    margin-top: 22px;
+  }
+  .pager-btn{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    padding: 7px 14px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--navy);
+    cursor: pointer;
+  }
+  .pager-btn:hover:not(:disabled){ border-color: var(--sand); }
+  .pager-btn:disabled{ opacity: 0.35; cursor: default; }
+  .pager-info{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--slate-light);
+  }
   .filter-pill{
     display:flex;
     flex-direction: column;
@@ -752,6 +776,8 @@
 
   let todosProdutos = [];
   let categoriaAtiva = 'Todas';
+  const PRODUTOS_POR_PAGINA = 8;
+  const paginaAtualPorCategoria = {};
 
   async function carregarProdutos() {
     const grid = document.getElementById('productsGrid');
@@ -855,14 +881,26 @@
       porCategoria[cat].push(p);
     });
 
-    grid.innerHTML = Object.keys(porCategoria).map((categoria) => `
+    grid.innerHTML = Object.keys(porCategoria).map((categoria) => {
+      const itensDaCategoria = porCategoria[categoria];
+      const totalPaginas = Math.max(1, Math.ceil(itensDaCategoria.length / PRODUTOS_POR_PAGINA));
+
+      if (!paginaAtualPorCategoria[categoria]) paginaAtualPorCategoria[categoria] = 1;
+      if (paginaAtualPorCategoria[categoria] > totalPaginas) paginaAtualPorCategoria[categoria] = totalPaginas;
+      const pagina = paginaAtualPorCategoria[categoria];
+
+      const inicio = (pagina - 1) * PRODUTOS_POR_PAGINA;
+      const itensDaPagina = itensDaCategoria.slice(inicio, inicio + PRODUTOS_POR_PAGINA);
+
+      return `
       <div class="category-block">
         <div class="category-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; vertical-align:-3px; margin-right:6px;">${iconeParaCategoria(categoria)}</svg>
           ${categoria}
+          <span style="font-weight:400; color:var(--slate-light); font-size:0.8rem; text-transform:none; letter-spacing:0;"> — ${itensDaCategoria.length} ${itensDaCategoria.length === 1 ? 'oferta' : 'ofertas'}</span>
         </div>
         <div class="products-grid">
-          ${porCategoria[categoria].map((p) => `
+          ${itensDaPagina.map((p) => `
             <div class="product-card">
               ${p.imagem ? `<img src="${p.imagem}" alt="${p.titulo}">` : ''}
               <div class="product-store">${p.loja || 'Amazon'}</div>
@@ -873,11 +911,32 @@
             </div>
           `).join('')}
         </div>
+        ${totalPaginas > 1 ? `
+          <div class="category-pager">
+            <button class="pager-btn" data-cat="${categoria}" data-dir="-1" ${pagina === 1 ? 'disabled' : ''}>‹ Anterior</button>
+            <span class="pager-info">Página ${pagina} de ${totalPaginas}</span>
+            <button class="pager-btn" data-cat="${categoria}" data-dir="1" ${pagina === totalPaginas ? 'disabled' : ''}>Próxima ›</button>
+          </div>
+        ` : ''}
       </div>
-    `).join('');
+    `;
+    }).join('');
+
+    grid.querySelectorAll('.pager-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.cat;
+        const dir = parseInt(btn.dataset.dir, 10);
+        paginaAtualPorCategoria[cat] = (paginaAtualPorCategoria[cat] || 1) + dir;
+        renderizarProdutos();
+        document.querySelector(`.category-block .category-title`);
+      });
+    });
   }
 
-  document.getElementById('searchInput').addEventListener('input', renderizarProdutos);
+  document.getElementById('searchInput').addEventListener('input', () => {
+    Object.keys(paginaAtualPorCategoria).forEach((c) => { paginaAtualPorCategoria[c] = 1; });
+    renderizarProdutos();
+  });
 
   carregarProdutos();
 
