@@ -36,6 +36,58 @@ app.get('/', (req, res) => {
   res.json({ status: 'ok', service: 'soubarcos-api' });
 });
 
+// Busca uma prévia (título, imagem, preço) a partir do link do produto,
+// para agilizar o cadastro no admin.html. Usa apenas informações públicas
+// de "prévia de link" (mesmo mecanismo que gera preview no WhatsApp/Telegram).
+// IMPORTANTE: isso não é a API oficial da Amazon — é uma tentativa best-effort,
+// pode falhar ou vir incompleta, e por isso o admin.html sempre deixa
+// os campos editáveis antes de salvar.
+app.get('/api/preview', checkAdmin, async (req, res) => {
+  const url = req.query.url;
+  if (!url) {
+    return res.status(400).json({ error: 'Informe o link do produto no parâmetro "url".' });
+  }
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+      },
+    });
+    const html = await response.text();
+
+    const getMeta = (property) => {
+      const regex = new RegExp(
+        `<meta[^>]+property=["']${property}["'][^>]+content=["']([^"']+)["']`,
+        'i'
+      );
+      const match = html.match(regex);
+      return match ? match[1] : null;
+    };
+
+    const titulo = getMeta('og:title');
+    const imagem = getMeta('og:image');
+
+    // Preço é best-effort: a Amazon não expõe isso de forma padronizada
+    // via meta tags, então tentamos alguns padrões comuns da página.
+    let preco = null;
+    const precoMatch =
+      html.match(/class="a-price-whole">([\d.,]+)/) ||
+      html.match(/"priceAmount":"([\d.,]+)"/);
+    if (precoMatch) {
+      preco = 'R$ ' + precoMatch[1].replace(/\.$/, '');
+    }
+
+    res.json({ titulo, imagem, preco });
+  } catch (error) {
+    console.error('Erro ao buscar prévia:', error?.message || error);
+    res.status(502).json({
+      error: 'Não foi possível buscar as informações desse link. Preencha manualmente.',
+    });
+  }
+});
+
 // Lista todos os produtos cadastrados — usado pela página pública do site
 app.get('/api/products', async (req, res) => {
   const { data, error } = await supabase
