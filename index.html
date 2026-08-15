@@ -371,6 +371,25 @@
     padding-bottom: 10px;
     margin-bottom: 20px;
   }
+  .filter-pill{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--slate);
+    cursor: pointer;
+  }
+  .filter-pill:hover{
+    border-color: var(--sand);
+  }
+  .filter-pill.active{
+    background: var(--navy);
+    color: #fff;
+    border-color: var(--navy);
+  }
 </style>
 </head>
 <body>
@@ -414,6 +433,12 @@
       <h2>Ofertas e promoções exclusivas</h2>
       <p>Uma seleção de ofertas escolhidas a dedo, com link direto para aproveitar.</p>
     </div>
+
+    <div id="filterBar" style="display:none; margin-bottom:32px;">
+      <input type="text" id="searchInput" placeholder="Buscar por nome do produto..." style="width:100%; max-width:420px; padding:11px 14px; border:1px solid var(--line); border-radius:3px; font-family:'Work Sans',sans-serif; font-size:0.92rem; background:#fff; margin-bottom:16px;">
+      <div id="categoryFilters" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+    </div>
+
     <div id="productsGrid">
       <p class="compare-empty">Carregando produtos…</p>
     </div>
@@ -481,6 +506,9 @@
   // pela URL real, ex: 'https://soubarcos-api.onrender.com'
   const API_URL = 'https://soubarcos.onrender.com';
 
+  let todosProdutos = [];
+  let categoriaAtiva = 'Todas';
+
   async function carregarProdutos() {
     const grid = document.getElementById('productsGrid');
     try {
@@ -492,35 +520,80 @@
         return;
       }
 
-      // Agrupa os produtos por categoria
-      const porCategoria = {};
-      data.resultados.forEach((p) => {
-        const cat = p.categoria || 'Geral';
-        if (!porCategoria[cat]) porCategoria[cat] = [];
-        porCategoria[cat].push(p);
-      });
-
-      grid.innerHTML = Object.keys(porCategoria).map((categoria) => `
-        <div class="category-block">
-          <div class="category-title">${categoria}</div>
-          <div class="products-grid">
-            ${porCategoria[categoria].map((p) => `
-              <div class="product-card">
-                ${p.imagem ? `<img src="${p.imagem}" alt="${p.titulo}">` : ''}
-                <div class="product-store">${p.loja || 'Amazon'}</div>
-                <h3>${p.titulo}</h3>
-                ${p.descricao ? `<p class="product-desc">${p.descricao}</p>` : ''}
-                <div class="product-price">${p.preco}</div>
-                <a class="product-link" href="${p.link}" target="_blank" rel="noopener sponsored">Ver oferta</a>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `).join('');
+      todosProdutos = data.resultados;
+      montarFiltros();
+      renderizarProdutos();
+      document.getElementById('filterBar').style.display = 'block';
     } catch (e) {
       grid.innerHTML = '<p class="compare-empty">Não foi possível carregar os produtos agora.</p>';
     }
   }
+
+  function montarFiltros() {
+    const categorias = [...new Set(todosProdutos.map((p) => p.categoria || 'Geral'))];
+    const container = document.getElementById('categoryFilters');
+
+    const pills = ['Todas', ...categorias];
+    container.innerHTML = pills.map((cat) => `
+      <button class="filter-pill${cat === categoriaAtiva ? ' active' : ''}" data-categoria="${cat}">${cat}</button>
+    `).join('');
+
+    container.querySelectorAll('.filter-pill').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        categoriaAtiva = btn.dataset.categoria;
+        montarFiltros();
+        renderizarProdutos();
+      });
+    });
+  }
+
+  function renderizarProdutos() {
+    const grid = document.getElementById('productsGrid');
+    const termoBusca = document.getElementById('searchInput').value.trim().toLowerCase();
+
+    let filtrados = todosProdutos;
+
+    if (categoriaAtiva !== 'Todas') {
+      filtrados = filtrados.filter((p) => (p.categoria || 'Geral') === categoriaAtiva);
+    }
+
+    if (termoBusca) {
+      filtrados = filtrados.filter((p) => p.titulo.toLowerCase().includes(termoBusca));
+    }
+
+    if (filtrados.length === 0) {
+      grid.innerHTML = '<p class="compare-empty">Nenhuma oferta encontrada com esse filtro.</p>';
+      return;
+    }
+
+    // Agrupa os produtos filtrados por categoria
+    const porCategoria = {};
+    filtrados.forEach((p) => {
+      const cat = p.categoria || 'Geral';
+      if (!porCategoria[cat]) porCategoria[cat] = [];
+      porCategoria[cat].push(p);
+    });
+
+    grid.innerHTML = Object.keys(porCategoria).map((categoria) => `
+      <div class="category-block">
+        <div class="category-title">${categoria}</div>
+        <div class="products-grid">
+          ${porCategoria[categoria].map((p) => `
+            <div class="product-card">
+              ${p.imagem ? `<img src="${p.imagem}" alt="${p.titulo}">` : ''}
+              <div class="product-store">${p.loja || 'Amazon'}</div>
+              <h3>${p.titulo}</h3>
+              ${p.descricao ? `<p class="product-desc">${p.descricao}</p>` : ''}
+              <div class="product-price">${p.preco}</div>
+              <a class="product-link" href="${p.link}" target="_blank" rel="noopener sponsored">Ver oferta</a>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('searchInput').addEventListener('input', renderizarProdutos);
 
   carregarProdutos();
 </script>
