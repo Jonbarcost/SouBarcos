@@ -244,7 +244,14 @@
       var precoEl = document.querySelector('.a-price .a-offscreen') || document.getElementById('priceblock_ourprice') || document.getElementById('priceblock_dealprice') || document.querySelector('.a-price-whole');
       var preco = precoEl ? precoEl.innerText.trim() : '';
       var link = window.location.href.split('?')[0];
-      var destino = 'https://jonbarcost.github.io/SouBarcos/admin.html?titulo=' + encodeURIComponent(t) + '&preco=' + encodeURIComponent(preco) + '&imagem=' + encodeURIComponent(img) + '&link=' + encodeURIComponent(link);
+
+      var categoria = '';
+      var trilha = document.querySelectorAll('#wayfinding-breadcrumbs_feature_div a');
+      if (trilha.length) {
+        categoria = trilha[Math.min(1, trilha.length - 1)].innerText.trim();
+      }
+
+      var destino = 'https://jonbarcost.github.io/SouBarcos/admin.html?titulo=' + encodeURIComponent(t) + '&preco=' + encodeURIComponent(preco) + '&imagem=' + encodeURIComponent(img) + '&link=' + encodeURIComponent(link) + '&categoria=' + encodeURIComponent(categoria);
       window.open(destino, '_blank');
     })();
   `.replace(/\s+/g, ' ').trim();
@@ -275,7 +282,11 @@
 
       if (!produtos.length) { alert('Nenhum produto identificado nesta página.'); return; }
 
-      var categoria = prompt('Qual categoria para estes ' + produtos.length + ' produtos?', '');
+      // Sugere a categoria com base no termo pesquisado na Amazon (ex: "?k=pneu+carro" → "Pneu carro")
+      var termoBusca = new URLSearchParams(window.location.search).get('k') || '';
+      var sugestao = termoBusca ? termoBusca.charAt(0).toUpperCase() + termoBusca.slice(1) : '';
+
+      var categoria = prompt('Qual categoria para estes ' + produtos.length + ' produtos?', sugestao);
       if (categoria === null) return;
 
       var senha = prompt('Senha de administrador do SouBarcos:', '');
@@ -316,6 +327,11 @@
 
     $('link').value = dadosBookmarklet.link;
     mostrarPreview(dadosBookmarklet);
+
+    const categoriaSugerida = params.get('categoria');
+    if (categoriaSugerida) {
+      $('categoria').value = categoriaSugerida;
+    }
 
     // Mostra o link de afiliado já gerado, com sua tag (soubarcos-20)
     const afiliado = extrairLinkAfiliado(dadosBookmarklet.link);
