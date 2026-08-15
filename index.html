@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SouBarcos — em construção</title>
-<meta name="description" content="SouBarcos é uma plataforma em construção para ajudar pessoas a encontrar os melhores preços, apoiar quem precisa e aprender de graça.">
+<meta name="description" content="SouBarcos é uma plataforma em construção para reunir ofertas e promoções exclusivas, apoiar quem precisa e ajudar a aprender de graça.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -319,6 +319,15 @@
     color: var(--navy);
     line-height: 1.35;
   }
+  .product-desc{
+    font-size: 0.85rem;
+    color: var(--slate);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .product-price{
     font-family: 'Space Mono', monospace;
     font-size: 1rem;
@@ -381,7 +390,7 @@
 <section class="intent">
   <div class="wrap">
     <div class="section-label">Por que este projeto existe</div>
-    <p class="intent-text">O <strong>SouBarcos</strong> nasce com um propósito declarado: ser uma ferramenta que ajuda pessoas a <strong>pesquisar e comparar preços</strong> antes de comprar, e ao mesmo tempo abrir espaço para <strong>apoiar instituições de ajuda humanitária e pessoas em situação de carência</strong>, oferecer <strong>cursos gratuitos</strong> disponíveis na internet, e conectar pessoas a <strong>apoio à saúde, nutrição, esporte e bem-estar emocional</strong> com profissionais atuando online.</p>
+    <p class="intent-text">O <strong>SouBarcos</strong> nasce com um propósito declarado: ser uma ferramenta que reúne <strong>ofertas e promoções exclusivas</strong> para ajudar as pessoas a economizar, e ao mesmo tempo abrir espaço para <strong>apoiar instituições de ajuda humanitária e pessoas em situação de carência</strong>, oferecer <strong>cursos gratuitos</strong> disponíveis na internet, e conectar pessoas a <strong>apoio à saúde, nutrição, esporte e bem-estar emocional</strong> com profissionais atuando online.</p>
     <p class="intent-note">Não é só uma ferramenta de comparação de preços. É um projeto que pretende crescer em várias frentes ao mesmo tempo — e este site vai sendo construído nessa mesma ordem de prioridade, começando pelo que já está em desenvolvimento abaixo.</p>
   </div>
 </section>
@@ -389,8 +398,8 @@
 <section class="compare">
   <div class="wrap">
     <div class="compare-head">
-      <h2>Comparativo de preços</h2>
-      <p>Produtos selecionados para começar, com preço e link direto para compra.</p>
+      <h2>Ofertas e promoções exclusivas</h2>
+      <p>Uma seleção de ofertas escolhidas a dedo, com link direto para aproveitar.</p>
     </div>
     <div id="productsGrid" class="products-grid">
       <p class="compare-empty">Carregando produtos…</p>
@@ -466,7 +475,7 @@
       const data = await res.json();
 
       if (!data.resultados || data.resultados.length === 0) {
-        grid.innerHTML = '<p class="compare-empty">Nenhum produto cadastrado ainda.</p>';
+        grid.innerHTML = '<p class="compare-empty">Nenhuma oferta cadastrada ainda.</p>';
         return;
       }
 
@@ -475,6 +484,7 @@
           ${p.imagem ? `<img src="${p.imagem}" alt="${p.titulo}">` : ''}
           <div class="product-store">${p.loja || 'Amazon'}</div>
           <h3>${p.titulo}</h3>
+          ${p.descricao ? `<p class="product-desc">${p.descricao}</p>` : ''}
           <div class="product-price">${p.preco}</div>
           <a class="product-link" href="${p.link}" target="_blank" rel="noopener sponsored">Ver oferta</a>
         </div>

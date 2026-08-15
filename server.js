@@ -68,6 +68,7 @@ app.get('/api/preview', checkAdmin, async (req, res) => {
 
     const titulo = getMeta('og:title');
     const imagem = getMeta('og:image');
+    const descricao = getMeta('og:description');
 
     // Preço é best-effort: a Amazon não expõe isso de forma padronizada
     // via meta tags, então tentamos alguns padrões comuns da página.
@@ -79,7 +80,7 @@ app.get('/api/preview', checkAdmin, async (req, res) => {
       preco = 'R$ ' + precoMatch[1].replace(/\.$/, '');
     }
 
-    res.json({ titulo, imagem, preco });
+    res.json({ titulo, imagem, preco, descricao });
   } catch (error) {
     console.error('Erro ao buscar prévia:', error?.message || error);
     res.status(502).json({
@@ -105,7 +106,7 @@ app.get('/api/products', async (req, res) => {
 
 // Adiciona um novo produto — usado pela página /admin.html
 app.post('/api/products', checkAdmin, async (req, res) => {
-  const { titulo, preco, link, imagem, loja } = req.body;
+  const { titulo, preco, link, imagem, loja, descricao } = req.body;
 
   if (!titulo || !preco || !link) {
     return res.status(400).json({ error: 'Título, preço e link são obrigatórios.' });
@@ -113,7 +114,7 @@ app.post('/api/products', checkAdmin, async (req, res) => {
 
   const { data, error } = await supabase
     .from('products')
-    .insert([{ titulo, preco, link, imagem: imagem || null, loja: loja || 'Amazon' }])
+    .insert([{ titulo, preco, link, imagem: imagem || null, loja: loja || 'Amazon', descricao: descricao || null }])
     .select();
 
   if (error) {
