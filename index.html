@@ -358,6 +358,19 @@
     font-size: 0.92rem;
     font-family: 'Space Mono', monospace;
   }
+  .category-block{
+    margin-bottom: 40px;
+  }
+  .category-title{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sand);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
 </style>
 </head>
 <body>
@@ -401,7 +414,7 @@
       <h2>Ofertas e promoções exclusivas</h2>
       <p>Uma seleção de ofertas escolhidas a dedo, com link direto para aproveitar.</p>
     </div>
-    <div id="productsGrid" class="products-grid">
+    <div id="productsGrid">
       <p class="compare-empty">Carregando produtos…</p>
     </div>
   </div>
@@ -479,14 +492,29 @@
         return;
       }
 
-      grid.innerHTML = data.resultados.map((p) => `
-        <div class="product-card">
-          ${p.imagem ? `<img src="${p.imagem}" alt="${p.titulo}">` : ''}
-          <div class="product-store">${p.loja || 'Amazon'}</div>
-          <h3>${p.titulo}</h3>
-          ${p.descricao ? `<p class="product-desc">${p.descricao}</p>` : ''}
-          <div class="product-price">${p.preco}</div>
-          <a class="product-link" href="${p.link}" target="_blank" rel="noopener sponsored">Ver oferta</a>
+      // Agrupa os produtos por categoria
+      const porCategoria = {};
+      data.resultados.forEach((p) => {
+        const cat = p.categoria || 'Geral';
+        if (!porCategoria[cat]) porCategoria[cat] = [];
+        porCategoria[cat].push(p);
+      });
+
+      grid.innerHTML = Object.keys(porCategoria).map((categoria) => `
+        <div class="category-block">
+          <div class="category-title">${categoria}</div>
+          <div class="products-grid">
+            ${porCategoria[categoria].map((p) => `
+              <div class="product-card">
+                ${p.imagem ? `<img src="${p.imagem}" alt="${p.titulo}">` : ''}
+                <div class="product-store">${p.loja || 'Amazon'}</div>
+                <h3>${p.titulo}</h3>
+                ${p.descricao ? `<p class="product-desc">${p.descricao}</p>` : ''}
+                <div class="product-price">${p.preco}</div>
+                <a class="product-link" href="${p.link}" target="_blank" rel="noopener sponsored">Ver oferta</a>
+              </div>
+            `).join('')}
+          </div>
         </div>
       `).join('');
     } catch (e) {

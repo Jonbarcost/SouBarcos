@@ -162,6 +162,10 @@
       <div style="clear:both;"></div>
     </div>
 
+    <label for="categoria">Categoria</label>
+    <input type="text" id="categoria" list="categoriasExistentes" placeholder="Ex: Beleza">
+    <datalist id="categoriasExistentes"></datalist>
+
     <button id="btnSalvar">Adicionar oferta</button>
     <div id="msg" class="msg"></div>
   </div>
@@ -294,6 +298,7 @@
         row.innerHTML = `
           <div>
             <div class="item-title">${p.titulo}</div>
+            <div style="font-size:0.75rem; color:#7C8CA3; font-family:'Space Mono',monospace; margin-top:2px;">${p.categoria || 'Geral'}</div>
           </div>
           <div style="display:flex; align-items:center; gap:14px;">
             <span class="item-price">${p.preco}</span>
@@ -378,7 +383,7 @@
           'Content-Type': 'application/json',
           'x-admin-password': adminPw(),
         },
-        body: JSON.stringify({ titulo, preco, link, imagem, descricao }),
+        body: JSON.stringify({ titulo, preco, link, imagem, descricao, categoria: $('categoria').value.trim() || 'Geral' }),
       });
 
       if (!res.ok) {
@@ -392,6 +397,7 @@
       $('previewCard').style.display = 'none';
       dadosBookmarklet = null;
       carregarLista();
+      carregarCategorias();
     } catch (e) {
       showMsg(e.message, false);
     } finally {
@@ -400,8 +406,26 @@
   });
 
 
+  async function carregarCategorias() {
+    if (!apiUrl()) return;
+    try {
+      const res = await fetch(apiUrl() + '/api/categorias');
+      const data = await res.json();
+      const datalist = $('categoriasExistentes');
+      datalist.innerHTML = '';
+      (data.categorias || []).forEach((cat) => {
+        const option = document.createElement('option');
+        option.value = cat;
+        datalist.appendChild(option);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   processarParametrosDaURL();
   carregarLista();
+  carregarCategorias();
 </script>
 </body>
 </html>

@@ -104,9 +104,21 @@ app.get('/api/products', async (req, res) => {
   res.json({ resultados: data });
 });
 
+// Lista as categorias já usadas, para preencher o dropdown do admin.html
+app.get('/api/categorias', async (req, res) => {
+  const { data, error } = await supabase.from('products').select('categoria');
+
+  if (error) {
+    return res.status(500).json({ error: 'Não foi possível carregar as categorias.' });
+  }
+
+  const categorias = [...new Set(data.map((p) => p.categoria).filter(Boolean))];
+  res.json({ categorias });
+});
+
 // Adiciona um novo produto — usado pela página /admin.html
 app.post('/api/products', checkAdmin, async (req, res) => {
-  const { titulo, preco, link, imagem, loja, descricao } = req.body;
+  const { titulo, preco, link, imagem, loja, descricao, categoria } = req.body;
 
   if (!titulo || !preco || !link) {
     return res.status(400).json({ error: 'Título, preço e link são obrigatórios.' });
@@ -114,7 +126,7 @@ app.post('/api/products', checkAdmin, async (req, res) => {
 
   const { data, error } = await supabase
     .from('products')
-    .insert([{ titulo, preco, link, imagem: imagem || null, loja: loja || 'Amazon', descricao: descricao || null }])
+    .insert([{ titulo, preco, link, imagem: imagem || null, loja: loja || 'Amazon', descricao: descricao || null, categoria: categoria || 'Geral' }])
     .select();
 
   if (error) {
