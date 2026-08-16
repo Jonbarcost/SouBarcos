@@ -42,6 +42,62 @@
     font-size:0.85rem;
     color:var(--slate-light);
   }
+  .prof-result button{
+    margin-top:10px;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    padding:9px 16px;
+    border-radius:3px;
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+  }
+  .agendar-box{
+    display:none;
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+  .agendar-box.aberto{ display:block; }
+  .agendar-box input[type="datetime-local"]{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.9rem;
+    margin-bottom:8px;
+  }
+  .agendamento-item{
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .agendamento-item button{
+    background:#fff;
+    color:var(--navy);
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:3px;
+    font-size:0.8rem;
+    cursor:pointer;
+  }
+  .status-tag{
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:3px 8px;
+    border-radius:999px;
+  }
+  .status-agendado{ background:rgba(232,163,61,0.15); color:#96631a; }
+  .status-desmarcado{ background:rgba(150,150,150,0.15); color:#666; }
+  .status-concluido{ background:rgba(30,120,80,0.12); color:#1e7850; }
 </style>
 </head>
 <body>
@@ -173,6 +229,7 @@
   const blocoPainel = document.getElementById('blocoPainel');
 
   let todosProfissionais = [];
+  let clienteIdAtual = null;
 
   function esconderTudo() {
     blocoAuth.style.display = 'none';
@@ -301,10 +358,11 @@
   });
 
   function mostrarPainel(perfil, userId) {
+    clienteIdAtual = userId;
     blocoPainel.style.display = 'block';
     document.getElementById('painelSaudacao').textContent = 'Bem-vindo(a), ' + perfil.nome + '!';
     carregarProfissionais();
-    carregarAgendamentos(userId);
+    carregarAgendamentos();
   }
 
   async function carregarProfissionais() {
@@ -331,9 +389,48 @@
         ${p.servicos ? '<p><strong>Serviços:</strong> ' + p.servicos + '</p>' : ''}
         ${p.bio ? '<p>' + p.bio + '</p>' : ''}
         ${p.forma_contato ? '<p class="contato">Contato: ' + p.forma_contato + '</p>' : ''}
+        <button type="button" onclick="abrirAgendar('${p.id}')">Agendar consulta</button>
+        <div class="agendar-box" id="agendar-${p.id}">
+          <input type="datetime-local" id="data-${p.id}">
+          <button type="button" onclick="confirmarAgendamento('${p.id}')">Confirmar agendamento</button>
+          <div id="agendarFeedback-${p.id}" class="form-feedback"></div>
+        </div>
       </div>
     `).join('');
   }
+
+  window.abrirAgendar = function(profissionalId) {
+    const box = document.getElementById('agendar-' + profissionalId);
+    box.classList.toggle('aberto');
+  };
+
+  window.confirmarAgendamento = async function(profissionalId) {
+    const input = document.getElementById('data-' + profissionalId);
+    const fb = document.getElementById('agendarFeedback-' + profissionalId);
+    const valor = input.value;
+
+    if (!valor) {
+      fb.textContent = 'Escolha uma data e horário.';
+      return;
+    }
+
+    fb.textContent = 'Agendando...';
+    const { error } = await supabaseClient.from('agendamentos').insert({
+      profissional_id: profissionalId,
+      cliente_id: clienteIdAtual,
+      data_hora: new Date(valor).toISOString(),
+      status: 'agendado'
+    });
+
+    if (error) {
+      fb.textContent = error.message;
+      return;
+    }
+
+    fb.textContent = 'Consulta agendada com sucesso!';
+    input.value = '';
+    carregarAgendamentos();
+  };
 
   document.getElementById('buscaArea').addEventListener('input', (e) => {
     const termo = e.target.value.trim().toLowerCase();
@@ -349,11 +446,11 @@
     renderizarProfissionais(filtrados);
   });
 
-  async function carregarAgendamentos(clienteId) {
+  async function carregarAgendamentos() {
     const { data: agendamentos } = await supabaseClient
       .from('agendamentos')
-      .select('*')
-      .eq('cliente_id', clienteId)
+      .select('*, profissionais(nome)')
+      .eq('cliente_id', clienteIdAtual)
       .order('data_hora', { ascending: true });
 
     const lista = document.getElementById('listaAgendamentos');
@@ -361,13 +458,30 @@
       lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum agendamento ainda.</p>';
       return;
     }
-    lista.innerHTML = agendamentos.map(a =>
-      '<div style="padding:10px 0; border-bottom:1px solid var(--line);">' +
-      new Date(a.data_hora).toLocaleString('pt-BR') +
-      ' — status: ' + a.status +
-      '</div>'
-    ).join('');
+    lista.innerHTML = agendamentos.map(a => {
+      const nomeProf = a.profissionais ? a.profissionais.nome : 'Profissional';
+      const statusClasse = 'status-' + a.status;
+      const podeDesmarcar = a.status === 'agendado';
+      return `
+        <div class="agendamento-item">
+          <div>
+            <strong>${nomeProf}</strong><br>
+            ${new Date(a.data_hora).toLocaleString('pt-BR')}
+            <span class="status-tag ${statusClasse}">${a.status}</span>
+          </div>
+          ${podeDesmarcar ? '<button type="button" onclick="desmarcar(\'' + a.id + '\')">Desmarcar</button>' : ''}
+        </div>
+      `;
+    }).join('');
   }
+
+  window.desmarcar = async function(agendamentoId) {
+    await supabaseClient
+      .from('agendamentos')
+      .update({ status: 'desmarcado' })
+      .eq('id', agendamentoId);
+    carregarAgendamentos();
+  };
 
   async function sair() {
     await supabaseClient.auth.signOut();

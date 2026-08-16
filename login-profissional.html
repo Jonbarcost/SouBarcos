@@ -12,6 +12,37 @@
 <style>
   .tab-btn { flex:1; padding:14px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--navy); }
   .tab-btn.ativa { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .agendamento-item{
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .agendamento-item .acoes{ display:flex; gap:8px; }
+  .agendamento-item button{
+    background:#fff;
+    color:var(--navy);
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:3px;
+    font-size:0.8rem;
+    cursor:pointer;
+  }
+  .status-tag{
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:3px 8px;
+    border-radius:999px;
+    margin-left:8px;
+  }
+  .status-agendado{ background:rgba(232,163,61,0.15); color:#96631a; }
+  .status-desmarcado{ background:rgba(150,150,150,0.15); color:#666; }
+  .status-concluido{ background:rgba(30,120,80,0.12); color:#1e7850; }
 </style>
 </head>
 <body>
@@ -136,7 +167,7 @@
     <!-- ===== PAINEL DO PROFISSIONAL (aprovado) ===== -->
     <div id="blocoPainel" class="form-card" style="display:none;">
       <h2 style="margin-top:0;" id="painelSaudacao">Bem-vindo(a)!</h2>
-      <p style="color:var(--slate); font-size:0.9rem;">Seus agendamentos aparecerão aqui.</p>
+      <p style="color:var(--slate); font-size:0.9rem;">Seus agendamentos aparecem abaixo.</p>
       <div id="listaAgendamentos"></div>
       <button id="btnSairPainel" style="margin-top:22px; background:#fff; color:var(--navy); border:1px solid var(--line);">Sair</button>
     </div>
@@ -221,7 +252,6 @@
       return;
     }
 
-    // Guarda os dados do perfil localmente até o primeiro login (após confirmação de e-mail)
     localStorage.setItem(PENDING_KEY, JSON.stringify({ email, nome, area, servicos, bio, contato }));
 
     feedback.textContent = '';
@@ -244,7 +274,6 @@
     await tratarLogin(data.user);
   });
 
-  // Decide o que mostrar depois de um login bem-sucedido
   async function tratarLogin(user) {
     const { data: perfil } = await supabaseClient
       .from('profissionais')
@@ -265,7 +294,6 @@
       return;
     }
 
-    // Perfil ainda não existe — primeira vez logando após confirmar e-mail
     const pendingRaw = localStorage.getItem(PENDING_KEY);
     if (pendingRaw) {
       const pending = JSON.parse(pendingRaw);
@@ -286,7 +314,6 @@
       }
     }
 
-    // Não achou dados salvos localmente — pede pra completar de novo
     blocoCompletar.style.display = 'block';
     blocoCompletar.dataset.userId = user.id;
   }
@@ -326,7 +353,7 @@
   async function carregarAgendamentos(profissionalId) {
     const { data: agendamentos } = await supabaseClient
       .from('agendamentos')
-      .select('*')
+      .select('*, pacientes_clientes(nome)')
       .eq('profissional_id', profissionalId)
       .order('data_hora', { ascending: true });
 
@@ -335,13 +362,33 @@
       lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum agendamento ainda.</p>';
       return;
     }
-    lista.innerHTML = agendamentos.map(a =>
-      '<div style="padding:10px 0; border-bottom:1px solid var(--line);">' +
-      new Date(a.data_hora).toLocaleString('pt-BR') +
-      ' — status: ' + a.status +
-      '</div>'
-    ).join('');
+    lista.innerHTML = agendamentos.map(a => {
+      const nomeCliente = a.pacientes_clientes ? a.pacientes_clientes.nome : 'Cliente';
+      const statusClasse = 'status-' + a.status;
+      const acoes = a.status === 'agendado'
+        ? '<button type="button" onclick="marcarConcluido(\'' + a.id + '\')">Marcar concluído</button>'
+        : '';
+      return `
+        <div class="agendamento-item">
+          <div>
+            <strong>${nomeCliente}</strong><br>
+            ${new Date(a.data_hora).toLocaleString('pt-BR')}
+            <span class="status-tag ${statusClasse}">${a.status}</span>
+          </div>
+          <div class="acoes">${acoes}</div>
+        </div>
+      `;
+    }).join('');
   }
+
+  window.marcarConcluido = async function(agendamentoId) {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    await supabaseClient
+      .from('agendamentos')
+      .update({ status: 'concluido' })
+      .eq('id', agendamentoId);
+    carregarAgendamentos(session.user.id);
+  };
 
   async function sair() {
     await supabaseClient.auth.signOut();
