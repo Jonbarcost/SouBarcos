@@ -759,7 +759,6 @@
       <div class="tabs-scroll">
         <div id="categoryFilters" class="tabs-row"></div>
       </div>
-      <div id="categoryShareRow" class="category-share-row" style="display:none;"></div>
     </div>
 
     <div id="productsGrid">
@@ -1011,43 +1010,21 @@
 
     container.querySelectorAll('.filter-pill').forEach((btn) => {
       btn.addEventListener('click', () => {
-        categoriaAtiva = btn.dataset.categoria;
-        montarFiltros();
-        renderizarProdutos();
+        const chave = btn.dataset.categoria;
+
+        if (chave === 'Todas') {
+          // "Todas" continua na mesma aba, mostrando tudo
+          categoriaAtiva = 'Todas';
+          montarFiltros();
+          renderizarProdutos();
+          return;
+        }
+
+        // Clicar numa categoria abre ela numa ABA NOVA do navegador
+        const url = new URL(window.location.href);
+        url.searchParams.set('categoria', chave);
+        window.open(url.toString(), '_blank');
       });
-    });
-
-    atualizarLinkCompartilhavel(mapaCategorias);
-  }
-
-  function atualizarLinkCompartilhavel(mapaCategorias) {
-    const row = document.getElementById('categoryShareRow');
-    const url = new URL(window.location.href);
-
-    if (categoriaAtiva === 'Todas') {
-      url.searchParams.delete('categoria');
-      window.history.replaceState({}, '', url.pathname + url.search);
-      row.style.display = 'none';
-      return;
-    }
-
-    const label = mapaCategorias[categoriaAtiva] || categoriaAtiva;
-    url.searchParams.set('categoria', categoriaAtiva);
-    window.history.replaceState({}, '', url.pathname + '?' + url.searchParams.toString());
-
-    row.style.display = 'flex';
-    row.innerHTML = `
-      <span>Link direto de "${label}":</span>
-      <button class="category-share-btn" id="btnCopiarLinkCategoria">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copiar link
-      </button>
-    `;
-    document.getElementById('btnCopiarLinkCategoria').addEventListener('click', () => {
-      navigator.clipboard.writeText(url.toString());
-      const btn = document.getElementById('btnCopiarLinkCategoria');
-      btn.innerHTML = 'Copiado!';
-      setTimeout(() => atualizarLinkCompartilhavel(mapaCategorias), 1500);
     });
   }
 
