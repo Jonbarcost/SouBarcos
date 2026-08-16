@@ -9,6 +9,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<style>
+  .tab-btn { flex:1; padding:14px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--navy); }
+  .tab-btn.ativa { background:var(--navy); color:#fff; border-color:var(--navy); }
+</style>
 </head>
 <body>
 
@@ -44,13 +48,24 @@
 
     <!-- ===== BLOCO DE LOGIN / CADASTRO ===== -->
     <div id="blocoAuth" class="form-card">
-      <div style="display:flex; gap:10px; margin-bottom:22px;">
-        <button id="tabCadastro" type="button" style="flex:1;">Criar conta</button>
-        <button id="tabLogin" type="button" style="flex:1; background:#fff; color:var(--navy); border:1px solid var(--line);">Já tenho conta</button>
+      <div style="display:flex; margin-bottom:26px;">
+        <button id="tabLogin" type="button" class="tab-btn ativa">Já tenho conta — Entrar</button>
+        <button id="tabCadastro" type="button" class="tab-btn">Criar conta nova</button>
+      </div>
+
+      <!-- Formulário de login (padrão, aparece primeiro) -->
+      <div id="formLogin">
+        <label for="logEmail">E-mail</label>
+        <input type="email" id="logEmail" placeholder="seu@email.com">
+
+        <label for="logSenha">Senha</label>
+        <input type="password" id="logSenha" placeholder="Sua senha">
+
+        <button id="btnLogin" style="width:100%; margin-top:22px;">Entrar</button>
       </div>
 
       <!-- Formulário de cadastro -->
-      <div id="formCadastro">
+      <div id="formCadastro" style="display:none;">
         <label for="cadNome">Nome completo</label>
         <input type="text" id="cadNome" placeholder="Seu nome">
 
@@ -72,18 +87,10 @@
         <label for="cadSenha">Senha</label>
         <input type="password" id="cadSenha" placeholder="Mínimo de 6 caracteres">
 
+        <label for="cadSenhaConfirma">Confirmar senha</label>
+        <input type="password" id="cadSenhaConfirma" placeholder="Repita a senha">
+
         <button id="btnCadastrar" style="width:100%; margin-top:22px;">Criar conta de profissional</button>
-      </div>
-
-      <!-- Formulário de login -->
-      <div id="formLogin" style="display:none;">
-        <label for="logEmail">E-mail</label>
-        <input type="email" id="logEmail" placeholder="seu@email.com">
-
-        <label for="logSenha">Senha</label>
-        <input type="password" id="logSenha" placeholder="Sua senha">
-
-        <button id="btnLogin" style="width:100%; margin-top:22px;">Entrar</button>
       </div>
 
       <div id="authFeedback" class="form-feedback"></div>
@@ -125,14 +132,24 @@
   const blocoAguardando = document.getElementById('blocoAguardando');
   const blocoPainel = document.getElementById('blocoPainel');
 
-  // Alternar entre abas cadastro/login
-  document.getElementById('tabCadastro').addEventListener('click', () => {
-    document.getElementById('formCadastro').style.display = 'block';
-    document.getElementById('formLogin').style.display = 'none';
+  const tabLogin = document.getElementById('tabLogin');
+  const tabCadastro = document.getElementById('tabCadastro');
+  const formLogin = document.getElementById('formLogin');
+  const formCadastro = document.getElementById('formCadastro');
+
+  tabLogin.addEventListener('click', () => {
+    tabLogin.classList.add('ativa');
+    tabCadastro.classList.remove('ativa');
+    formLogin.style.display = 'block';
+    formCadastro.style.display = 'none';
+    feedback.textContent = '';
   });
-  document.getElementById('tabLogin').addEventListener('click', () => {
-    document.getElementById('formCadastro').style.display = 'none';
-    document.getElementById('formLogin').style.display = 'block';
+  tabCadastro.addEventListener('click', () => {
+    tabCadastro.classList.add('ativa');
+    tabLogin.classList.remove('ativa');
+    formCadastro.style.display = 'block';
+    formLogin.style.display = 'none';
+    feedback.textContent = '';
   });
 
   // Criar conta
@@ -144,9 +161,14 @@
     const contato = document.getElementById('cadContato').value.trim();
     const email = document.getElementById('cadEmail').value.trim();
     const senha = document.getElementById('cadSenha').value;
+    const senhaConfirma = document.getElementById('cadSenhaConfirma').value;
 
     if (!nome || !area || !email || senha.length < 6) {
       feedback.textContent = 'Preencha nome, área de atuação, e-mail e uma senha com pelo menos 6 caracteres.';
+      return;
+    }
+    if (senha !== senhaConfirma) {
+      feedback.textContent = 'As senhas não coincidem. Confira e tente novamente.';
       return;
     }
 
@@ -157,7 +179,6 @@
       return;
     }
 
-    // Salva o perfil profissional vinculado ao novo usuário
     const userId = data.user ? data.user.id : null;
     if (userId) {
       const { error: perfilError } = await supabaseClient.from('profissionais').insert({
@@ -194,7 +215,6 @@
     await mostrarPainelOuEspera(data.user);
   });
 
-  // Decide se mostra o painel (aprovado) ou a tela de espera
   async function mostrarPainelOuEspera(user) {
     const { data: perfil, error } = await supabaseClient
       .from('profissionais')
@@ -238,7 +258,6 @@
     ).join('');
   }
 
-  // Sair
   async function sair() {
     await supabaseClient.auth.signOut();
     blocoAguardando.style.display = 'none';
@@ -248,7 +267,6 @@
   document.getElementById('btnSairAguardando').addEventListener('click', sair);
   document.getElementById('btnSairPainel').addEventListener('click', sair);
 
-  // Se já estiver logado ao abrir a página, verifica o status direto
   supabaseClient.auth.getSession().then(({ data }) => {
     if (data.session) {
       mostrarPainelOuEspera(data.session.user);
