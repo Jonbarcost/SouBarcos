@@ -7,11 +7,13 @@
 <meta name="description" content="Cadastro e login para profissionais no SouBarcos.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .tab-btn { flex:1; padding:14px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--navy); }
+  .tab-btn { flex:1; padding:14px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--navy); border-radius:10px; }
   .tab-btn.ativa { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .tab-btn:first-child{ border-top-right-radius:0; border-bottom-right-radius:0; }
+  .tab-btn:last-child{ border-top-left-radius:0; border-bottom-left-radius:0; margin-left:-1px; }
   .agendamento-item{
     padding:10px 0;
     border-bottom:1px solid var(--line);
@@ -27,7 +29,7 @@
     color:var(--navy);
     border:1px solid var(--line);
     padding:6px 12px;
-    border-radius:3px;
+    border-radius:8px;
     font-size:0.8rem;
     cursor:pointer;
   }

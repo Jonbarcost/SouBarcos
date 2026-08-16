@@ -7,7 +7,7 @@
 <meta name="description" content="SouBarcos é uma plataforma em construção para reunir ofertas e promoções exclusivas, apoiar quem precisa e ajudar a aprender de graça.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy: #0B2545;
@@ -17,7 +17,7 @@
     --slate: #45566B;
     --slate-light: #7C8CA3;
     --line: rgba(11,37,69,0.12);
-    --radius: 2px;
+    --radius: 12px;
   }
 
   *{ box-sizing: border-box; margin:0; padding:0; }
@@ -63,7 +63,7 @@
     flex-shrink: 0;
   }
   .wordmark{
-    font-family: 'Spectral', serif;
+    font-family: 'Fraunces', serif;
     font-weight: 700;
     font-size: 1.35rem;
     letter-spacing: 0.01em;
@@ -108,7 +108,7 @@
     color: #fff !important;
     background: var(--navy);
     padding: 7px 14px;
-    border-radius: 3px;
+    border-radius: var(--radius);
     font-weight: 600;
   }
   .user-nav-cta::after{ display:none; }
@@ -171,7 +171,7 @@
     margin-bottom: 22px;
   }
   h1{
-    font-family: 'Spectral', serif;
+    font-family: 'Fraunces', serif;
     font-weight: 600;
     font-size: clamp(2.4rem, 5.5vw, 4rem);
     line-height: 1.12;
@@ -215,7 +215,7 @@
     margin-bottom: 18px;
   }
   .intent-text{
-    font-family: 'Spectral', serif;
+    font-family: 'Fraunces', serif;
     font-size: clamp(1.25rem, 2.4vw, 1.6rem);
     line-height: 1.55;
     max-width: 62ch;
@@ -237,7 +237,7 @@
     max-width: 640px;
     height: 340px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: var(--radius);
     display: block;
   }
 
@@ -254,7 +254,7 @@
     margin-bottom: 36px;
   }
   .manifest-head h2{
-    font-family: 'Spectral', serif;
+    font-family: 'Fraunces', serif;
     font-weight: 600;
     font-size: 1.6rem;
   }
@@ -282,7 +282,7 @@
     padding-top: 4px;
   }
   .item-body h3{
-    font-family: 'Spectral', serif;
+    font-family: 'Fraunces', serif;
     font-weight: 600;
     font-size: 1.15rem;
     margin-bottom: 6px;
@@ -333,7 +333,7 @@
     font-size: 0.88rem;
   }
   .footer-wordmark{
-    font-family: 'Spectral', serif;
+    font-family: 'Fraunces', serif;
     font-weight: 700;
     color: var(--slate-light);
   }
@@ -366,7 +366,7 @@
   .card-block{
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 4px;
+    border-radius: calc(var(--radius) + 2px);
     padding: 26px;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
@@ -391,7 +391,7 @@
     width: 100%;
     padding: 10px 12px;
     border: 1px solid var(--line);
-    border-radius: 3px;
+    border-radius: 8px;
     font-family: 'Work Sans', sans-serif;
     font-size: 0.92rem;
     color: var(--navy);
@@ -404,7 +404,7 @@
     color: #fff;
     border: none;
     padding: 11px;
-    border-radius: 3px;
+    border-radius: var(--radius);
     font-weight: 600;
     font-size: 0.9rem;
     cursor: pointer;
@@ -423,9 +423,9 @@
     gap: 10px;
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 4px;
+    border-radius: var(--radius);
     padding: 16px 18px;
-    font-family: 'Spectral', serif;
+    font-family: 'Fraunces', serif;
     font-weight: 600;
     font-size: 0.95rem;
     color: var(--navy);

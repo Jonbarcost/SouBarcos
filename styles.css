@@ -8,6 +8,8 @@
   --slate: #45566B;
   --slate-light: #7C8CA3;
   --line: rgba(11,37,69,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
 }
 
 *{ box-sizing: border-box; margin:0; padding:0; }
@@ -47,8 +49,8 @@ header{
 }
 .logo-mark{ width: 30px; height: 30px; flex-shrink: 0; }
 .wordmark{
-  font-family: 'Spectral', serif;
-  font-weight: 700;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
   font-size: 1.2rem;
 }
 .wordmark span{ color: var(--sand); }
@@ -64,8 +66,8 @@ header{
   text-decoration: none;
   color: var(--navy);
   border: 1px solid var(--line);
-  padding: 9px 16px;
-  border-radius: 4px;
+  padding: 9px 18px;
+  border-radius: var(--radius);
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 .btn-inicio:hover{ border-color: var(--sand); background: var(--foam); }
@@ -84,8 +86,8 @@ header{
   margin-bottom: 18px;
 }
 .pitch-hero h1{
-  font-family: 'Spectral', serif;
-  font-weight: 600;
+  font-family: 'Fraunces', serif;
+  font-weight: 560;
   font-size: clamp(2rem, 4.5vw, 3rem);
   line-height: 1.18;
   max-width: 22ch;
@@ -104,8 +106,8 @@ header{
   border-bottom: 1px solid var(--line);
 }
 .section-title{
-  font-family: 'Spectral', serif;
-  font-weight: 600;
+  font-family: 'Fraunces', serif;
+  font-weight: 560;
   font-size: 1.5rem;
   margin-bottom: 14px;
 }
@@ -124,7 +126,7 @@ header{
 .value-card{
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: var(--radius);
   padding: 24px;
 }
 .value-card svg{
@@ -134,7 +136,7 @@ header{
   margin-bottom: 14px;
 }
 .value-card h3{
-  font-family: 'Spectral', serif;
+  font-family: 'Fraunces', serif;
   font-weight: 600;
   font-size: 1.05rem;
   margin-bottom: 8px;
@@ -150,7 +152,7 @@ header{
 .form-card{
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: calc(var(--radius) + 4px);
   padding: 32px;
   max-width: 520px;
 }
@@ -171,7 +173,7 @@ header{
   width: 100%;
   padding: 11px 13px;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-family: 'Work Sans', sans-serif;
   font-size: 0.94rem;
   color: var(--navy);
@@ -184,7 +186,7 @@ header{
   color: #fff;
   border: none;
   padding: 13px;
-  border-radius: 4px;
+  border-radius: var(--radius);
   font-weight: 600;
   font-size: 0.94rem;
   cursor: pointer;
@@ -211,9 +213,9 @@ header{
   gap: 10px;
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: var(--radius);
   padding: 16px 18px;
-  font-family: 'Spectral', serif;
+  font-family: 'Fraunces', serif;
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--navy);
@@ -242,6 +244,11 @@ header{
   background: transparent;
   color: var(--slate-light);
   border: 1px solid var(--line);
+}
+.tag.active{
+  background: rgba(30,120,80,0.1);
+  color: #1e7850;
+  border-color: rgba(30,120,80,0.3);
 }
 
 /* ---------- footer ---------- */
