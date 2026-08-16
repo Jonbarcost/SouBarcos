@@ -53,7 +53,7 @@
         <button id="tabCadastro" type="button" class="tab-btn">Criar conta nova</button>
       </div>
 
-      <!-- Formulário de login (padrão, aparece primeiro) -->
+      <!-- Login -->
       <div id="formLogin">
         <label for="logEmail">E-mail</label>
         <input type="email" id="logEmail" placeholder="seu@email.com">
@@ -64,7 +64,7 @@
         <button id="btnLogin" style="width:100%; margin-top:22px;">Entrar</button>
       </div>
 
-      <!-- Formulário de cadastro -->
+      <!-- Cadastro -->
       <div id="formCadastro" style="display:none;">
         <label for="cadNome">Nome completo</label>
         <input type="text" id="cadNome" placeholder="Seu nome">
@@ -96,9 +96,39 @@
       <div id="authFeedback" class="form-feedback"></div>
     </div>
 
+    <!-- ===== CONFIRME SEU E-MAIL (logo após cadastro) ===== -->
+    <div id="blocoConfirmeEmail" class="form-card" style="display:none; text-align:center;">
+      <h2 style="margin-top:0;">Quase lá!</h2>
+      <p>Enviamos um link de confirmação para o seu e-mail. Depois de confirmar, volte aqui e faça login para concluir seu cadastro.</p>
+    </div>
+
+    <!-- ===== COMPLETAR PERFIL (login sem dados salvos localmente) ===== -->
+    <div id="blocoCompletar" class="form-card" style="display:none;">
+      <h2 style="margin-top:0;">Complete seu perfil</h2>
+      <p style="color:var(--slate); font-size:0.9rem;">Não encontramos os dados do seu cadastro neste dispositivo. Preencha novamente para concluir.</p>
+
+      <label for="compNome">Nome completo</label>
+      <input type="text" id="compNome" placeholder="Seu nome">
+
+      <label for="compArea">Área de atuação</label>
+      <input type="text" id="compArea" placeholder="Ex: Nutrição, Psicologia, Educação física">
+
+      <label for="compServicos">Serviços oferecidos</label>
+      <input type="text" id="compServicos" placeholder="Ex: Consulta inicial, acompanhamento mensal">
+
+      <label for="compBio">Breve apresentação</label>
+      <input type="text" id="compBio" placeholder="Fale um pouco sobre sua experiência">
+
+      <label for="compContato">Forma de contato</label>
+      <input type="text" id="compContato" placeholder="Ex: WhatsApp (11) 90000-0000">
+
+      <button id="btnCompletar" style="width:100%; margin-top:22px;">Salvar perfil</button>
+      <div id="completarFeedback" class="form-feedback"></div>
+    </div>
+
     <!-- ===== AGUARDANDO APROVAÇÃO ===== -->
     <div id="blocoAguardando" class="form-card" style="display:none; text-align:center;">
-      <h2 style="margin-top:0;">Conta criada!</h2>
+      <h2 style="margin-top:0;">Perfil salvo!</h2>
       <p>Seu cadastro foi enviado para análise. Assim que for aprovado, você terá acesso ao seu painel de profissional. Isso pode levar até alguns dias.</p>
       <button id="btnSairAguardando" style="background:#fff; color:var(--navy); border:1px solid var(--line);">Sair</button>
     </div>
@@ -127,10 +157,22 @@
   const SUPABASE_KEY = 'sb_publishable_dxERlC03iJBjBR1NAwyvwQ_fgrMJ7XH';
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  const PENDING_KEY = 'sb_pending_profissional';
+
   const feedback = document.getElementById('authFeedback');
   const blocoAuth = document.getElementById('blocoAuth');
+  const blocoConfirmeEmail = document.getElementById('blocoConfirmeEmail');
+  const blocoCompletar = document.getElementById('blocoCompletar');
   const blocoAguardando = document.getElementById('blocoAguardando');
   const blocoPainel = document.getElementById('blocoPainel');
+
+  function esconderTudo() {
+    blocoAuth.style.display = 'none';
+    blocoConfirmeEmail.style.display = 'none';
+    blocoCompletar.style.display = 'none';
+    blocoAguardando.style.display = 'none';
+    blocoPainel.style.display = 'none';
+  }
 
   const tabLogin = document.getElementById('tabLogin');
   const tabCadastro = document.getElementById('tabCadastro');
@@ -152,7 +194,7 @@
     feedback.textContent = '';
   });
 
-  // Criar conta
+  // ===== Criar conta =====
   document.getElementById('btnCadastrar').addEventListener('click', async () => {
     const nome = document.getElementById('cadNome').value.trim();
     const area = document.getElementById('cadArea').value.trim();
@@ -173,34 +215,21 @@
     }
 
     feedback.textContent = 'Criando conta...';
-    const { data, error } = await supabaseClient.auth.signUp({ email, password: senha });
+    const { error } = await supabaseClient.auth.signUp({ email, password: senha });
     if (error) {
       feedback.textContent = error.message;
       return;
     }
 
-    const userId = data.user ? data.user.id : null;
-    if (userId) {
-      const { error: perfilError } = await supabaseClient.from('profissionais').insert({
-        id: userId,
-        nome,
-        area_atuacao: area,
-        servicos,
-        bio,
-        forma_contato: contato
-      });
-      if (perfilError) {
-        feedback.textContent = 'Conta criada, mas houve um erro ao salvar seu perfil: ' + perfilError.message;
-        return;
-      }
-    }
+    // Guarda os dados do perfil localmente até o primeiro login (após confirmação de e-mail)
+    localStorage.setItem(PENDING_KEY, JSON.stringify({ email, nome, area, servicos, bio, contato }));
 
     feedback.textContent = '';
-    blocoAuth.style.display = 'none';
-    blocoAguardando.style.display = 'block';
+    esconderTudo();
+    blocoConfirmeEmail.style.display = 'block';
   });
 
-  // Login
+  // ===== Login =====
   document.getElementById('btnLogin').addEventListener('click', async () => {
     const email = document.getElementById('logEmail').value.trim();
     const senha = document.getElementById('logSenha').value;
@@ -212,31 +241,87 @@
       return;
     }
     feedback.textContent = '';
-    await mostrarPainelOuEspera(data.user);
+    await tratarLogin(data.user);
   });
 
-  async function mostrarPainelOuEspera(user) {
-    const { data: perfil, error } = await supabaseClient
+  // Decide o que mostrar depois de um login bem-sucedido
+  async function tratarLogin(user) {
+    const { data: perfil } = await supabaseClient
       .from('profissionais')
       .select('*')
       .eq('id', user.id)
-      .single();
+      .maybeSingle();
 
-    if (error || !perfil) {
-      feedback.textContent = 'Não encontramos seu perfil profissional.';
+    esconderTudo();
+
+    if (perfil) {
+      if (perfil.aprovado) {
+        blocoPainel.style.display = 'block';
+        document.getElementById('painelSaudacao').textContent = 'Bem-vindo(a), ' + perfil.nome + '!';
+        carregarAgendamentos(user.id);
+      } else {
+        blocoAguardando.style.display = 'block';
+      }
       return;
     }
 
-    blocoAuth.style.display = 'none';
-
-    if (perfil.aprovado) {
-      blocoPainel.style.display = 'block';
-      document.getElementById('painelSaudacao').textContent = 'Bem-vindo(a), ' + perfil.nome + '!';
-      carregarAgendamentos(user.id);
-    } else {
-      blocoAguardando.style.display = 'block';
+    // Perfil ainda não existe — primeira vez logando após confirmar e-mail
+    const pendingRaw = localStorage.getItem(PENDING_KEY);
+    if (pendingRaw) {
+      const pending = JSON.parse(pendingRaw);
+      if (pending.email === user.email) {
+        const { error: perfilError } = await supabaseClient.from('profissionais').insert({
+          id: user.id,
+          nome: pending.nome,
+          area_atuacao: pending.area,
+          servicos: pending.servicos,
+          bio: pending.bio,
+          forma_contato: pending.contato
+        });
+        localStorage.removeItem(PENDING_KEY);
+        if (!perfilError) {
+          blocoAguardando.style.display = 'block';
+          return;
+        }
+      }
     }
+
+    // Não achou dados salvos localmente — pede pra completar de novo
+    blocoCompletar.style.display = 'block';
+    blocoCompletar.dataset.userId = user.id;
   }
+
+  document.getElementById('btnCompletar').addEventListener('click', async () => {
+    const userId = blocoCompletar.dataset.userId;
+    const nome = document.getElementById('compNome').value.trim();
+    const area = document.getElementById('compArea').value.trim();
+    const servicos = document.getElementById('compServicos').value.trim();
+    const bio = document.getElementById('compBio').value.trim();
+    const contato = document.getElementById('compContato').value.trim();
+    const compFeedback = document.getElementById('completarFeedback');
+
+    if (!nome || !area) {
+      compFeedback.textContent = 'Preencha ao menos nome e área de atuação.';
+      return;
+    }
+
+    const { error } = await supabaseClient.from('profissionais').insert({
+      id: userId,
+      nome,
+      area_atuacao: area,
+      servicos,
+      bio,
+      forma_contato: contato
+    });
+
+    if (error) {
+      compFeedback.textContent = error.message;
+      return;
+    }
+
+    esconderTudo();
+    blocoAguardando.style.display = 'block';
+  });
 
   async function carregarAgendamentos(profissionalId) {
     const { data: agendamentos } = await supabaseClient
@@ -260,16 +345,16 @@
 
   async function sair() {
     await supabaseClient.auth.signOut();
-    blocoAguardando.style.display = 'none';
-    blocoPainel.style.display = 'none';
+    esconderTudo();
     blocoAuth.style.display = 'block';
   }
   document.getElementById('btnSairAguardando').addEventListener('click', sair);
   document.getElementById('btnSairPainel').addEventListener('click', sair);
 
+  // Se já estiver logado ao abrir a página
   supabaseClient.auth.getSession().then(({ data }) => {
     if (data.session) {
-      mostrarPainelOuEspera(data.session.user);
+      tratarLogin(data.session.user);
     }
   });
 </script>
