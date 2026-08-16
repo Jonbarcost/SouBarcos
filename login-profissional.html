@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Área do Profissional — SouBarcos</title>
+<meta name="description" content="Cadastro e login para profissionais no SouBarcos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="wordmark-group">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+          <path d="M50 62 L50 12 L86 44 Z"/>
+          <path d="M50 62 L50 12 L14 44 Z"/>
+        </g>
+      </svg>
+      <div class="wordmark">Sou<span>Barcos</span></div>
+    </div>
+    <a href="index.html" class="btn-inicio">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Início
+    </a>
+  </div>
+</header>
+
+<section class="pitch-hero">
+  <div class="wrap">
+    <div class="pitch-eyebrow">Área do profissional</div>
+    <h1>Ofereça seus serviços através do SouBarcos.</h1>
+    <p>Cadastre seu perfil profissional, receba solicitações de consulta e organize sua agenda em um só lugar. Os valores de consultas e serviços são combinados diretamente entre você e o cliente — o SouBarcos não processa pagamentos.</p>
+  </div>
+</section>
+
+<section class="section" style="border-bottom:none;">
+  <div class="wrap">
+
+    <!-- ===== BLOCO DE LOGIN / CADASTRO ===== -->
+    <div id="blocoAuth" class="form-card">
+      <div style="display:flex; gap:10px; margin-bottom:22px;">
+        <button id="tabCadastro" type="button" style="flex:1;">Criar conta</button>
+        <button id="tabLogin" type="button" style="flex:1; background:#fff; color:var(--navy); border:1px solid var(--line);">Já tenho conta</button>
+      </div>
+
+      <!-- Formulário de cadastro -->
+      <div id="formCadastro">
+        <label for="cadNome">Nome completo</label>
+        <input type="text" id="cadNome" placeholder="Seu nome">
+
+        <label for="cadArea">Área de atuação</label>
+        <input type="text" id="cadArea" placeholder="Ex: Nutrição, Psicologia, Educação física">
+
+        <label for="cadServicos">Serviços oferecidos</label>
+        <input type="text" id="cadServicos" placeholder="Ex: Consulta inicial, acompanhamento mensal">
+
+        <label for="cadBio">Breve apresentação</label>
+        <input type="text" id="cadBio" placeholder="Fale um pouco sobre sua experiência">
+
+        <label for="cadContato">Forma de contato (para combinar valores/atendimento)</label>
+        <input type="text" id="cadContato" placeholder="Ex: WhatsApp (11) 90000-0000">
+
+        <label for="cadEmail">E-mail</label>
+        <input type="email" id="cadEmail" placeholder="seu@email.com">
+
+        <label for="cadSenha">Senha</label>
+        <input type="password" id="cadSenha" placeholder="Mínimo de 6 caracteres">
+
+        <button id="btnCadastrar" style="width:100%; margin-top:22px;">Criar conta de profissional</button>
+      </div>
+
+      <!-- Formulário de login -->
+      <div id="formLogin" style="display:none;">
+        <label for="logEmail">E-mail</label>
+        <input type="email" id="logEmail" placeholder="seu@email.com">
+
+        <label for="logSenha">Senha</label>
+        <input type="password" id="logSenha" placeholder="Sua senha">
+
+        <button id="btnLogin" style="width:100%; margin-top:22px;">Entrar</button>
+      </div>
+
+      <div id="authFeedback" class="form-feedback"></div>
+    </div>
+
+    <!-- ===== AGUARDANDO APROVAÇÃO ===== -->
+    <div id="blocoAguardando" class="form-card" style="display:none; text-align:center;">
+      <h2 style="margin-top:0;">Conta criada!</h2>
+      <p>Seu cadastro foi enviado para análise. Assim que for aprovado, você terá acesso ao seu painel de profissional. Isso pode levar até alguns dias.</p>
+      <button id="btnSairAguardando" style="background:#fff; color:var(--navy); border:1px solid var(--line);">Sair</button>
+    </div>
+
+    <!-- ===== PAINEL DO PROFISSIONAL (aprovado) ===== -->
+    <div id="blocoPainel" class="form-card" style="display:none;">
+      <h2 style="margin-top:0;" id="painelSaudacao">Bem-vindo(a)!</h2>
+      <p style="color:var(--slate); font-size:0.9rem;">Seus agendamentos aparecerão aqui.</p>
+      <div id="listaAgendamentos"></div>
+      <button id="btnSairPainel" style="margin-top:22px; background:#fff; color:var(--navy); border:1px solid var(--line);">Sair</button>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap header-row">
+    <div class="wordmark">SouBarcos</div>
+    <div>Projeto em construção · atualizado conforme avança</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://rrymtjzsekmjplyuoqef.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_dxERlC03iJBjBR1NAwyvwQ_fgrMJ7XH';
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const feedback = document.getElementById('authFeedback');
+  const blocoAuth = document.getElementById('blocoAuth');
+  const blocoAguardando = document.getElementById('blocoAguardando');
+  const blocoPainel = document.getElementById('blocoPainel');
+
+  // Alternar entre abas cadastro/login
+  document.getElementById('tabCadastro').addEventListener('click', () => {
+    document.getElementById('formCadastro').style.display = 'block';
+    document.getElementById('formLogin').style.display = 'none';
+  });
+  document.getElementById('tabLogin').addEventListener('click', () => {
+    document.getElementById('formCadastro').style.display = 'none';
+    document.getElementById('formLogin').style.display = 'block';
+  });
+
+  // Criar conta
+  document.getElementById('btnCadastrar').addEventListener('click', async () => {
+    const nome = document.getElementById('cadNome').value.trim();
+    const area = document.getElementById('cadArea').value.trim();
+    const servicos = document.getElementById('cadServicos').value.trim();
+    const bio = document.getElementById('cadBio').value.trim();
+    const contato = document.getElementById('cadContato').value.trim();
+    const email = document.getElementById('cadEmail').value.trim();
+    const senha = document.getElementById('cadSenha').value;
+
+    if (!nome || !area || !email || senha.length < 6) {
+      feedback.textContent = 'Preencha nome, área de atuação, e-mail e uma senha com pelo menos 6 caracteres.';
+      return;
+    }
+
+    feedback.textContent = 'Criando conta...';
+    const { data, error } = await supabaseClient.auth.signUp({ email, password: senha });
+    if (error) {
+      feedback.textContent = error.message;
+      return;
+    }
+
+    // Salva o perfil profissional vinculado ao novo usuário
+    const userId = data.user ? data.user.id : null;
+    if (userId) {
+      const { error: perfilError } = await supabaseClient.from('profissionais').insert({
+        id: userId,
+        nome,
+        area_atuacao: area,
+        servicos,
+        bio,
+        forma_contato: contato
+      });
+      if (perfilError) {
+        feedback.textContent = 'Conta criada, mas houve um erro ao salvar seu perfil: ' + perfilError.message;
+        return;
+      }
+    }
+
+    feedback.textContent = '';
+    blocoAuth.style.display = 'none';
+    blocoAguardando.style.display = 'block';
+  });
+
+  // Login
+  document.getElementById('btnLogin').addEventListener('click', async () => {
+    const email = document.getElementById('logEmail').value.trim();
+    const senha = document.getElementById('logSenha').value;
+
+    feedback.textContent = 'Entrando...';
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: senha });
+    if (error) {
+      feedback.textContent = error.message;
+      return;
+    }
+    feedback.textContent = '';
+    await mostrarPainelOuEspera(data.user);
+  });
+
+  // Decide se mostra o painel (aprovado) ou a tela de espera
+  async function mostrarPainelOuEspera(user) {
+    const { data: perfil, error } = await supabaseClient
+      .from('profissionais')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (error || !perfil) {
+      feedback.textContent = 'Não encontramos seu perfil profissional.';
+      return;
+    }
+
+    blocoAuth.style.display = 'none';
+
+    if (perfil.aprovado) {
+      blocoPainel.style.display = 'block';
+      document.getElementById('painelSaudacao').textContent = 'Bem-vindo(a), ' + perfil.nome + '!';
+      carregarAgendamentos(user.id);
+    } else {
+      blocoAguardando.style.display = 'block';
+    }
+  }
+
+  async function carregarAgendamentos(profissionalId) {
+    const { data: agendamentos } = await supabaseClient
+      .from('agendamentos')
+      .select('*')
+      .eq('profissional_id', profissionalId)
+      .order('data_hora', { ascending: true });
+
+    const lista = document.getElementById('listaAgendamentos');
+    if (!agendamentos || agendamentos.length === 0) {
+      lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum agendamento ainda.</p>';
+      return;
+    }
+    lista.innerHTML = agendamentos.map(a =>
+      '<div style="padding:10px 0; border-bottom:1px solid var(--line);">' +
+      new Date(a.data_hora).toLocaleString('pt-BR') +
+      ' — status: ' + a.status +
+      '</div>'
+    ).join('');
+  }
+
+  // Sair
+  async function sair() {
+    await supabaseClient.auth.signOut();
+    blocoAguardando.style.display = 'none';
+    blocoPainel.style.display = 'none';
+    blocoAuth.style.display = 'block';
+  }
+  document.getElementById('btnSairAguardando').addEventListener('click', sair);
+  document.getElementById('btnSairPainel').addEventListener('click', sair);
+
+  // Se já estiver logado ao abrir a página, verifica o status direto
+  supabaseClient.auth.getSession().then(({ data }) => {
+    if (data.session) {
+      mostrarPainelOuEspera(data.session.user);
+    }
+  });
+</script>
+</body>
+</html>
