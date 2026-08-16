@@ -449,7 +449,7 @@
   async function carregarAgendamentos() {
     const { data: agendamentos } = await supabaseClient
       .from('agendamentos')
-      .select('*, profissionais(nome)')
+      .select('*')
       .eq('cliente_id', clienteIdAtual)
       .order('data_hora', { ascending: true });
 
@@ -458,8 +458,18 @@
       lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum agendamento ainda.</p>';
       return;
     }
+
+    // Busca os nomes dos profissionais envolvidos numa consulta separada
+    const profIds = [...new Set(agendamentos.map(a => a.profissional_id))];
+    const { data: profs } = await supabaseClient
+      .from('profissionais')
+      .select('id, nome')
+      .in('id', profIds);
+    const nomesPorId = {};
+    (profs || []).forEach(p => { nomesPorId[p.id] = p.nome; });
+
     lista.innerHTML = agendamentos.map(a => {
-      const nomeProf = a.profissionais ? a.profissionais.nome : 'Profissional';
+      const nomeProf = nomesPorId[a.profissional_id] || 'Profissional';
       const statusClasse = 'status-' + a.status;
       const podeDesmarcar = a.status === 'agendado';
       return `

@@ -353,7 +353,7 @@
   async function carregarAgendamentos(profissionalId) {
     const { data: agendamentos } = await supabaseClient
       .from('agendamentos')
-      .select('*, pacientes_clientes(nome)')
+      .select('*')
       .eq('profissional_id', profissionalId)
       .order('data_hora', { ascending: true });
 
@@ -362,8 +362,18 @@
       lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum agendamento ainda.</p>';
       return;
     }
+
+    // Busca os nomes dos clientes envolvidos numa consulta separada
+    const clienteIds = [...new Set(agendamentos.map(a => a.cliente_id))];
+    const { data: clientes } = await supabaseClient
+      .from('pacientes_clientes')
+      .select('id, nome')
+      .in('id', clienteIds);
+    const nomesPorId = {};
+    (clientes || []).forEach(c => { nomesPorId[c.id] = c.nome; });
+
     lista.innerHTML = agendamentos.map(a => {
-      const nomeCliente = a.pacientes_clientes ? a.pacientes_clientes.nome : 'Cliente';
+      const nomeCliente = nomesPorId[a.cliente_id] || 'Cliente';
       const statusClasse = 'status-' + a.status;
       const acoes = a.status === 'agendado'
         ? '<button type="button" onclick="marcarConcluido(\'' + a.id + '\')">Marcar concluído</button>'
