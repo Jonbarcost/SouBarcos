@@ -12,6 +12,36 @@
 <style>
   .tab-btn { flex:1; padding:14px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--navy); }
   .tab-btn.ativa { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .prof-result{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:18px 20px;
+    margin-bottom:14px;
+  }
+  .prof-result h4{
+    font-family:'Spectral', serif;
+    font-size:1.05rem;
+    color:var(--navy);
+    margin-bottom:4px;
+  }
+  .prof-result .area{
+    font-family:'Space Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--sand);
+    margin-bottom:10px;
+  }
+  .prof-result p{
+    color:var(--slate);
+    font-size:0.92rem;
+    margin-bottom:6px;
+  }
+  .prof-result .contato{
+    font-size:0.85rem;
+    color:var(--slate-light);
+  }
 </style>
 </head>
 <body>
@@ -87,9 +117,16 @@
     <!-- ===== PAINEL DO CLIENTE (logado) ===== -->
     <div id="blocoPainel" class="form-card" style="display:none;">
       <h2 style="margin-top:0;" id="painelSaudacao">Bem-vindo(a)!</h2>
-      <p style="color:var(--slate); font-size:0.95rem;">Em breve você poderá buscar profissionais, agendar consultas e acompanhar seu histórico por aqui.</p>
 
+      <!-- Busca de profissionais -->
       <div style="margin-top:22px;">
+        <h3 style="font-size:1rem; margin-bottom:10px;">Buscar profissionais</h3>
+        <input type="text" id="buscaArea" placeholder="Buscar por área de atuação (ex: nutrição, psicologia)" style="margin-bottom:14px;">
+        <div id="listaProfissionais"><p style="color:var(--slate); font-size:0.9rem;">Carregando profissionais...</p></div>
+      </div>
+
+      <!-- Agendamentos -->
+      <div style="margin-top:32px;">
         <h3 style="font-size:1rem; margin-bottom:10px;">Seus agendamentos</h3>
         <div id="listaAgendamentos"></div>
       </div>
@@ -121,6 +158,8 @@
   const tabCadastro = document.getElementById('tabCadastro');
   const formLogin = document.getElementById('formLogin');
   const formCadastro = document.getElementById('formCadastro');
+
+  let todosProfissionais = [];
 
   tabLogin.addEventListener('click', () => {
     tabLogin.classList.add('ativa');
@@ -205,8 +244,52 @@
     blocoAuth.style.display = 'none';
     blocoPainel.style.display = 'block';
     document.getElementById('painelSaudacao').textContent = 'Bem-vindo(a), ' + perfil.nome + '!';
+    carregarProfissionais();
     carregarAgendamentos(user.id);
   }
+
+  // Busca de profissionais aprovados
+  async function carregarProfissionais() {
+    const { data: profissionais, error } = await supabaseClient
+      .from('profissionais')
+      .select('*')
+      .eq('aprovado', true)
+      .order('nome', { ascending: true });
+
+    todosProfissionais = profissionais || [];
+    renderizarProfissionais(todosProfissionais);
+  }
+
+  function renderizarProfissionais(lista) {
+    const container = document.getElementById('listaProfissionais');
+    if (!lista || lista.length === 0) {
+      container.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum profissional disponível ainda.</p>';
+      return;
+    }
+    container.innerHTML = lista.map(p => `
+      <div class="prof-result">
+        <h4>${p.nome}</h4>
+        <div class="area">${p.area_atuacao || ''}</div>
+        ${p.servicos ? '<p><strong>Serviços:</strong> ' + p.servicos + '</p>' : ''}
+        ${p.bio ? '<p>' + p.bio + '</p>' : ''}
+        ${p.forma_contato ? '<p class="contato">Contato: ' + p.forma_contato + '</p>' : ''}
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('buscaArea').addEventListener('input', (e) => {
+    const termo = e.target.value.trim().toLowerCase();
+    if (!termo) {
+      renderizarProfissionais(todosProfissionais);
+      return;
+    }
+    const filtrados = todosProfissionais.filter(p =>
+      (p.area_atuacao || '').toLowerCase().includes(termo) ||
+      (p.servicos || '').toLowerCase().includes(termo) ||
+      (p.nome || '').toLowerCase().includes(termo)
+    );
+    renderizarProfissionais(filtrados);
+  });
 
   async function carregarAgendamentos(clienteId) {
     const { data: agendamentos } = await supabaseClient
