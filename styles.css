@@ -218,6 +218,19 @@ header{
   font-size: 0.95rem;
   color: var(--navy);
 }
+.prof-left{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+.prof-icon{
+  flex-shrink: 0;
+  display:flex;
+}
+.prof-icon svg{
+  width: 22px;
+  height: 22px;
+}
 .tag{
   font-family: 'Space Mono', monospace;
   font-size: 0.65rem;
