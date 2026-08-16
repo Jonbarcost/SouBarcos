@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar conta — SouBarcos</title>
+<meta name="description" content="Crie sua conta no SouBarcos e acompanhe suas mensagens e futuras vantagens de associado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="wordmark-group">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+          <path d="M50 62 L50 12 L86 44 Z"/>
+          <path d="M50 62 L50 12 L14 44 Z"/>
+        </g>
+      </svg>
+      <div class="wordmark">Sou<span>Barcos</span></div>
+    </div>
+    <a href="index.html" class="btn-inicio">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Início
+    </a>
+  </div>
+</header>
+
+<section class="pitch-hero">
+  <div class="wrap">
+    <div class="pitch-eyebrow">Criar conta</div>
+    <h1>Acompanhe o SouBarcos por dentro, desde o início.</h1>
+    <p>Com uma conta, você acompanha suas mensagens, guarda seu histórico e vai ser um dos primeiros a saber quando as vantagens de associado — e a área de profissionais — estiverem no ar.</p>
+  </div>
+</section>
+
+<section class="section" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="form-card">
+      <label for="contaEmail">Seu e-mail</label>
+      <input type="email" id="contaEmail" placeholder="seu@email.com">
+
+      <label for="contaSenha">Senha</label>
+      <input type="password" id="contaSenha" placeholder="Mínimo de 6 caracteres">
+
+      <div style="display:flex; gap:10px; margin-top:22px;">
+        <button id="btnCriarConta" style="flex:1;">Criar conta</button>
+        <button id="btnEntrar" style="flex:1; background:#fff; color:var(--navy); border:1px solid var(--line);">Entrar</button>
+      </div>
+      <div id="contaFeedback" class="form-feedback"></div>
+      <div id="contaLogada" style="display:none; margin-top:10px; font-size:0.9rem; color:var(--slate);"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap header-row">
+    <div class="wordmark">SouBarcos</div>
+    <div>Projeto em construção · atualizado conforme avança</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Preencha com os dados reais do seu projeto Supabase (Project URL e Publishable key)
+  const SUPABASE_URL = 'https://rrymtjzsekmjplyuoqef.supabase.co';
+  const SUPABASE_KEY = 'COLE_AQUI_SUA_PUBLISHABLE_KEY';
+
+  let supabaseClient = null;
+  try {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } catch (e) {
+    console.error('Supabase não configurado ainda.', e);
+  }
+
+  document.getElementById('btnCriarConta').addEventListener('click', async () => {
+    const email = document.getElementById('contaEmail').value.trim();
+    const senha = document.getElementById('contaSenha').value;
+    const feedback = document.getElementById('contaFeedback');
+
+    if (!email || senha.length < 6) {
+      feedback.textContent = 'Informe um e-mail e uma senha com pelo menos 6 caracteres.';
+      return;
+    }
+    if (!supabaseClient) {
+      feedback.textContent = 'Conta ainda não está disponível — volte em breve.';
+      return;
+    }
+
+    feedback.textContent = 'Criando conta...';
+    const { error } = await supabaseClient.auth.signUp({ email, password: senha });
+    feedback.textContent = error ? error.message : 'Conta criada! Confira seu e-mail para confirmar.';
+  });
+
+  document.getElementById('btnEntrar').addEventListener('click', async () => {
+    const email = document.getElementById('contaEmail').value.trim();
+    const senha = document.getElementById('contaSenha').value;
+    const feedback = document.getElementById('contaFeedback');
+
+    if (!supabaseClient) {
+      feedback.textContent = 'Conta ainda não está disponível — volte em breve.';
+      return;
+    }
+
+    feedback.textContent = 'Entrando...';
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: senha });
+    if (error) {
+      feedback.textContent = error.message;
+      return;
+    }
+    feedback.textContent = '';
+    document.getElementById('contaLogada').style.display = 'block';
+    document.getElementById('contaLogada').textContent = 'Conectado como ' + data.user.email;
+  });
+</script>
+</body>
+</html>

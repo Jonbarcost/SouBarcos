@@ -698,11 +698,11 @@
       <div class="wordmark">Sou<span>Barcos</span></div>
     </div>
     <nav class="user-nav">
-      <a href="#areaProfissionais" data-target="areaProfissionais">Área profissionais</a>
-      <a href="#cardMensagem" data-categoria="Suporte" data-target="cardMensagem">Suporte</a>
-      <a href="#cardMensagem" data-categoria="Seja associado" data-target="cardMensagem">Seja associado</a>
-      <a href="#cardMensagem" data-categoria="Sugestão" data-target="cardMensagem">Sugestões</a>
-      <a href="#conta" class="user-nav-cta" data-target="conta">Criar conta</a>
+      <a href="profissionais.html" target="_blank" rel="noopener">Área profissionais</a>
+      <a href="contato.html?assunto=Suporte" target="_blank" rel="noopener">Suporte</a>
+      <a href="contato.html?assunto=Seja+associado" target="_blank" rel="noopener">Seja associado</a>
+      <a href="contato.html?assunto=Sugestão" target="_blank" rel="noopener">Sugestões</a>
+      <a href="conta.html" class="user-nav-cta" target="_blank" rel="noopener">Criar conta</a>
     </nav>
     <div class="status-pill">Em construção</div>
   </div>
@@ -816,73 +816,6 @@
   </div>
 </section>
 
-<section class="userzone hideable" id="areaProfissionais">
-  <div class="wrap">
-    <div class="manifest-head">
-      <h2>Área de profissionais</h2>
-      <p>Especialidades que pretendemos conectar aos usuários do SouBarcos. Em construção — mais serão adicionadas com o tempo.</p>
-    </div>
-    <div class="prof-grid">
-      <div class="prof-card"><span>Médicos</span><span class="tag planned">Em breve</span></div>
-      <div class="prof-card"><span>Educador físico</span><span class="tag planned">Em breve</span></div>
-      <div class="prof-card"><span>Dentista</span><span class="tag planned">Em breve</span></div>
-      <div class="prof-card"><span>Nutricionista</span><span class="tag planned">Em breve</span></div>
-      <div class="prof-card"><span>Psicólogo</span><span class="tag planned">Em breve</span></div>
-      <div class="prof-card"><span>Serviços sociais e cultura</span><span class="tag planned">Em breve</span></div>
-      <div class="prof-card"><span>Esportes, lazer e educação</span><span class="tag planned">Em breve</span></div>
-      <div class="prof-card"><span>Cursos gratuitos</span><span class="tag planned">Em breve</span></div>
-      <div class="prof-card prof-card-more">+ Novas especialidades em breve</div>
-    </div>
-  </div>
-</section>
-
-<section class="userzone hideable" id="contato">
-  <div class="wrap">
-    <div class="manifest-head">
-      <h2>Fale com a gente</h2>
-      <p>Suporte, sugestões ou interesse em ser associado — escolha o assunto e envie.</p>
-    </div>
-
-    <div class="userzone-grid">
-      <div class="card-block" id="cardMensagem">
-        <label for="msgCategoria">Assunto</label>
-        <select id="msgCategoria">
-          <option>Suporte</option>
-          <option>Seja associado</option>
-          <option>Sugestão</option>
-        </select>
-
-        <label for="msgNome">Seu nome</label>
-        <input type="text" id="msgNome" placeholder="Como podemos te chamar">
-
-        <label for="msgEmail">Seu e-mail</label>
-        <input type="email" id="msgEmail" placeholder="seu@email.com">
-
-        <label for="msgTexto">Mensagem</label>
-        <textarea id="msgTexto" rows="4" placeholder="Escreva aqui..."></textarea>
-
-        <button id="btnEnviarMsg">Enviar mensagem</button>
-        <div id="msgFeedback" class="compare-empty" style="margin-top:10px;"></div>
-      </div>
-
-      <div class="card-block" id="conta">
-        <label style="margin-top:0;">Criar conta</label>
-        <p style="font-size:0.88rem; color:var(--slate); margin-bottom:14px;">Crie uma conta para acompanhar suas mensagens e futuras vantagens de associado.</p>
-
-        <input type="email" id="contaEmail" placeholder="seu@email.com" style="margin-bottom:10px;">
-        <input type="password" id="contaSenha" placeholder="Senha (mínimo 6 caracteres)">
-
-        <div style="display:flex; gap:10px; margin-top:14px;">
-          <button id="btnCriarConta" style="flex:1;">Criar conta</button>
-          <button id="btnEntrar" style="flex:1; background:#fff; color:var(--navy); border:1px solid var(--line);">Entrar</button>
-        </div>
-        <div id="contaFeedback" class="compare-empty" style="margin-top:10px;"></div>
-        <div id="contaLogada" style="display:none; margin-top:10px; font-size:0.88rem; color:var(--slate);"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <footer>
   <div class="wrap footer-row">
     <div class="footer-wordmark">SouBarcos</div>
@@ -890,7 +823,6 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Depois de publicar o backend no Render, troque a linha abaixo
   // pela URL real, ex: 'https://soubarcos-api.onrender.com'
@@ -1120,117 +1052,6 @@
 
   carregarProdutos();
 
-  // ---------- Área do usuário: conta e mensagens ----------
-  // Preencha com os dados reais do seu projeto Supabase (Project URL e Publishable key)
-  const SUPABASE_URL = 'https://rrymtjzsekmjplyuoqef.supabase.co';
-  const SUPABASE_KEY = 'COLE_AQUI_SUA_PUBLISHABLE_KEY';
-
-  let supabaseClient = null;
-  try {
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  } catch (e) {
-    console.error('Supabase não configurado ainda.', e);
-  }
-
-  // Ao clicar em cada item do menu, abre a seção escondida certa e destaca a parte relevante
-  document.querySelectorAll('.user-nav a[data-target]').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-
-      if (link.dataset.categoria) {
-        document.getElementById('msgCategoria').value = link.dataset.categoria;
-      }
-
-      const target = document.getElementById(link.dataset.target);
-      if (!target) return;
-
-      // Fecha qualquer outra seção aberta, abre só a que foi clicada
-      document.querySelectorAll('.hideable.open').forEach((el) => el.classList.remove('open'));
-      const hideableSection = target.closest('.hideable') || target;
-      hideableSection.classList.add('open');
-
-      setTimeout(() => {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        if (target !== hideableSection) {
-          target.classList.add('highlight');
-          setTimeout(() => target.classList.remove('highlight'), 1800);
-        }
-
-        const firstField = target.querySelector('input, select, textarea');
-        if (firstField) setTimeout(() => firstField.focus(), 400);
-      }, 30);
-    });
-  });
-
-  document.getElementById('btnEnviarMsg').addEventListener('click', async () => {
-    const categoria = document.getElementById('msgCategoria').value;
-    const nome = document.getElementById('msgNome').value.trim();
-    const email = document.getElementById('msgEmail').value.trim();
-    const mensagem = document.getElementById('msgTexto').value.trim();
-    const feedback = document.getElementById('msgFeedback');
-
-    if (!mensagem) {
-      feedback.textContent = 'Escreva uma mensagem antes de enviar.';
-      return;
-    }
-
-    feedback.textContent = 'Enviando...';
-    try {
-      const res = await fetch(API_URL + '/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ categoria, nome, email, mensagem }),
-      });
-      if (!res.ok) throw new Error();
-      feedback.textContent = 'Mensagem enviada — obrigado pelo contato!';
-      document.getElementById('msgNome').value = '';
-      document.getElementById('msgEmail').value = '';
-      document.getElementById('msgTexto').value = '';
-    } catch (e) {
-      feedback.textContent = 'Não foi possível enviar agora. Tente novamente.';
-    }
-  });
-
-  document.getElementById('btnCriarConta').addEventListener('click', async () => {
-    const email = document.getElementById('contaEmail').value.trim();
-    const senha = document.getElementById('contaSenha').value;
-    const feedback = document.getElementById('contaFeedback');
-
-    if (!email || senha.length < 6) {
-      feedback.textContent = 'Informe um e-mail e uma senha com pelo menos 6 caracteres.';
-      return;
-    }
-    if (!supabaseClient) {
-      feedback.textContent = 'Conta ainda não está disponível — volte em breve.';
-      return;
-    }
-
-    feedback.textContent = 'Criando conta...';
-    const { error } = await supabaseClient.auth.signUp({ email, password: senha });
-    feedback.textContent = error ? error.message : 'Conta criada! Confira seu e-mail para confirmar.';
-  });
-
-  document.getElementById('btnEntrar').addEventListener('click', async () => {
-    const email = document.getElementById('contaEmail').value.trim();
-    const senha = document.getElementById('contaSenha').value;
-    const feedback = document.getElementById('contaFeedback');
-
-    if (!supabaseClient) {
-      feedback.textContent = 'Conta ainda não está disponível — volte em breve.';
-      return;
-    }
-
-    feedback.textContent = 'Entrando...';
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: senha });
-    if (error) {
-      feedback.textContent = error.message;
-      return;
-    }
-    feedback.textContent = '';
-    document.getElementById('contaLogada').style.display = 'block';
-    document.getElementById('contaLogada').textContent = 'Conectado como ' + data.user.email;
-    document.getElementById('msgEmail').value = data.user.email;
-  });
 </script>
 </body>
 </html>

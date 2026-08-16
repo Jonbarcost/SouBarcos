@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fale com a gente — SouBarcos</title>
+<meta name="description" content="Suporte, sugestões ou interesse em ser associado do SouBarcos. Fale com a gente.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="wordmark-group">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+          <path d="M50 62 L50 12 L86 44 Z"/>
+          <path d="M50 62 L50 12 L14 44 Z"/>
+        </g>
+      </svg>
+      <div class="wordmark">Sou<span>Barcos</span></div>
+    </div>
+    <a href="index.html" class="btn-inicio">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Início
+    </a>
+  </div>
+</header>
+
+<section class="pitch-hero">
+  <div class="wrap">
+    <div class="pitch-eyebrow">Fale com a gente</div>
+    <h1>Toda mensagem chega a uma pessoa de verdade.</h1>
+    <p>Seja para pedir suporte, sugerir algo que faria o SouBarcos melhor, ou se juntar a nós de alguma forma — não existe pergunta pequena demais nesse estágio do projeto. O que você disser aqui ajuda a moldar o que construímos a seguir.</p>
+  </div>
+</section>
+
+<section class="section" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="form-card">
+      <label for="msgCategoria">Assunto</label>
+      <select id="msgCategoria">
+        <option>Suporte</option>
+        <option>Seja associado</option>
+        <option>Sugestão</option>
+      </select>
+
+      <label for="msgNome">Seu nome</label>
+      <input type="text" id="msgNome" placeholder="Como podemos te chamar">
+
+      <label for="msgEmail">Seu e-mail</label>
+      <input type="email" id="msgEmail" placeholder="seu@email.com">
+
+      <label for="msgTexto">Mensagem</label>
+      <textarea id="msgTexto" rows="5" placeholder="Escreva aqui..."></textarea>
+
+      <button id="btnEnviarMsg">Enviar mensagem</button>
+      <div id="msgFeedback" class="form-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap header-row">
+    <div class="wordmark">SouBarcos</div>
+    <div>Projeto em construção · atualizado conforme avança</div>
+  </div>
+</footer>
+
+<script>
+  const API_URL = 'https://soubarcos.onrender.com';
+
+  // Se veio de um link tipo contato.html?assunto=Seja+associado, pré-seleciona
+  const assuntoDaURL = new URLSearchParams(window.location.search).get('assunto');
+  if (assuntoDaURL) {
+    document.getElementById('msgCategoria').value = assuntoDaURL;
+  }
+
+  document.getElementById('btnEnviarMsg').addEventListener('click', async () => {
+    const categoria = document.getElementById('msgCategoria').value;
+    const nome = document.getElementById('msgNome').value.trim();
+    const email = document.getElementById('msgEmail').value.trim();
+    const mensagem = document.getElementById('msgTexto').value.trim();
+    const feedback = document.getElementById('msgFeedback');
+
+    if (!mensagem) {
+      feedback.textContent = 'Escreva uma mensagem antes de enviar.';
+      return;
+    }
+
+    feedback.textContent = 'Enviando...';
+    try {
+      const res = await fetch(API_URL + '/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categoria, nome, email, mensagem }),
+      });
+      if (!res.ok) throw new Error();
+      feedback.textContent = 'Mensagem enviada — obrigado pelo contato!';
+      document.getElementById('msgNome').value = '';
+      document.getElementById('msgEmail').value = '';
+      document.getElementById('msgTexto').value = '';
+    } catch (e) {
+      feedback.textContent = 'Não foi possível enviar agora. Tente novamente.';
+    }
+  });
+</script>
+</body>
+</html>
