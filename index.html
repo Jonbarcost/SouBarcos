@@ -146,6 +146,22 @@
     padding: 96px 0 64px;
     border-bottom: 1px solid var(--line);
   }
+  .hero-grid{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 48px;
+  }
+  .hero-mark{
+    width: 200px;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+  .hero-mark svg{ width: 100%; height: auto; }
+  @media (max-width: 860px){
+    .hero-grid{ grid-template-columns: 1fr; }
+    .hero-mark{ display: none; }
+  }
   .hero-eyebrow{
     font-family: 'Space Mono', monospace;
     font-size: 0.72rem;
@@ -387,9 +403,37 @@
     overflow: hidden;
   }
   .product-price{
-    font-family: 'Space Mono', monospace;
-    font-size: 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1px;
+    font-variant-numeric: tabular-nums;
+  }
+  .price-currency{
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
     color: #96631a;
+    margin-right: 3px;
+  }
+  .price-whole{
+    font-family: 'Spectral', serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #7a4f0f;
+    line-height: 1;
+  }
+  .price-decimal{
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: #96631a;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+  .price-fallback{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--slate-light);
   }
   .product-store{
     font-family: 'Space Mono', monospace;
@@ -509,6 +553,44 @@
     stroke: #fff;
   }
 
+  .tabs-scroll{
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .tabs-scroll::-webkit-scrollbar{ display: none; }
+  .tabs-row{
+    display: flex;
+    gap: 8px;
+    width: max-content;
+    min-width: 100%;
+  }
+  .category-share-row{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--slate-light);
+  }
+  .category-share-btn{
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--navy);
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .category-share-btn:hover{ border-color: var(--sand); }
+
   .hideable{
     display: none;
   }
@@ -627,19 +709,32 @@
 </header>
 
 <section class="hero">
-  <div class="wrap">
-    <div class="hero-eyebrow">soubarcos.com.br — projeto em desenvolvimento</div>
-    <h1>Boas indicações, reunidas em um só lugar.</h1>
-    <p class="hero-sub">Este site ainda está sendo construído, peça por peça, à vista. Abaixo você encontra exatamente o que está planejado e em que estágio cada parte se encontra.</p>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <div class="hero-eyebrow">soubarcos.com — projeto em desenvolvimento</div>
+      <h1>Boas indicações, reunidas em um só lugar.</h1>
+      <p class="hero-sub">Este site ainda está sendo construído, peça por peça, à vista. Abaixo você encontra exatamente o que está planejado e em que estágio cada parte se encontra.</p>
 
-    <div class="route">
-      <svg viewBox="0 0 640 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M10 70 C 140 70, 160 20, 300 20 S 460 70, 630 30" stroke="#0B2545" stroke-width="1.2" stroke-dasharray="1 7" stroke-linecap="round"/>
-        <circle cx="10" cy="70" r="4.5" fill="#0B2545"/>
-        <circle cx="300" cy="20" r="4.5" fill="#E8A33D"/>
-        <circle cx="630" cy="30" r="4.5" fill="#0B2545"/>
+      <div class="route">
+        <svg viewBox="0 0 640 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M10 70 C 140 70, 160 20, 300 20 S 460 70, 630 30" stroke="#0B2545" stroke-width="1.2" stroke-dasharray="1 7" stroke-linecap="round"/>
+          <circle cx="10" cy="70" r="4.5" fill="#0B2545"/>
+          <circle cx="300" cy="20" r="4.5" fill="#E8A33D"/>
+          <circle cx="630" cy="30" r="4.5" fill="#0B2545"/>
+        </svg>
+        <div class="route-caption">Ponto de partida — MVP em rota — destino: plataforma completa</div>
+      </div>
+    </div>
+
+    <div class="hero-mark" aria-hidden="true">
+      <svg viewBox="0 0 200 160">
+        <g fill="none" stroke="#0B2545" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M24 100 L176 100 L148 156 L52 156 Z"/>
+          <path d="M100 100 L100 12 L172 62 Z"/>
+          <path d="M100 100 L100 12 L28 62 Z"/>
+        </g>
+        <path d="M4 178 Q100 200 196 178" stroke="#E8A33D" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
       </svg>
-      <div class="route-caption">Ponto de partida — MVP em rota — destino: plataforma completa</div>
     </div>
   </div>
 </section>
@@ -661,7 +756,10 @@
 
     <div id="filterBar" style="display:none; margin-bottom:32px;">
       <input type="text" id="searchInput" placeholder="Buscar por nome do produto..." style="width:100%; max-width:420px; padding:11px 14px; border:1px solid var(--line); border-radius:3px; font-family:'Work Sans',sans-serif; font-size:0.92rem; background:#fff; margin-bottom:16px;">
-      <div id="categoryFilters" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+      <div class="tabs-scroll">
+        <div id="categoryFilters" class="tabs-row"></div>
+      </div>
+      <div id="categoryShareRow" class="category-share-row" style="display:none;"></div>
     </div>
 
     <div id="productsGrid">
@@ -816,9 +914,18 @@
       }
 
       todosProdutos = data.resultados;
+
+      // Se o link já veio com ?categoria=Nome, abre direto naquela aba
+      const catDaURL = new URLSearchParams(window.location.search).get('categoria');
+      if (catDaURL) categoriaAtiva = chaveCategoria(catDaURL);
+
       montarFiltros();
       renderizarProdutos();
       document.getElementById('filterBar').style.display = 'block';
+
+      if (catDaURL) {
+        document.querySelector('.compare').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     } catch (e) {
       grid.innerHTML = '<p class="compare-empty">Não foi possível carregar os produtos agora.</p>';
     }
@@ -868,6 +975,17 @@
     return limpa.charAt(0).toUpperCase() + limpa.slice(1);
   }
 
+  // Deixa o preço com acabamento de e-commerce: número grande + centavos menores
+  function formatarPrecoHTML(preco) {
+    if (!preco) return '';
+    const match = preco.trim().match(/^(R\$|US\$|\$|€)?\s*([\d.]+),(\d{2})\s*$/);
+    if (match) {
+      const moeda = match[1] || 'R$';
+      return `<span class="price-currency">${moeda}</span><span class="price-whole">${match[2]}</span><span class="price-decimal">,${match[3]}</span>`;
+    }
+    return `<span class="price-fallback">${preco}</span>`;
+  }
+
   function montarFiltros() {
     const mapaCategorias = {};
     todosProdutos.forEach((p) => {
@@ -897,6 +1015,39 @@
         montarFiltros();
         renderizarProdutos();
       });
+    });
+
+    atualizarLinkCompartilhavel(mapaCategorias);
+  }
+
+  function atualizarLinkCompartilhavel(mapaCategorias) {
+    const row = document.getElementById('categoryShareRow');
+    const url = new URL(window.location.href);
+
+    if (categoriaAtiva === 'Todas') {
+      url.searchParams.delete('categoria');
+      window.history.replaceState({}, '', url.pathname + url.search);
+      row.style.display = 'none';
+      return;
+    }
+
+    const label = mapaCategorias[categoriaAtiva] || categoriaAtiva;
+    url.searchParams.set('categoria', categoriaAtiva);
+    window.history.replaceState({}, '', url.pathname + '?' + url.searchParams.toString());
+
+    row.style.display = 'flex';
+    row.innerHTML = `
+      <span>Link direto de "${label}":</span>
+      <button class="category-share-btn" id="btnCopiarLinkCategoria">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar link
+      </button>
+    `;
+    document.getElementById('btnCopiarLinkCategoria').addEventListener('click', () => {
+      navigator.clipboard.writeText(url.toString());
+      const btn = document.getElementById('btnCopiarLinkCategoria');
+      btn.innerHTML = 'Copiado!';
+      setTimeout(() => atualizarLinkCompartilhavel(mapaCategorias), 1500);
     });
   }
 
@@ -952,7 +1103,7 @@
               <div class="product-store">${p.loja || 'Amazon'}</div>
               <h3>${p.titulo}</h3>
               ${p.descricao ? `<p class="product-desc">${p.descricao}</p>` : ''}
-              <div class="product-price">${p.preco}</div>
+              <div class="product-price">${formatarPrecoHTML(p.preco)}</div>
               <a class="product-link" href="${p.link}" target="_blank" rel="noopener sponsored">Ver oferta</a>
             </div>
           `).join('')}
