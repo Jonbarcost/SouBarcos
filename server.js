@@ -8,6 +8,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
@@ -22,6 +23,36 @@ const supabase = createClient(
 );
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+// Transporte de e-mail via Titan (mesma conta usada pra receber contato@)
+const emailTransporter = nodemailer.createTransport({
+  host: 'smtp.titan.email',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.TITAN_EMAIL_USER,
+    pass: process.env.TITAN_EMAIL_PASS,
+  },
+});
+
+// Envia um e-mail de aviso; nunca derruba a rota que chamou — só loga o erro,
+// porque uma falha no e-mail não deve impedir a ação principal (salvar msg, etc).
+async function enviarAviso({ para, assunto, texto }) {
+  if (!process.env.TITAN_EMAIL_USER || !process.env.TITAN_EMAIL_PASS) {
+    console.warn('E-mail não enviado: TITAN_EMAIL_USER/TITAN_EMAIL_PASS não configurados.');
+    return;
+  }
+  try {
+    await emailTransporter.sendMail({
+      from: `"SouBarcos" <${process.env.TITAN_EMAIL_USER}>`,
+      to: para,
+      subject: assunto,
+      text: texto,
+    });
+  } catch (error) {
+    console.error('Erro ao enviar e-mail:', error?.message || error);
+  }
+}
 
 // Protege as rotas de escrita (adicionar/remover produto) com uma senha simples.
 function checkAdmin(req, res, next) {
@@ -133,6 +164,13 @@ app.post('/api/messages', async (req, res) => {
     console.error('Erro ao salvar mensagem:', error.message);
     return res.status(500).json({ error: 'Não foi possível enviar sua mensagem agora.' });
   }
+
+  // Aviso por e-mail é best-effort — não bloqueia a resposta ao usuário
+  enviarAviso({
+    para: 'contato@soubarcos.com',
+    assunto: `Nova mensagem (${categoria || 'Suporte'}) — SouBarcos`,
+    texto: `Nome: ${nome || 'não informado'}\nE-mail: ${email || 'não informado'}\nCategoria: ${categoria || 'Suporte'}\n\nMensagem:\n${mensagem}`,
+  });
 
   res.status(201).json({ ok: true });
 });
