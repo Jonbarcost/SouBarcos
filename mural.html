@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mural de Apoio entre Pais — SouBarcos</title>
+<meta name="description" content="Espaço de conversa entre pais e responsáveis por crianças com autismo ou necessidades especiais.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .topico-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px 22px;
+    margin-bottom:14px;
+    cursor:pointer;
+    transition:border-color 0.15s ease;
+  }
+  .topico-card:hover{ border-color:var(--sand); }
+  .topico-card h4{
+    font-family:'Fraunces', serif;
+    font-size:1.05rem;
+    color:var(--navy);
+    margin-bottom:6px;
+  }
+  .topico-meta{
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    color:var(--slate-light);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .topico-preview{
+    color:var(--slate);
+    font-size:0.9rem;
+    margin-top:8px;
+  }
+  .resposta-item{
+    background:var(--foam);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:10px;
+  }
+  .resposta-autor{
+    font-weight:600;
+    font-size:0.85rem;
+    color:var(--navy);
+  }
+  .resposta-data{
+    font-family:'Space Mono', monospace;
+    font-size:0.65rem;
+    color:var(--slate-light);
+    text-transform:uppercase;
+    margin-left:8px;
+  }
+  .resposta-texto{
+    color:var(--slate);
+    font-size:0.92rem;
+    margin-top:6px;
+  }
+  .link-voltar{
+    display:inline-block;
+    margin-bottom:20px;
+    font-size:0.85rem;
+    color:var(--slate);
+    cursor:pointer;
+  }
+  .link-voltar:hover{ color:var(--navy); }
+  .intent-photo{
+    margin-top: 32px;
+    width: 100%;
+    max-width: 640px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: var(--radius, 12px);
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="wordmark-group">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+          <path d="M50 62 L50 12 L86 44 Z"/>
+          <path d="M50 62 L50 12 L14 44 Z"/>
+        </g>
+      </svg>
+      <div class="wordmark">Sou<span>Barcos</span></div>
+    </div>
+    <a href="index.html" class="btn-inicio">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Início
+    </a>
+  </div>
+</header>
+
+<section class="pitch-hero">
+  <div class="wrap">
+    <div class="pitch-eyebrow">Mural de apoio entre pais</div>
+    <h1>Um espaço para trocar experiências.</h1>
+    <p>Converse com outros pais e responsáveis por crianças com autismo ou necessidades especiais. Esse espaço é privado — só quem tem conta de cliente no SouBarcos consegue ler e participar.</p>
+    <img src="https://images.pexels.com/photos/6338761/pexels-photo-6338761.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Mãos dadas entre pai e filho, em gesto de cuidado e apoio" class="intent-photo">
+  </div>
+</section>
+
+<section class="section" style="border-bottom:none;">
+  <div class="wrap">
+
+    <!-- ===== NÃO LOGADO ===== -->
+    <div id="blocoNaoLogado" class="form-card" style="display:none; text-align:center;">
+      <h2 style="margin-top:0;">Entre para participar</h2>
+      <p>Você precisa ter uma conta de cliente para ver e participar do mural.</p>
+      <a href="login-cliente.html" class="btn-inicio" style="background:var(--navy); color:#fff; border-color:var(--navy); margin-top:10px; display:inline-block;">Entrar ou criar conta</a>
+    </div>
+
+    <!-- ===== LISTA DE TÓPICOS ===== -->
+    <div id="blocoLista" style="display:none; max-width:680px;">
+      <div class="form-card" style="margin-bottom:28px;">
+        <h2 style="margin-top:0; font-size:1.15rem;">Novo tópico</h2>
+        <label for="novoTitulo">Título</label>
+        <input type="text" id="novoTitulo" placeholder="Ex: Alguém já passou por seletividade alimentar?">
+        <label for="novoConteudo">Sua mensagem</label>
+        <textarea id="novoConteudo" rows="4" placeholder="Conte um pouco do que está buscando ou vivendo..."></textarea>
+        <button id="btnNovoTopico" style="width:100%; margin-top:22px;">Publicar tópico</button>
+        <div id="novoFeedback" class="form-feedback"></div>
+      </div>
+
+      <h2 style="font-size:1.15rem; margin-bottom:16px;">Tópicos recentes</h2>
+      <div id="listaTopicos"><p style="color:var(--slate); font-size:0.9rem;">Carregando...</p></div>
+    </div>
+
+    <!-- ===== DETALHE DO TÓPICO ===== -->
+    <div id="blocoDetalhe" style="display:none; max-width:680px;">
+      <span class="link-voltar" id="btnVoltar">← Voltar para os tópicos</span>
+      <div class="form-card" style="margin-bottom:24px;">
+        <div class="topico-meta" id="detalheAutorData"></div>
+        <h2 style="margin-top:8px;" id="detalheTitulo"></h2>
+        <p style="color:var(--slate); margin-top:10px;" id="detalheConteudo"></p>
+      </div>
+
+      <h3 style="font-size:1rem; margin-bottom:14px;">Respostas</h3>
+      <div id="listaRespostas"></div>
+
+      <div class="form-card" style="margin-top:20px;">
+        <label for="novaResposta">Responder</label>
+        <textarea id="novaResposta" rows="3" placeholder="Escreva sua resposta..."></textarea>
+        <button id="btnResponder" style="width:100%; margin-top:22px;">Enviar resposta</button>
+        <div id="respostaFeedback" class="form-feedback"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap header-row">
+    <div class="wordmark">SouBarcos</div>
+    <div>Projeto em construção · atualizado conforme avança</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://rrymtjzsekmjplyuoqef.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_dxERlC03iJBjBR1NAwyvwQ_fgrMJ7XH';
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const blocoNaoLogado = document.getElementById('blocoNaoLogado');
+  const blocoLista = document.getElementById('blocoLista');
+  const blocoDetalhe = document.getElementById('blocoDetalhe');
+
+  let usuarioAtual = null;
+  let nomesPorId = {};
+
+  function esconderTudo() {
+    blocoNaoLogado.style.display = 'none';
+    blocoLista.style.display = 'none';
+    blocoDetalhe.style.display = 'none';
+  }
+
+  async function iniciar() {
+    const { data } = await supabaseClient.auth.getSession();
+    if (!data.session) {
+      esconderTudo();
+      blocoNaoLogado.style.display = 'block';
+      return;
+    }
+    usuarioAtual = data.session.user;
+
+    const { data: perfil } = await supabaseClient
+      .from('pacientes_clientes')
+      .select('*')
+      .eq('id', usuarioAtual.id)
+      .maybeSingle();
+
+    if (!perfil) {
+      esconderTudo();
+      blocoNaoLogado.style.display = 'block';
+      return;
+    }
+
+    esconderTudo();
+    blocoLista.style.display = 'block';
+    carregarTopicos();
+  }
+
+  async function carregarTopicos() {
+    const { data: topicos } = await supabaseClient
+      .from('mural_topicos')
+      .select('*')
+      .order('criado_em', { ascending: false });
+
+    const lista = document.getElementById('listaTopicos');
+    if (!topicos || topicos.length === 0) {
+      lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum tópico ainda. Seja o primeiro a compartilhar!</p>';
+      return;
+    }
+
+    const autorIds = [...new Set(topicos.map(t => t.autor_id))];
+    await carregarNomes(autorIds);
+
+    lista.innerHTML = topicos.map(t => `
+      <div class="topico-card" onclick="abrirTopico('${t.id}')">
+        <div class="topico-meta">${nomesPorId[t.autor_id] || 'Pai/mãe'} · ${new Date(t.criado_em).toLocaleDateString('pt-BR')}</div>
+        <h4>${t.titulo}</h4>
+        <div class="topico-preview">${t.conteudo.slice(0, 140)}${t.conteudo.length > 140 ? '...' : ''}</div>
+      </div>
+    `).join('');
+  }
+
+  async function carregarNomes(ids) {
+    const faltantes = ids.filter(id => !(id in nomesPorId));
+    if (faltantes.length === 0) return;
+    const { data: clientes } = await supabaseClient
+      .from('pacientes_clientes')
+      .select('id, nome')
+      .in('id', faltantes);
+    (clientes || []).forEach(c => { nomesPorId[c.id] = c.nome; });
+  }
+
+  document.getElementById('btnNovoTopico').addEventListener('click', async () => {
+    const titulo = document.getElementById('novoTitulo').value.trim();
+    const conteudo = document.getElementById('novoConteudo').value.trim();
+    const fb = document.getElementById('novoFeedback');
+
+    if (!titulo || !conteudo) {
+      fb.textContent = 'Preencha o título e a mensagem.';
+      return;
+    }
+
+    fb.textContent = 'Publicando...';
+    const { error } = await supabaseClient.from('mural_topicos').insert({
+      autor_id: usuarioAtual.id,
+      titulo,
+      conteudo
+    });
+
+    if (error) {
+      fb.textContent = error.message;
+      return;
+    }
+
+    fb.textContent = '';
+    document.getElementById('novoTitulo').value = '';
+    document.getElementById('novoConteudo').value = '';
+    carregarTopicos();
+  });
+
+  window.abrirTopico = async function(topicoId) {
+    const { data: topico } = await supabaseClient
+      .from('mural_topicos')
+      .select('*')
+      .eq('id', topicoId)
+      .single();
+
+    if (!topico) return;
+
+    await carregarNomes([topico.autor_id]);
+
+    esconderTudo();
+    blocoDetalhe.style.display = 'block';
+    blocoDetalhe.dataset.topicoId = topicoId;
+
+    document.getElementById('detalheAutorData').textContent =
+      (nomesPorId[topico.autor_id] || 'Pai/mãe') + ' · ' + new Date(topico.criado_em).toLocaleDateString('pt-BR');
+    document.getElementById('detalheTitulo').textContent = topico.titulo;
+    document.getElementById('detalheConteudo').textContent = topico.conteudo;
+
+    carregarRespostas(topicoId);
+  };
+
+  async function carregarRespostas(topicoId) {
+    const { data: respostas } = await supabaseClient
+      .from('mural_respostas')
+      .select('*')
+      .eq('topico_id', topicoId)
+      .order('criado_em', { ascending: true });
+
+    const lista = document.getElementById('listaRespostas');
+    if (!respostas || respostas.length === 0) {
+      lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhuma resposta ainda.</p>';
+      return;
+    }
+
+    const autorIds = [...new Set(respostas.map(r => r.autor_id))];
+    await carregarNomes(autorIds);
+
+    lista.innerHTML = respostas.map(r => `
+      <div class="resposta-item">
+        <span class="resposta-autor">${nomesPorId[r.autor_id] || 'Pai/mãe'}</span>
+        <span class="resposta-data">${new Date(r.criado_em).toLocaleDateString('pt-BR')}</span>
+        <div class="resposta-texto">${r.conteudo}</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('btnResponder').addEventListener('click', async () => {
+    const topicoId = blocoDetalhe.dataset.topicoId;
+    const conteudo = document.getElementById('novaResposta').value.trim();
+    const fb = document.getElementById('respostaFeedback');
+
+    if (!conteudo) {
+      fb.textContent = 'Escreva uma resposta antes de enviar.';
+      return;
+    }
+
+    fb.textContent = 'Enviando...';
+    const { error } = await supabaseClient.from('mural_respostas').insert({
+      topico_id: topicoId,
+      autor_id: usuarioAtual.id,
+      conteudo
+    });
+
+    if (error) {
+      fb.textContent = error.message;
+      return;
+    }
+
+    fb.textContent = '';
+    document.getElementById('novaResposta').value = '';
+    carregarRespostas(topicoId);
+  });
+
+  document.getElementById('btnVoltar').addEventListener('click', () => {
+    esconderTudo();
+    blocoLista.style.display = 'block';
+    carregarTopicos();
+  });
+
+  iniciar();
+</script>
+</body>
+</html>
