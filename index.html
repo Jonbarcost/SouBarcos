@@ -143,6 +143,105 @@
     50%{ opacity: 0.35; }
   }
 
+  /* ---------- acesso central: criar conta / serviços ---------- */
+  .acesso-central{
+    padding: 8px 0 64px;
+  }
+  .botao-central{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width: 100%;
+    text-align:center;
+    text-decoration:none;
+    cursor:pointer;
+    font-family:'Work Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 20px 24px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .botao-criar-conta{
+    background: var(--navy);
+    color: #fff;
+    border: 4px solid var(--navy);
+  }
+  .botao-criar-conta:hover{ background: #16305e; }
+  .botao-servicos{
+    background: #fff;
+    color: var(--navy);
+    border: 4px solid var(--sand);
+  }
+  .botao-servicos:hover{ background: rgba(232,163,61,0.08); }
+  .botao-servicos.aberto #setaServicos{ transform: rotate(180deg); }
+
+  .escada-servicos{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .escada-servicos.aberta{ max-height: 640px; }
+  .escada-item{
+    position: relative;
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius: var(--radius, 12px);
+    padding: 14px 18px;
+    margin-top: 12px;
+    text-decoration:none;
+    color: var(--navy);
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .escada-item:hover{ border-color: var(--sand); transform: translateX(4px); }
+  .escada-icone{ flex-shrink:0; display:flex; }
+  .escada-texto{ font-family:'Work Sans', sans-serif; font-weight:600; font-size:0.95rem; line-height:1.3; }
+  .escada-texto small{ font-weight:400; color: var(--slate-light); font-size:0.78rem; }
+
+  .escada-legenda{
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%) translateY(4px);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background: var(--navy);
+    color: #fff;
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
+    z-index: 20;
+  }
+  .escada-legenda::after{
+    content:"";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--navy);
+  }
+  .escada-item:hover .escada-legenda{ opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 640px){
+    .escada-item{ margin-left: 0 !important; }
+    .escada-legenda{ display:none; }
+  }
+
   /* ---------- hero ---------- */
   .hero{
     padding: 96px 0 64px;
@@ -545,18 +644,10 @@
       </svg>
       <div class="wordmark">Sou<span>Barcos</span></div>
     </div>
-    <nav class="user-nav">
-      <div class="sb-busca-wrap">
-        <input type="text" id="sbBuscaInput" class="sb-busca-input" placeholder="Buscar no site...">
-        <div id="sbBuscaResultados" class="sb-busca-resultados"></div>
-      </div>
-      <a href="apoio-autismo.html">Apoio ao Autismo</a>
-      <a href="profissionais.html">Área profissionais</a>
-      <a href="contato.html?assunto=Suporte">Suporte</a>
-      <a href="contato.html?assunto=Seja+associado">Seja associado</a>
-      <a href="contato.html?assunto=Sugestão">Sugestões</a>
-      <a href="selecionar-perfil.html" class="user-nav-cta">Criar conta / Login</a>
-    </nav>
+    <div class="sb-busca-wrap" style="width:220px;">
+      <input type="text" id="sbBuscaInput" class="sb-busca-input" placeholder="Buscar no site...">
+      <div id="sbBuscaResultados" class="sb-busca-resultados"></div>
+    </div>
     <div class="status-pill">Em construção</div>
   </div>
 </header>
@@ -581,6 +672,59 @@
 
     <div class="hero-mark">
       <img src="barco-jornada.jpg" alt="Barquinho de papel azul navegando em águas calmas" style="width:100%; height:100%; object-fit:cover; display:block; border-radius:var(--radius, 12px);">
+    </div>
+  </div>
+</section>
+
+<section class="acesso-central">
+  <div class="wrap" style="max-width:560px;">
+    <a href="selecionar-perfil.html" class="botao-central botao-criar-conta">Criar conta / Login</a>
+
+    <button type="button" id="btnServicos" class="botao-central botao-servicos">
+      Serviços
+      <svg id="setaServicos" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px; transition:transform 0.2s;"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+
+    <div id="escadaServicos" class="escada-servicos">
+      <a href="apoio-autismo.html" class="escada-item" style="margin-left:0;">
+        <span class="escada-icone">
+          <svg width="26" height="26" viewBox="0 0 100 50" fill="none"><path d="M25 25c0-11 9-20 15-10 4 7 4 13 0 20-6 10-15 1-15-10zm50 0c0-11-9-20-15-10-4 7-4 13 0 20 6 10 15 1 15-10z" stroke="#E8A33D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 25c3-5 8-8 10-8s7 3 10 8c-3 5-8 8-10 8s-7-3-10-8z" stroke="#0B2545" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="escada-texto">Apoio a famílias atípicas<br><small>Autismo e necessidades intelectuais</small></span>
+        <span class="escada-legenda"><svg width="13" height="13" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>Direitos, benefícios e apoio para famílias atípicas</span>
+      </a>
+
+      <a href="selecionar-perfil.html" class="escada-item" style="margin-left:18px;">
+        <span class="escada-icone">
+          <svg width="26" height="26" viewBox="0 0 40 40" fill="none" stroke="#0B2545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="14" width="28" height="20" rx="2"/><path d="M14 14v-4a3 3 0 013-3h6a3 3 0 013 3v4"/><path d="M6 22h28"/></svg>
+        </span>
+        <span class="escada-texto">Sou profissional</span>
+        <span class="escada-legenda"><svg width="13" height="13" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>Crie seu perfil e apareça na busca de clientes</span>
+      </a>
+
+      <a href="login-cliente.html" class="escada-item" style="margin-left:36px;">
+        <span class="escada-icone">
+          <svg width="26" height="26" viewBox="0 0 40 40" fill="none" stroke="#0B2545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="13" r="7"/><path d="M6 34c0-8 6-13 14-13s14 5 14 13"/></svg>
+        </span>
+        <span class="escada-texto">Sou cliente ou paciente</span>
+        <span class="escada-legenda"><svg width="13" height="13" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>Encontre um profissional e agende sua consulta</span>
+      </a>
+
+      <a href="colaboradores.html" class="escada-item" style="margin-left:54px;">
+        <span class="escada-icone">
+          <svg width="26" height="26" viewBox="0 0 40 40" fill="none" stroke="#0B2545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 34S5 24 5 14a8 8 0 0115-4 8 8 0 0115 4c0 10-15 20-15 20z"/></svg>
+        </span>
+        <span class="escada-texto">Seja um associado</span>
+        <span class="escada-legenda"><svg width="13" height="13" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>Ajude essa corrente a não quebrar</span>
+      </a>
+
+      <a href="contato.html?assunto=Sugestão" class="escada-item" style="margin-left:72px;">
+        <span class="escada-icone">
+          <svg width="26" height="26" viewBox="0 0 40 40" fill="none" stroke="#0B2545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6a10 10 0 00-6 18c1 1 2 3 2 5h8c0-2 1-4 2-5a10 10 0 00-6-18z"/><path d="M16 33h8M17 37h6"/></svg>
+        </span>
+        <span class="escada-texto">Sugestões e críticas</span>
+        <span class="escada-legenda"><svg width="13" height="13" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>Sua opinião ajuda a construir o SouBarcos</span>
+      </a>
     </div>
   </div>
 </section>
@@ -654,6 +798,14 @@
   </div>
 </footer>
 
+<script>
+  const btnServicos = document.getElementById('btnServicos');
+  const escadaServicos = document.getElementById('escadaServicos');
+  btnServicos.addEventListener('click', () => {
+    escadaServicos.classList.toggle('aberta');
+    btnServicos.classList.toggle('aberto');
+  });
+</script>
 <script src="site-nav.js"></script>
 </body>
 </html>
