@@ -51,7 +51,8 @@ header{
 .wordmark{
   font-family: 'Fraunces', serif;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-style: italic;
+  font-size: 1.25rem;
 }
 .wordmark span{ color: var(--sand); }
 
@@ -262,6 +263,12 @@ footer{
   gap: 12px;
 }
 footer .wordmark{ color: var(--slate-light); font-size: 0.95rem; }
+.footer-signature{
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.92rem;
+}
 
 @media (max-width: 640px){
   footer{ flex-direction: column; }
