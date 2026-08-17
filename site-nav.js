@@ -8,6 +8,8 @@ const SOUBARCOS_PAGINAS = [
   { titulo: "Entrar como Cliente", url: "login-cliente.html", palavras: "login cliente buscar profissional agendar consulta paciente entrar" },
   { titulo: "Mural de apoio entre pais", url: "mural.html", palavras: "mural pais autismo conversa apoio fórum tópicos experiências família" },
   { titulo: "Apoio ao Autismo — Direitos e recursos", url: "apoio-autismo.html", palavras: "autismo TEA direitos BPC LOAS CIPTEA benefícios documentários estudos vagas emprego governamental ONG associação" },
+  { titulo: "Cursos Gratuitos", url: "cursos-gratuitos.html", palavras: "curso gratuito aprender qualificação profissional idioma TEA ABA estudar certificado" },
+  { titulo: "Colaboradores", url: "colaboradores.html", palavras: "colaborador ajudar contribuir voluntário amigo do projeto apoiar corrente" },
   { titulo: "Suporte", url: "contato.html?assunto=Suporte", palavras: "suporte ajuda contato problema dúvida" },
   { titulo: "Seja associado", url: "contato.html?assunto=Seja+associado", palavras: "associado colaborador parceria participar" },
   { titulo: "Sugestões", url: "contato.html?assunto=Sugestão", palavras: "sugestão feedback ideia opinião" }

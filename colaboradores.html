@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colaboradores — SouBarcos</title>
+<meta name="description" content="Conheça o programa de colaboradores do SouBarcos — amigos do projeto que ajudam essa travessia a continuar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600;1,9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .hero-bg{
+    position: relative;
+    padding: 90px 0 70px;
+    background-image: linear-gradient(rgba(11,37,69,0.75), rgba(11,37,69,0.82)), url('barco-dourado.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+  }
+  .hero-bg .pitch-eyebrow{ color: var(--sand); }
+  .hero-bg h1{ font-family:'Fraunces', serif; font-weight:560; font-size: clamp(2rem, 4.5vw, 2.8rem); max-width: 24ch; margin-bottom: 18px; line-height:1.2; }
+  .hero-bg p{ max-width: 60ch; font-size: 1.05rem; color: rgba(255,255,255,0.88); }
+
+  .corrente-ilustracao{
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius, 12px);
+    padding: 32px 20px 24px;
+    margin: 40px 0;
+    text-align: center;
+  }
+  .corrente-ilustracao svg{ max-width: 640px; width: 100%; height: auto; }
+  .corrente-ilustracao .legenda{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-top: 14px;
+  }
+
+  .texto-colab p{
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: var(--slate);
+    margin-bottom: 20px;
+    max-width: 68ch;
+  }
+  .texto-colab p strong{ color: var(--navy); }
+
+  .caixa-colaboracao{
+    border: 2px dashed var(--line);
+    border-radius: var(--radius, 12px);
+    padding: 36px 28px;
+    text-align: center;
+    margin: 44px 0 20px;
+    background: rgba(11,37,69,0.02);
+  }
+  .caixa-colaboracao h3{
+    font-family:'Fraunces', serif;
+    color: var(--navy);
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+  }
+  .caixa-colaboracao p{
+    color: var(--slate-light);
+    font-size: 0.92rem;
+    max-width: 46ch;
+    margin: 0 auto;
+  }
+  .caixa-colaboracao .selo-em-breve{
+    display: inline-block;
+    margin-top: 14px;
+    font-family:'Space Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sand);
+    border: 1px solid var(--sand);
+    border-radius: 999px;
+    padding: 5px 14px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="wordmark-group">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+          <path d="M50 62 L50 12 L86 44 Z"/>
+          <path d="M50 62 L50 12 L14 44 Z"/>
+        </g>
+      </svg>
+      <div class="wordmark">Sou<span>Barcos</span></div>
+    </div>
+    <div class="sb-nav-actions">
+      <div class="sb-busca-wrap">
+        <input type="text" id="sbBuscaInput" class="sb-busca-input" placeholder="Buscar no site...">
+        <div id="sbBuscaResultados" class="sb-busca-resultados"></div>
+      </div>
+      <a href="javascript:void(0)" onclick="history.back()" class="btn-inicio">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Voltar
+      </a>
+      <a href="index.html" class="btn-inicio">Início</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero-bg">
+  <div class="wrap">
+    <div class="pitch-eyebrow">Colaboradores</div>
+    <h1>Amigos do projeto — quem segura essa corrente junto.</h1>
+    <p>O SouBarcos é feito por uma pessoa só, mas não precisa continuar assim. Conheça por que os colaboradores importam, e por que essa corrente não pode quebrar.</p>
+  </div>
+</section>
+
+<section class="section" style="border-bottom:none;">
+  <div class="wrap">
+
+    <div class="texto-colab">
+      <p>O <strong>SouBarcos</strong> não nasceu de um plano de negócios. Nasceu de uma vontade simples: usar o tempo livre que sobra depois do trabalho pra construir algo que ajude gente de verdade — um pai procurando um profissional de confiança, alguém atrás de um curso gratuito, uma família que só queria conversar com outra que entende a mesma rotina.</p>
+
+      <p>Manter esse projeto no ar tem um custo real, mês após mês: domínio, hospedagem, banco de dados, e-mail. Nada disso é caro sozinho, mas tudo isso é sustentado até aqui por uma pessoa só — e o tempo também é um custo, talvez o maior deles. Cada página nova, cada correção, cada ideia colocada no ar sai de horas que, de outra forma, seriam de descanso.</p>
+
+      <p>Nada disso é motivo de reclamação — é escolha, feita com gosto. Mas um projeto como esse cresce mais rápido, e com mais força, quando não é carregado por uma pessoa só. É aí que entram os colaboradores: pessoas que acreditam na mesma ideia e topam ajudar, cada uma do seu jeito — com tempo, com talento, com uma palavra de incentivo, ou simplesmente espalhando o projeto pra quem precisa.</p>
+
+      <p style="font-family:'Fraunces', serif; font-style:italic; font-size:1.3rem; color:var(--navy); text-align:center; margin:36px 0;">Não deixe essa corrente quebrar.</p>
+    </div>
+
+    <div class="corrente-ilustracao">
+      <svg viewBox="0 0 700 150" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cinco barquinhos de papel conectados por uma corrente, lado a lado">
+        <path d="M60 95 L640 95" stroke="#0B2545" stroke-width="1.5" stroke-dasharray="1 8" stroke-linecap="round" opacity="0.5"/>
+
+        <!-- elos da corrente entre os barcos -->
+        <g fill="none" stroke="#E8A33D" stroke-width="3" opacity="0.85">
+          <ellipse cx="150" cy="95" rx="10" ry="7" transform="rotate(20 150 95)"/>
+          <ellipse cx="167" cy="95" rx="10" ry="7" transform="rotate(-20 167 95)"/>
+          <ellipse cx="290" cy="95" rx="10" ry="7" transform="rotate(20 290 95)"/>
+          <ellipse cx="307" cy="95" rx="10" ry="7" transform="rotate(-20 307 95)"/>
+          <ellipse cx="430" cy="95" rx="10" ry="7" transform="rotate(20 430 95)"/>
+          <ellipse cx="447" cy="95" rx="10" ry="7" transform="rotate(-20 447 95)"/>
+          <ellipse cx="570" cy="95" rx="10" ry="7" transform="rotate(20 570 95)"/>
+          <ellipse cx="587" cy="95" rx="10" ry="7" transform="rotate(-20 587 95)"/>
+        </g>
+
+        <!-- 5 barquinhos -->
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <g transform="translate(40, 30) scale(0.55)">
+            <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+            <path d="M50 62 L50 12 L86 44 Z"/>
+            <path d="M50 62 L50 12 L14 44 Z"/>
+          </g>
+          <g transform="translate(180, 30) scale(0.55)">
+            <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+            <path d="M50 62 L50 12 L86 44 Z"/>
+            <path d="M50 62 L50 12 L14 44 Z"/>
+          </g>
+          <g transform="translate(320, 30) scale(0.55)">
+            <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+            <path d="M50 62 L50 12 L86 44 Z"/>
+            <path d="M50 62 L50 12 L14 44 Z"/>
+          </g>
+          <g transform="translate(460, 30) scale(0.55)">
+            <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+            <path d="M50 62 L50 12 L86 44 Z"/>
+            <path d="M50 62 L50 12 L14 44 Z"/>
+          </g>
+          <g transform="translate(600, 30) scale(0.55)">
+            <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+            <path d="M50 62 L50 12 L86 44 Z"/>
+            <path d="M50 62 L50 12 L14 44 Z"/>
+          </g>
+        </g>
+      </svg>
+      <div class="legenda">Cada colaborador é mais um elo — sozinho o barco flutua, junto a corrente não se quebra.</div>
+    </div>
+
+    <div class="caixa-colaboracao">
+      <h3>Caixa de colaboração</h3>
+      <p>Aqui vai morar a forma prática de ajudar — tempo, talento ou apoio direto ao projeto. Ainda estamos desenhando como vai funcionar.</p>
+      <div class="selo-em-breve">Em construção</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap header-row">
+    <div class="wordmark">SouBarcos</div>
+    <div class="footer-signature" style="display:flex; align-items:center; gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>
+      Pequenos gestos. Grandes travessias.
+    </div>
+  </div>
+</footer>
+
+<script src="site-nav.js"></script>
+</body>
+</html>
