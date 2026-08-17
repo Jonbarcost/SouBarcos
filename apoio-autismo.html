@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apoio ao Autismo — SouBarcos</title>
+<meta name="description" content="Direitos, apoios governamentais e não governamentais, incentivos e oportunidades de emprego para pessoas com autismo e suas famílias.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .hero-bg{
+    position: relative;
+    padding: 90px 0 70px;
+    background-image: linear-gradient(rgba(11,37,69,0.72), rgba(11,37,69,0.8)), url('https://images.pexels.com/photos/6338761/pexels-photo-6338761.jpeg?auto=compress&cs=tinysrgb&w=1600');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+  }
+  .hero-bg .pitch-eyebrow{ color: var(--sand); }
+  .hero-bg h1{ font-family:'Fraunces', serif; font-weight:560; font-size: clamp(2rem, 4.5vw, 2.8rem); max-width: 22ch; margin-bottom: 18px; line-height:1.2; }
+  .hero-bg p{ max-width: 60ch; font-size: 1.05rem; color: rgba(255,255,255,0.88); }
+
+  .tabs-nav{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin: 36px 0 30px;
+  }
+  .tab-item{
+    padding: 11px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--navy);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .tab-item.ativa{ background: var(--navy); color:#fff; border-color: var(--navy); }
+
+  .recurso-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 24px;
+    margin-bottom:14px;
+  }
+  .recurso-card h3{
+    font-family:'Fraunces', serif;
+    font-size:1.05rem;
+    color:var(--navy);
+    margin-bottom:8px;
+  }
+  .recurso-card p{
+    color:var(--slate);
+    font-size:0.92rem;
+    margin-bottom:12px;
+  }
+  .recurso-card a{
+    font-family:'Space Mono', monospace;
+    font-size:0.75rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--navy);
+    text-decoration:none;
+    border-bottom:1px solid var(--sand);
+    padding-bottom:2px;
+  }
+  .aviso{
+    background: rgba(232,163,61,0.1);
+    border:1px solid rgba(232,163,61,0.3);
+    border-radius:12px;
+    padding:16px 20px;
+    font-size:0.88rem;
+    color: var(--slate);
+    margin-bottom:32px;
+  }
+  .painel-recursos{ display:none; }
+  .painel-recursos.ativo{ display:block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="wordmark-group">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+          <path d="M50 62 L50 12 L86 44 Z"/>
+          <path d="M50 62 L50 12 L14 44 Z"/>
+        </g>
+      </svg>
+      <div class="wordmark">Sou<span>Barcos</span></div>
+    </div>
+    <a href="index.html" class="btn-inicio">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Início
+    </a>
+  </div>
+</header>
+
+<section class="hero-bg">
+  <div class="wrap">
+    <div class="pitch-eyebrow">Apoio ao Autismo</div>
+    <h1>Direitos, apoios e oportunidades para famílias atípicas.</h1>
+    <p>Reunimos aqui informações sobre benefícios governamentais, instituições de apoio, incentivos e oportunidades de emprego para pessoas com autismo e suas famílias. Esta página é aberta a todos — não é preciso ter conta no SouBarcos.</p>
+  </div>
+</section>
+
+<section class="section" style="border-bottom:none;">
+  <div class="wrap">
+
+    <div class="aviso">
+      As regras, valores e critérios desses programas podem mudar. Sempre confira as informações mais recentes direto na fonte oficial antes de tomar uma decisão — os links abaixo levam a sites oficiais e instituições reconhecidas.
+    </div>
+
+    <div class="tabs-nav">
+      <div class="tab-item ativa" data-painel="governamentais">Apoios governamentais</div>
+      <div class="tab-item" data-painel="nao-governamentais">Apoios não governamentais</div>
+      <div class="tab-item" data-painel="gratuitos">Gratuitos e incentivos</div>
+      <div class="tab-item" data-painel="empregos">Vagas de emprego</div>
+    </div>
+
+    <!-- ===== GOVERNAMENTAIS ===== -->
+    <div class="painel-recursos ativo" id="painel-governamentais">
+      <div class="recurso-card">
+        <h3>BPC/LOAS</h3>
+        <p>Benefício de Prestação Continuada: um salário mínimo mensal do INSS para pessoas com deficiência (incluindo TEA) em situação de vulnerabilidade social, sem necessidade de contribuição prévia. Critério principal é a renda familiar por pessoa. Solicitação feita pelo Meu INSS ou telefone 135, sem custo.</p>
+        <a href="https://www.gov.br/inss/pt-br" target="_blank" rel="noopener">gov.br/inss →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>CIPTEA — Carteira de Identificação da Pessoa com TEA</h3>
+        <p>Documento gratuito (Lei Federal 13.977/2020) que facilita a identificação da pessoa com autismo, garantindo atendimento prioritário em serviços públicos e privados sem precisar apresentar laudo médico toda vez. Emitida pelo estado ou município onde a família mora.</p>
+        <a href="https://www.gov.br/pt-br/servicos/emitir-a-carteira-de-identificacao-da-pessoa-com-transtorno-do-espectro-autista-ciptea" target="_blank" rel="noopener">gov.br — como emitir →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>Lei Berenice Piana (12.764/2012)</h3>
+        <p>Reconhece a pessoa com TEA como pessoa com deficiência para todos os efeitos legais, garantindo acesso prioritário a saúde, educação e assistência social.</p>
+        <a href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12764.htm" target="_blank" rel="noopener">Texto da lei (planalto.gov.br) →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>Atendimento Educacional Especializado (AEE)</h3>
+        <p>Direito garantido por lei nas escolas públicas: apoio especializado, adaptações e acompanhamento para o aluno com TEA, sem custo. Deve ser solicitado diretamente na secretaria de educação do município ou estado.</p>
+        <a href="https://www.gov.br/mec/pt-br" target="_blank" rel="noopener">Ministério da Educação →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>CAPSi e atendimento pelo SUS</h3>
+        <p>Os Centros de Atenção Psicossocial Infantojuvenil (CAPSi) oferecem acompanhamento gratuito de saúde mental e desenvolvimento infantil pelo Sistema Único de Saúde. Procure a unidade mais próxima pela Secretaria de Saúde do seu município.</p>
+        <a href="https://www.gov.br/saude/pt-br" target="_blank" rel="noopener">Ministério da Saúde →</a>
+      </div>
+    </div>
+
+    <!-- ===== NÃO GOVERNAMENTAIS ===== -->
+    <div class="painel-recursos" id="painel-nao-governamentais">
+      <div class="recurso-card">
+        <h3>AMA — Associação de Amigos do Autista</h3>
+        <p>Uma das organizações mais antigas do Brasil dedicadas ao autismo, com atendimento, orientação a famílias e indicação de instituições em todo o país.</p>
+        <a href="https://ama.org.br" target="_blank" rel="noopener">ama.org.br →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>ABRA — Associação Brasileira de Autismo</h3>
+        <p>Atua na promoção de direitos, informação e apoio a pessoas autistas e suas famílias em nível nacional.</p>
+        <a href="https://www.autismo.org.br" target="_blank" rel="noopener">autismo.org.br →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>Autismo e Realidade</h3>
+        <p>ONG formada por pais e profissionais, com foco em produzir e divulgar conhecimento sobre o TEA para orientar famílias, professores e cuidadores.</p>
+        <a href="https://autismoerealidade.org.br" target="_blank" rel="noopener">autismoerealidade.org.br →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>Instituto Jô Clemente</h3>
+        <p>Oferece atendimento especializado (incluindo apoio psicológico) para pessoas com deficiência intelectual e múltipla, e também para familiares e cuidadores.</p>
+        <a href="https://www.institutojoclemente.org.br" target="_blank" rel="noopener">institutojoclemente.org.br →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>APAE Brasil</h3>
+        <p>Rede de associações presentes em milhares de municípios brasileiros, com atendimento e apoio a pessoas com deficiência, incluindo autismo.</p>
+        <a href="https://apaebrasil.org.br" target="_blank" rel="noopener">apaebrasil.org.br →</a>
+      </div>
+    </div>
+
+    <!-- ===== GRATUITOS E INCENTIVOS ===== -->
+    <div class="painel-recursos" id="painel-gratuitos">
+      <div class="recurso-card">
+        <h3>Isenção de IPI, ICMS e IPVA na compra de carro</h3>
+        <p>Pessoas com TEA (ou seus representantes legais) podem ter isenção desses impostos na compra de um veículo, mesmo sem CNH — o carro pode ser conduzido por pais ou cuidadores. Regras e limites variam por estado.</p>
+        <a href="https://www.gov.br/pt-br/servicos/obter-isencao-de-impostos-para-comprar-carro" target="_blank" rel="noopener">gov.br — isenção de impostos →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>Passe livre em transporte público</h3>
+        <p>Muitas cidades oferecem gratuidade ou desconto em ônibus e transporte municipal para pessoas com TEA e um acompanhante. As regras variam por município — consulte a prefeitura ou empresa de transporte local.</p>
+      </div>
+      <div class="recurso-card">
+        <h3>Prioridade em filas e atendimentos</h3>
+        <p>Com a CIPTEA (carteira de identificação), a pessoa com TEA tem direito a atendimento prioritário em bancos, órgãos públicos, comércio e outros serviços, sem precisar apresentar laudo médico a cada vez.</p>
+      </div>
+    </div>
+
+    <!-- ===== VAGAS DE EMPREGO ===== -->
+    <div class="painel-recursos" id="painel-empregos">
+      <div class="recurso-card">
+        <h3>Lei de Cotas (8.213/91)</h3>
+        <p>Empresas com 100 ou mais funcionários são obrigadas por lei a reservar uma parte das vagas para pessoas com deficiência, incluindo autismo. É um direito — vale conhecê-lo ao buscar emprego.</p>
+        <a href="https://www.gov.br/trabalho-e-emprego/pt-br" target="_blank" rel="noopener">Ministério do Trabalho e Emprego →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>SINE — Sistema Nacional de Emprego</h3>
+        <p>O sistema público de intermediação de emprego está sendo integrado ao SisTEA, facilitando a divulgação de vagas voltadas a pessoas com TEA em todo o país.</p>
+        <a href="https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/emprega-brasil" target="_blank" rel="noopener">Emprega Brasil →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>Minha Vaga por Direito (Catho)</h3>
+        <p>Programa da Catho dedicado a ampliar o acesso de profissionais autistas ao mercado de trabalho formal. Cadastro gratuito.</p>
+        <a href="https://www.catho.com.br" target="_blank" rel="noopener">catho.com.br →</a>
+      </div>
+      <div class="recurso-card">
+        <h3>Vagas.com — PCD</h3>
+        <p>Plataforma de recrutamento com seção dedicada a oportunidades para pessoas com deficiência.</p>
+        <a href="https://www.vagas.com.br" target="_blank" rel="noopener">vagas.com.br →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap header-row">
+    <div class="wordmark">SouBarcos</div>
+    <div>Projeto em construção · atualizado conforme avança</div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.tab-item').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('ativa'));
+      document.querySelectorAll('.painel-recursos').forEach(p => p.classList.remove('ativo'));
+      tab.classList.add('ativa');
+      document.getElementById('painel-' + tab.dataset.painel).classList.add('ativo');
+    });
+  });
+</script>
+</body>
+</html>
