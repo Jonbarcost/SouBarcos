@@ -8,7 +8,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
 const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
@@ -24,31 +23,33 @@ const supabase = createClient(
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
-// Transporte de e-mail via Titan (mesma conta usada pra receber contato@)
-const emailTransporter = nodemailer.createTransport({
-  host: 'smtp.titan.email',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.TITAN_EMAIL_USER,
-    pass: process.env.TITAN_EMAIL_PASS,
-  },
-});
-
-// Envia um e-mail de aviso; nunca derruba a rota que chamou — só loga o erro,
-// porque uma falha no e-mail não deve impedir a ação principal (salvar msg, etc).
+// Envia um e-mail de aviso via API do Resend (HTTPS, não usa portas SMTP —
+// funciona normalmente no plano gratuito do Render, que bloqueia SMTP direto).
+// Nunca derruba a rota que chamou — só loga o erro, porque uma falha no
+// e-mail não deve impedir a ação principal (salvar mensagem, etc).
 async function enviarAviso({ para, assunto, texto }) {
-  if (!process.env.TITAN_EMAIL_USER || !process.env.TITAN_EMAIL_PASS) {
-    console.warn('E-mail não enviado: TITAN_EMAIL_USER/TITAN_EMAIL_PASS não configurados.');
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('E-mail não enviado: RESEND_API_KEY não configurada.');
     return;
   }
   try {
-    await emailTransporter.sendMail({
-      from: `"SouBarcos" <${process.env.TITAN_EMAIL_USER}>`,
-      to: para,
-      subject: assunto,
-      text: texto,
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'SouBarcos <avisos@send.soubarcos.com>',
+        to: [para],
+        subject: assunto,
+        text: texto,
+      }),
     });
+    if (!response.ok) {
+      const erro = await response.text();
+      console.error('Erro ao enviar e-mail (Resend):', erro);
+    }
   } catch (error) {
     console.error('Erro ao enviar e-mail:', error?.message || error);
   }
