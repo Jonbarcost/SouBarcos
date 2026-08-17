@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursos Gratuitos — SouBarcos</title>
+<meta name="description" content="Cursos gratuitos e confiáveis sobre TEA, qualificação profissional e idiomas, com duração, certificado e pré-requisitos explicados.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600;1,9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .hero-bg{
+    position: relative;
+    padding: 90px 0 70px;
+    background-image: linear-gradient(rgba(11,37,69,0.72), rgba(11,37,69,0.8)), url('barco-jornada.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+  }
+  .hero-bg .pitch-eyebrow{ color: var(--sand); }
+  .hero-bg h1{ font-family:'Fraunces', serif; font-weight:560; font-size: clamp(2rem, 4.5vw, 2.8rem); max-width: 24ch; margin-bottom: 18px; line-height:1.2; }
+  .hero-bg p{ max-width: 60ch; font-size: 1.05rem; color: rgba(255,255,255,0.88); }
+
+  .tabs-nav{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin: 36px 0 30px;
+  }
+  .tab-item{
+    padding: 11px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--navy);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .tab-item.ativa{ background: var(--navy); color:#fff; border-color: var(--navy); }
+
+  .recurso-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 24px;
+    margin-bottom:16px;
+  }
+  .recurso-card h3{
+    font-family:'Fraunces', serif;
+    font-size:1.08rem;
+    color:var(--navy);
+    margin-bottom:6px;
+  }
+  .recurso-card .fonte{
+    font-family:'Space Mono', monospace;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--slate-light);
+    margin-bottom:12px;
+  }
+  .badges{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .badge{
+    font-family:'Space Mono', monospace;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:4px 10px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .badge-duracao{ background:rgba(11,37,69,0.06); color:var(--navy); }
+  .badge-cert-gratis{ background:rgba(30,120,80,0.1); color:#1e7850; }
+  .badge-cert-pago{ background:rgba(232,163,61,0.15); color:#96631a; }
+  .badge-cert-nao{ background:rgba(150,150,150,0.12); color:#666; }
+  .recurso-card .linha{
+    font-size:0.9rem;
+    color:var(--slate);
+    margin-bottom:8px;
+  }
+  .recurso-card .linha strong{ color:var(--navy); }
+  .recurso-card a.link-curso{
+    display:inline-block;
+    margin-top:6px;
+    font-family:'Space Mono', monospace;
+    font-size:0.75rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--navy);
+    text-decoration:none;
+    border-bottom:1px solid var(--sand);
+    padding-bottom:2px;
+  }
+  .aviso{
+    background: rgba(232,163,61,0.1);
+    border:1px solid rgba(232,163,61,0.3);
+    border-radius:12px;
+    padding:16px 20px;
+    font-size:0.88rem;
+    color: var(--slate);
+    margin-bottom:32px;
+  }
+  .painel-recursos{ display:none; }
+  .painel-recursos.ativo{ display:block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="wordmark-group">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+          <path d="M50 62 L50 12 L86 44 Z"/>
+          <path d="M50 62 L50 12 L14 44 Z"/>
+        </g>
+      </svg>
+      <div class="wordmark">Sou<span>Barcos</span></div>
+    </div>
+    <div class="sb-nav-actions">
+      <div class="sb-busca-wrap">
+        <input type="text" id="sbBuscaInput" class="sb-busca-input" placeholder="Buscar no site...">
+        <div id="sbBuscaResultados" class="sb-busca-resultados"></div>
+      </div>
+      <a href="javascript:void(0)" onclick="history.back()" class="btn-inicio">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Voltar
+      </a>
+      <a href="index.html" class="btn-inicio">Início</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero-bg">
+  <div class="wrap">
+    <div class="pitch-eyebrow">Cursos Gratuitos</div>
+    <h1>Aprender também é uma forma de apoio.</h1>
+    <p>Reunimos cursos gratuitos e confiáveis — sobre TEA, qualificação profissional e idiomas — com duração, certificado e pré-requisitos explicados, pra você saber exatamente no que está entrando antes de começar.</p>
+  </div>
+</section>
+
+<section class="section" style="border-bottom:none;">
+  <div class="wrap">
+
+    <div class="aviso">
+      Em alguns cursos, o <strong>conteúdo é gratuito mas a emissão do certificado tem custo</strong> — deixamos isso bem marcado em cada card. Cursos livres (sem vínculo com o MEC) valem para currículo e atualização, mas não substituem formação técnica reconhecida quando exigida por lei ou conselho profissional. Vagas, prazos e disponibilidade podem mudar — confira sempre na página oficial antes de se inscrever.
+    </div>
+
+    <div class="tabs-nav">
+      <div class="tab-item ativa" data-painel="tea">TEA e Inclusão</div>
+      <div class="tab-item" data-painel="profissionalizantes">Profissionalizantes</div>
+      <div class="tab-item" data-painel="idiomas">Idiomas e Educação Geral</div>
+    </div>
+
+    <!-- ===== TEA E INCLUSÃO ===== -->
+    <div class="painel-recursos ativo" id="painel-tea">
+
+      <div class="recurso-card">
+        <h3>Capacitação Multiprofissional em ABA voltada ao TEA</h3>
+        <div class="fonte">Ministério da Saúde · UNA-SUS/AVA-SUS</div>
+        <div class="badges">
+          <span class="badge badge-duracao">40 horas</span>
+          <span class="badge badge-cert-gratis">Certificado grátis</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> restrito a profissionais de saúde já formados (médicos, psicólogos, fonoaudiólogos, fisioterapeutas, terapeutas ocupacionais, enfermeiros).</div>
+        <div class="linha"><strong>O que abre depois:</strong> atualização profissional formal em ABA aplicada ao TEA — não substitui a graduação, mas soma pontos em currículo e seleções.</div>
+        <a class="link-curso" href="https://www.gov.br/saude/pt-br/assuntos/noticias/2022/abril/ministerio-da-saude-oferta-cursos-gratuitos-sobre-o-transtorno-do-espectro-autista" target="_blank" rel="noopener">Ver curso no gov.br →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Capacitação em ABA voltada ao TEA — Pais, Cuidadores e Educadores</h3>
+        <div class="fonte">Ministério da Saúde · UNA-SUS/AVA-SUS</div>
+        <div class="badges">
+          <span class="badge badge-duracao">20 horas</span>
+          <span class="badge badge-cert-gratis">Certificado grátis</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> aberto a qualquer pessoa — pais, cuidadores, educadores. Sem pré-requisito de formação.</div>
+        <div class="linha"><strong>O que abre depois:</strong> não habilita profissionalmente, mas ensina noções práticas de ABA pra aplicar em casa ou na escola no dia a dia com a criança.</div>
+        <a class="link-curso" href="https://www.gov.br/saude/pt-br/assuntos/noticias/2022/abril/ministerio-da-saude-oferta-cursos-gratuitos-sobre-o-transtorno-do-espectro-autista" target="_blank" rel="noopener">Ver curso no gov.br →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Webpalestra: Nutrição na Criança Autista</h3>
+        <div class="fonte">Ministério da Saúde · UNA-SUS/AVA-SUS</div>
+        <div class="badges">
+          <span class="badge badge-duracao">4 horas</span>
+          <span class="badge badge-cert-gratis">Certificado grátis</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> aberto a todos, sem pré-requisito — ideal pra quem quer uma introdução rápida ao tema.</div>
+        <div class="linha"><strong>O que abre depois:</strong> conteúdo introdutório, não substitui acompanhamento nutricional individual com profissional.</div>
+        <a class="link-curso" href="https://www.gov.br/saude/pt-br/assuntos/noticias/2022/abril/ministerio-da-saude-oferta-cursos-gratuitos-sobre-o-transtorno-do-espectro-autista" target="_blank" rel="noopener">Ver curso no gov.br →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Capacitação de Atenção à Reabilitação da Pessoa com TEA</h3>
+        <div class="fonte">UNA-SUS · Parceria com UFMA</div>
+        <div class="badges">
+          <span class="badge badge-duracao">30 horas</span>
+          <span class="badge badge-cert-gratis">Certificado grátis</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> profissionais de saúde e familiares interessados em entender o fluxo de atendimento da pessoa com TEA no SUS.</div>
+        <div class="linha"><strong>O que abre depois:</strong> visão de como funciona a rede de cuidado no sistema público — útil pra orientar famílias e planejar acompanhamento.</div>
+        <a class="link-curso" href="https://www.gov.br/saude/pt-br/assuntos/noticias/2022/abril/ministerio-da-saude-oferta-cursos-gratuitos-sobre-o-transtorno-do-espectro-autista" target="_blank" rel="noopener">Ver curso no gov.br →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>ABA e o Tratamento de Crianças com Autismo</h3>
+        <div class="fonte">Elevo Cursos · Curso livre</div>
+        <div class="badges">
+          <span class="badge badge-duracao">Flexível (6 a 400h, você escolhe)</span>
+          <span class="badge badge-cert-pago">Certificado pago (R$ 14,90 a R$ 54,90)</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> psicólogos, terapeutas ocupacionais, educadores, pais, estudantes — sem pré-requisito de idade ou escolaridade.</div>
+        <div class="linha"><strong>O que abre depois:</strong> introdução aos princípios da ABA. Curso livre, <strong>não reconhecido por conselhos profissionais</strong> — bom como primeiro contato, não substitui formação técnica. O conteúdo é gratuito; só emitir o certificado tem custo.</div>
+        <a class="link-curso" href="https://elevocursos.com.br/cursos/de/autismo/aba-e-o-tratamento-de-criancas-com-autismo/gratis" target="_blank" rel="noopener">Ver curso →</a>
+      </div>
+
+    </div>
+
+    <!-- ===== PROFISSIONALIZANTES ===== -->
+    <div class="painel-recursos" id="painel-profissionalizantes">
+
+      <div class="recurso-card">
+        <h3>Pacote Office — Word, Excel e PowerPoint</h3>
+        <div class="fonte">Fundação Bradesco · Escola Virtual (ev.org.br)</div>
+        <div class="badges">
+          <span class="badge badge-duracao">48 horas (3 módulos de 16h)</span>
+          <span class="badge badge-cert-gratis">Certificado grátis</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> qualquer pessoa a partir de 16 anos, sem pré-requisito de conhecimento prévio.</div>
+        <div class="linha"><strong>O que abre depois:</strong> base pra funções administrativas — assistente administrativo, auxiliar de escritório, recepção, atendimento — áreas que costumam pedir domínio do pacote Office.</div>
+        <a class="link-curso" href="https://www.ev.org.br/" target="_blank" rel="noopener">ev.org.br →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Cursos livres SENAI</h3>
+        <div class="fonte">SENAI · Portal Nacional de Educação a Distância</div>
+        <div class="badges">
+          <span class="badge badge-duracao">Varia por curso (geralmente 10 a 60h)</span>
+          <span class="badge badge-cert-gratis">Certificado grátis</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> varia por curso — alguns pedem idade mínima (12 ou 16 anos). A oferta muda conforme a unidade/estado.</div>
+        <div class="linha"><strong>O que abre depois:</strong> qualificação técnica pra áreas industriais — mecânica, construção civil, automação, lógica de programação — bom ponto de entrada pro mercado industrial.</div>
+        <a class="link-curso" href="https://ead.senai.br/" target="_blank" rel="noopener">ead.senai.br →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Cursos gratuitos FGV Online</h3>
+        <div class="fonte">Fundação Getulio Vargas</div>
+        <div class="badges">
+          <span class="badge badge-duracao">4 a 30 horas por curso (200+ opções)</span>
+          <span class="badge badge-cert-gratis">Certificado de participação grátis</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> qualquer pessoa — não exige inscrição prévia pra acessar o conteúdo, só pra emitir o certificado ao final.</div>
+        <div class="linha"><strong>O que abre depois:</strong> administração, direito, economia, gestão — bom reforço de currículo e conta como pontuação em muitos editais de concurso público (verificar cada edital).</div>
+        <a class="link-curso" href="https://educacao-executiva.fgv.br/cursos/gratuitos" target="_blank" rel="noopener">Ver cursos FGV →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Escola Virtual.Gov (EV.G)</h3>
+        <div class="fonte">ENAP — Escola Nacional de Administração Pública</div>
+        <div class="badges">
+          <span class="badge badge-duracao">10 a 60 horas por curso (900+ opções)</span>
+          <span class="badge badge-cert-gratis">Certificado grátis (ENAP)</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> aberto a qualquer cidadão, não só servidores públicos. Exige conta gov.br (gratuita, nível prata ou ouro).</div>
+        <div class="linha"><strong>O que abre depois:</strong> preparação pra concursos públicos, atuação em gestão pública, ética, tecnologia e mais — muitos editais aceitam esses certificados como pontuação em prova de títulos.</div>
+        <a class="link-curso" href="https://www.escolavirtual.gov.br/" target="_blank" rel="noopener">escolavirtual.gov.br →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Programação do zero (Python, JavaScript, HTML/CSS e mais)</h3>
+        <div class="fonte">Curso em Vídeo · Gustavo Guanabara</div>
+        <div class="badges">
+          <span class="badge badge-duracao">20 a 180h por trilha</span>
+          <span class="badge badge-cert-pago">Certificado pago (créditos)</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> iniciantes completos, sem pré-requisito — um dos cursos de programação mais assistidos do Brasil, em português.</div>
+        <div class="linha"><strong>O que abre depois:</strong> base pra vagas de estágio ou desenvolvedor júnior em tecnologia. Assistir as aulas é grátis; só emitir certificado formal tem custo (créditos comprados na própria plataforma).</div>
+        <a class="link-curso" href="https://www.cursoemvideo.com/" target="_blank" rel="noopener">cursoemvideo.com →</a>
+      </div>
+
+    </div>
+
+    <!-- ===== IDIOMAS E EDUCAÇÃO GERAL ===== -->
+    <div class="painel-recursos" id="painel-idiomas">
+
+      <div class="recurso-card">
+        <h3>Duolingo</h3>
+        <div class="fonte">Duolingo · App e site</div>
+        <div class="badges">
+          <span class="badge badge-duracao">No seu ritmo, sem prazo</span>
+          <span class="badge badge-cert-nao">Sem certificado formal</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> qualquer pessoa, sem pré-requisito — inglês, espanhol e outros idiomas, em aulas curtas pelo celular.</div>
+        <div class="linha"><strong>O que abre depois:</strong> prática e fluência no dia a dia; não substitui uma certificação formal de idioma (o "Duolingo English Test" é um produto pago separado, não incluído aqui).</div>
+        <a class="link-curso" href="https://www.duolingo.com/" target="_blank" rel="noopener">duolingo.com →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Khan Academy Brasil</h3>
+        <div class="fonte">Khan Academy · Versão em português</div>
+        <div class="badges">
+          <span class="badge badge-duracao">No seu ritmo, sem prazo</span>
+          <span class="badge badge-cert-nao">Sem certificado formal</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> crianças, adolescentes e adultos revisando matemática, ciências e outras matérias do fundamental ao ensino médio.</div>
+        <div class="linha"><strong>O que abre depois:</strong> ótimo apoio escolar e pra quem estuda pra ENEM/vestibular — não emite certificado reconhecido pro currículo.</div>
+        <a class="link-curso" href="https://pt.khanacademy.org/" target="_blank" rel="noopener">pt.khanacademy.org →</a>
+      </div>
+
+      <div class="recurso-card">
+        <h3>Inglês para Iniciantes</h3>
+        <div class="fonte">Curso em Vídeo · Gustavo Guanabara</div>
+        <div class="badges">
+          <span class="badge badge-duracao">20 horas por módulo</span>
+          <span class="badge badge-cert-pago">Certificado pago (créditos)</span>
+        </div>
+        <div class="linha"><strong>Pra quem é:</strong> quem nunca estudou inglês ou quer revisar o básico — mesma plataforma do curso de programação, em vídeo-aulas gratuitas.</div>
+        <div class="linha"><strong>O que abre depois:</strong> base de inglês pra viagens, trabalho ou estudo — assistir é grátis, certificado formal tem custo.</div>
+        <a class="link-curso" href="https://www.cursoemvideo.com/cursos/" target="_blank" rel="noopener">cursoemvideo.com →</a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap header-row">
+    <div class="wordmark">SouBarcos</div>
+    <div class="footer-signature" style="display:flex; align-items:center; gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>
+      Pequenos gestos. Grandes travessias.
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.tab-item').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('ativa'));
+      document.querySelectorAll('.painel-recursos').forEach(p => p.classList.remove('ativo'));
+      tab.classList.add('ativa');
+      document.getElementById('painel-' + tab.dataset.painel).classList.add('ativo');
+    });
+  });
+</script>
+<script src="site-nav.js"></script>
+</body>
+</html>
