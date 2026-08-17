@@ -252,6 +252,30 @@
     padding: 28px 20px;
     display: block;
   }
+  .sb-fold-stage{ opacity: 0; }
+  .sb-fold-1{ animation: sbFold1 7s ease-in-out infinite; }
+  .sb-fold-2{ animation: sbFold2 7s ease-in-out infinite; }
+  .sb-fold-3{ animation: sbFold3 7s ease-in-out infinite; }
+  .sb-fold-4{ animation: sbFold4 7s ease-in-out infinite; }
+  @keyframes sbFold1{
+    0%{ opacity:1; } 18%{ opacity:1; } 25%{ opacity:0; }
+    94%{ opacity:0; } 100%{ opacity:1; }
+  }
+  @keyframes sbFold2{
+    0%{ opacity:0; } 18%{ opacity:0; } 25%{ opacity:1; } 42%{ opacity:1; } 49%{ opacity:0; }
+    100%{ opacity:0; }
+  }
+  @keyframes sbFold3{
+    0%{ opacity:0; } 42%{ opacity:0; } 49%{ opacity:1; } 66%{ opacity:1; } 73%{ opacity:0; }
+    100%{ opacity:0; }
+  }
+  @keyframes sbFold4{
+    0%{ opacity:0; } 66%{ opacity:0; } 73%{ opacity:1; } 96%{ opacity:1; } 100%{ opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .sb-fold-stage{ animation: none; }
+    .sb-fold-4{ opacity: 1; }
+  }
 
   /* ---------- manifest / feature list ---------- */
   .manifest{
@@ -571,35 +595,25 @@
   <div class="wrap">
     <div class="section-label">Por que este projeto existe</div>
     <p class="intent-text">O <strong>SouBarcos</strong> existe para juntar quem precisa de apoio com quem pode ajudar — um curso gratuito, uma instituição séria, outros pais que entendem sua rotina, ou um profissional de confiança, a uma chamada de distância.</p>
-    <svg class="intent-illustration" viewBox="0 0 820 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de um barquinho de papel sendo dobrado em etapas, até tomar sua forma final">
-      <g stroke="#0B2545" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none">
-        <!-- etapa 1: folha lisa -->
-        <rect x="20" y="60" width="110" height="80" rx="2"/>
-        <!-- seta 1 -->
-        <path d="M148 100 C 165 90, 175 110, 192 100" stroke-dasharray="1 7"/>
-        <path d="M185 94 L192 100 L185 107"/>
-
-        <!-- etapa 2: dobra diagonal -->
-        <path d="M222 140 L277 60 L332 140 Z"/>
-        <path d="M222 140 L332 140" stroke-dasharray="2 5"/>
-        <!-- seta 2 -->
-        <path d="M362 100 C 379 90, 389 110, 406 100" stroke-dasharray="1 7"/>
-        <path d="M399 94 L406 100 L399 107"/>
-
-        <!-- etapa 3: "chapéu" de papel (forma intermediária clássica da dobradura) -->
-        <path d="M436 140 L491 80 L546 140 Z"/>
-        <path d="M448 140 L534 140 L534 122 L448 122 Z" stroke-dasharray="2 5"/>
-        <!-- seta 3 -->
-        <path d="M576 100 C 593 90, 600 110, 616 102" stroke-dasharray="1 7"/>
-        <path d="M609 96 L616 102 L608 108"/>
+    <svg class="intent-illustration" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animação de um barquinho de papel sendo dobrado até tomar sua forma final" style="max-width:220px; margin-left:auto; margin-right:auto;">
+      <g class="sb-fold-stage sb-fold-1" stroke="#0B2545" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
+        <rect x="25" y="25" width="90" height="90" rx="2"/>
       </g>
-      <!-- etapa 4: barquinho final (mesmo desenho da logomarca) -->
-      <g transform="translate(650, 40) scale(1.15)" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none">
-        <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
-        <path d="M50 62 L50 12 L86 44 Z"/>
-        <path d="M50 62 L50 12 L14 44 Z"/>
+      <g class="sb-fold-stage sb-fold-2" stroke="#0B2545" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
+        <path d="M25 115 L70 25 L115 115 Z"/>
+        <path d="M25 115 L115 115" stroke-dasharray="2 5"/>
+      </g>
+      <g class="sb-fold-stage sb-fold-3" stroke="#0B2545" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
+        <path d="M25 115 L70 45 L115 115 Z"/>
+        <path d="M37 115 L103 115 L103 97 L37 97 Z" stroke-dasharray="2 5"/>
+      </g>
+      <g class="sb-fold-stage sb-fold-4" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none">
+        <path d="M32 82 L108 82 L94 98 L46 98 Z"/>
+        <path d="M70 82 L70 32 L106 64 Z"/>
+        <path d="M70 82 L70 32 L34 64 Z"/>
       </g>
     </svg>
+    <p style="text-align:center; font-family:'Fraunces', serif; font-style:italic; font-size:0.85rem; color:var(--slate-light); margin-top:8px;">Peça por peça, até tomar forma.</p>
   </div>
 </section>
 
