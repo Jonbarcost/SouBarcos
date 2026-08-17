@@ -242,6 +242,16 @@
     border-radius: var(--radius);
     display: block;
   }
+  .intent-illustration{
+    margin-top: 32px;
+    width: 100%;
+    max-width: 640px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    display: block;
+  }
 
   /* ---------- manifest / feature list ---------- */
   .manifest{
@@ -560,8 +570,36 @@
 <section class="intent">
   <div class="wrap">
     <div class="section-label">Por que este projeto existe</div>
-    <p class="intent-text">O <strong>SouBarcos</strong> nasce com um propósito declarado: ser uma ponte entre quem precisa de apoio e quem pode ajudar. Isso significa <strong>apoiar instituições de ajuda humanitária e pessoas em situação de carência</strong>, oferecer <strong>cursos gratuitos</strong> disponíveis na internet, conectar famílias a uma <strong>rede de apoio entre pais</strong> vivendo experiências parecidas, e dar acesso a <strong>profissionais de saúde, nutrição, esporte e bem-estar emocional</strong> atuando online.</p>
-    <img src="https://images.pexels.com/photos/2450501/pexels-photo-2450501.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Crianças brincando alegremente à beira de um lago" class="intent-photo">
+    <p class="intent-text">O <strong>SouBarcos</strong> existe para juntar quem precisa de apoio com quem pode ajudar — um curso gratuito, uma instituição séria, outros pais que entendem sua rotina, ou um profissional de confiança, a uma chamada de distância.</p>
+    <svg class="intent-illustration" viewBox="0 0 820 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de um barquinho de papel sendo dobrado em etapas, até tomar sua forma final">
+      <g stroke="#0B2545" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none">
+        <!-- etapa 1: folha lisa -->
+        <rect x="20" y="60" width="110" height="80" rx="2"/>
+        <!-- seta 1 -->
+        <path d="M148 100 C 165 90, 175 110, 192 100" stroke-dasharray="1 7"/>
+        <path d="M185 94 L192 100 L185 107"/>
+
+        <!-- etapa 2: dobra diagonal -->
+        <path d="M222 140 L277 60 L332 140 Z"/>
+        <path d="M222 140 L332 140" stroke-dasharray="2 5"/>
+        <!-- seta 2 -->
+        <path d="M362 100 C 379 90, 389 110, 406 100" stroke-dasharray="1 7"/>
+        <path d="M399 94 L406 100 L399 107"/>
+
+        <!-- etapa 3: "chapéu" de papel (forma intermediária clássica da dobradura) -->
+        <path d="M436 140 L491 80 L546 140 Z"/>
+        <path d="M448 140 L534 140 L534 122 L448 122 Z" stroke-dasharray="2 5"/>
+        <!-- seta 3 -->
+        <path d="M576 100 C 593 90, 600 110, 616 102" stroke-dasharray="1 7"/>
+        <path d="M609 96 L616 102 L608 108"/>
+      </g>
+      <!-- etapa 4: barquinho final (mesmo desenho da logomarca) -->
+      <g transform="translate(650, 40) scale(1.15)" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none">
+        <path d="M12 62 L88 62 L74 78 L26 78 Z"/>
+        <path d="M50 62 L50 12 L86 44 Z"/>
+        <path d="M50 62 L50 12 L14 44 Z"/>
+      </g>
+    </svg>
   </div>
 </section>
 
