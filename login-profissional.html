@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
   .tab-btn { flex:1; padding:14px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--navy); border-radius:10px; }
   .tab-btn.ativa { background:var(--navy); color:#fff; border-color:var(--navy); }
@@ -131,6 +132,7 @@
 
     <!-- ===== CONFIRME SEU E-MAIL (logo após cadastro) ===== -->
     <div id="blocoConfirmeEmail" class="form-card" style="display:none; text-align:center;">
+      <svg width="36" height="36" viewBox="0 0 100 100" style="margin-bottom:14px;"><g fill="none" stroke="var(--sand)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>
       <h2 style="margin-top:0;">Quase lá!</h2>
       <p>Enviamos um link de confirmação para o seu e-mail. Depois de confirmar, volte aqui e faça login para concluir seu cadastro.</p>
     </div>
@@ -161,6 +163,7 @@
 
     <!-- ===== AGUARDANDO APROVAÇÃO ===== -->
     <div id="blocoAguardando" class="form-card" style="display:none; text-align:center;">
+      <svg width="36" height="36" viewBox="0 0 100 100" style="margin-bottom:14px;"><g fill="none" stroke="var(--sand)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>
       <h2 style="margin-top:0;">Perfil salvo!</h2>
       <p>Seu cadastro foi enviado para análise. Assim que for aprovado, você terá acesso ao seu painel de profissional. Isso pode levar até alguns dias.</p>
       <button id="btnSairAguardando" style="background:#fff; color:var(--navy); border:1px solid var(--line);">Sair</button>
@@ -180,7 +183,10 @@
 <footer>
   <div class="wrap header-row">
     <div class="wordmark">SouBarcos</div>
-    <div>Projeto em construção · atualizado conforme avança</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M12 62 L88 62 L74 78 L26 78 Z"/><path d="M50 62 L50 12 L86 44 Z"/><path d="M50 62 L50 12 L14 44 Z"/></g></svg>
+      Pequenos gestos. Grandes travessias.
+    </div>
   </div>
 </footer>
 
@@ -361,7 +367,7 @@
 
     const lista = document.getElementById('listaAgendamentos');
     if (!agendamentos || agendamentos.length === 0) {
-      lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum agendamento ainda.</p>';
+      lista.innerHTML = '<p style="color:var(--slate); font-size:0.9rem;">Nenhum agendamento ainda — em breve alguém chega ao seu píer.</p>';
       return;
     }
 
