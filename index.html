@@ -155,9 +155,10 @@
     gap: 48px;
   }
   .hero-mark{
-    width: 200px;
+    width: 320px;
+    height: 320px;
     flex-shrink: 0;
-    opacity: 0.9;
+    opacity: 1;
   }
   .hero-mark svg{ width: 100%; height: auto; }
   @media (max-width: 860px){
@@ -578,15 +579,8 @@
       </div>
     </div>
 
-    <div class="hero-mark" aria-hidden="true">
-      <svg viewBox="0 0 200 160">
-        <g fill="none" stroke="#0B2545" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
-          <path d="M24 100 L176 100 L148 156 L52 156 Z"/>
-          <path d="M100 100 L100 12 L172 62 Z"/>
-          <path d="M100 100 L100 12 L28 62 Z"/>
-        </g>
-        <path d="M4 178 Q100 200 196 178" stroke="#E8A33D" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
-      </svg>
+    <div class="hero-mark">
+      <img src="barco-jornada.jpg" alt="Barquinho de papel azul navegando em águas calmas" style="width:100%; height:100%; object-fit:cover; display:block; border-radius:var(--radius, 12px);">
     </div>
   </div>
 </section>
@@ -595,25 +589,9 @@
   <div class="wrap">
     <div class="section-label">Por que este projeto existe</div>
     <p class="intent-text">O <strong>SouBarcos</strong> existe para juntar quem precisa de apoio com quem pode ajudar — um curso gratuito, uma instituição séria, outros pais que entendem sua rotina, ou um profissional de confiança, a uma chamada de distância.</p>
-    <svg class="intent-illustration" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animação de um barquinho de papel sendo dobrado até tomar sua forma final" style="max-width:220px; margin-left:auto; margin-right:auto;">
-      <g class="sb-fold-stage sb-fold-1" stroke="#0B2545" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
-        <rect x="25" y="25" width="90" height="90" rx="2"/>
-      </g>
-      <g class="sb-fold-stage sb-fold-2" stroke="#0B2545" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
-        <path d="M25 115 L70 25 L115 115 Z"/>
-        <path d="M25 115 L115 115" stroke-dasharray="2 5"/>
-      </g>
-      <g class="sb-fold-stage sb-fold-3" stroke="#0B2545" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
-        <path d="M25 115 L70 45 L115 115 Z"/>
-        <path d="M37 115 L103 115 L103 97 L37 97 Z" stroke-dasharray="2 5"/>
-      </g>
-      <g class="sb-fold-stage sb-fold-4" stroke="#0B2545" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none">
-        <path d="M32 82 L108 82 L94 98 L46 98 Z"/>
-        <path d="M70 82 L70 32 L106 64 Z"/>
-        <path d="M70 82 L70 32 L34 64 Z"/>
-      </g>
-    </svg>
-    <p style="text-align:center; font-family:'Fraunces', serif; font-style:italic; font-size:0.85rem; color:var(--slate-light); margin-top:8px;">Peça por peça, até tomar forma.</p>
+    <video class="intent-photo" autoplay muted loop playsinline aria-label="Um barquinho de papel flutuando serenamente na água">
+      <source src="barco-flutuando.mp4" type="video/mp4">
+    </video>
   </div>
 </section>
 
