@@ -108,3 +108,11 @@ Não houve fixtures, política fictícia ou alterações SQL no Supabase remoto;
 - [ ] Novo preview desta entrega compilado/verificado e jornada autenticada remota em banco isolado.
 
 O ciclo **local isolado** foi comprovado. O aceite total que inclui novo preview continua pendente; isso não autoriza abertura comercial.
+
+## Publicação da branch e bloqueio Vercel
+
+Quatro commits enviados por push sem force até 2a9fb79, SHA remoto conferido. PR #1 atualizado pela API. Preview automático do commit 2a9fb79: dpl_24wZUVBVL6u89T1zNDvXxsficeho, estado failure. Logs Vercel indisponíveis por 403 sem autenticação; host do preview bloqueado pelo proxy, solicitado no rascunho. Veja DEPLOYMENT.md. A falha não é tratada como READY nem como homologação remota.
+
+Rascunho de ambiente salvo com SHA dos repositórios, instruções completas de retomada/serviços e hosts de preview. Install script existente preservado; salvar rascunho não aplica rede/credenciais nem publica snapshot. Credenciais externas não são requisito dos testes locais.
+
+CI remoto confirmado no SHA 2a9fb79: runs 38999323883 e 38999319287 concluídos com success, jobs verify/first-seller e cleanup/artifacts aprovados. Esta atualização documental registra o resultado; não modifica o código validado. URLs em TESTING.md.

@@ -8,9 +8,11 @@ O trabalho partiu de e91a236 e incorporou por fast-forward sete novos commits re
 
 Migrações remotas já confirmadas: verified_seller_approval 20261017030036 e listing_moderation 20261017030041. Política TEST-ONLY existe apenas no Docker descartável. Nenhuma política real, documento pessoal, fornecedor/anúncio fictício remoto ou conta real promovida nesta operação. Não houve produção/DNS/pagamento real.
 
-Novo preview e E2E remoto permanecem pendentes sem Vercel autenticado e banco remoto isolado. O preview anterior 13c431a READY é histórico, não homologa o novo fluxo. Acesso GitHub API voltou a funcionar nesta sessão; descrição revisável do PR #1 em PR-FIRST-SELLER.md. Modelo/respostas reais do gateway e próxima fase de pedidos/frete/pagamento sandbox continuam pendentes.
+O preview automático 2a9fb79 foi criado como dpl_24wZUVBVL6u89T1zNDvXxsficeho e retornou failure. Logs exigem Vercel autenticado (API 403); host bloqueado pelo proxy. Novo preview válido e E2E remoto permanecem pendentes, exigindo também banco remoto isolado. O preview anterior 13c431a READY é histórico, não homologa o novo fluxo. Acesso GitHub API voltou a funcionar nesta sessão; descrição revisável do PR #1 em PR-FIRST-SELLER.md. Modelo/respostas reais do gateway e próxima fase de pedidos/frete/pagamento sandbox continuam pendentes.
 
 Commits de implementação: 99bceac (ambiente/integração/concorrência), 860569b (jornada e CSP dev), 2dcb0b9 (CI). Este commit documental registra a evidência final. Histórico completo preservado, sem force/merge main.
+
+CI remoto do SHA 2a9fb79 confirmado success nas execuções 38999323883 e 38999319287; ambos jobs verify/first-seller, cleanup e artifacts passaram. PR #1 atualizado pela API. Rascunho de ambiente salvo com instruções de retomada, referências Git e hosts de preview; não aplicado/publicado automaticamente.
 
 Relatório detalhado: [FIRST-SELLER-OPERATION.md](FIRST-SELLER-OPERATION.md). Reprodução e contagens: [TESTING.md](TESTING.md). O restante deste arquivo preserva o relatório anterior e a atualização remota recebida; não deve ser lido como estado atual onde divergir da seção acima.
 

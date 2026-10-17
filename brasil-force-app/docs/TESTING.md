@@ -16,6 +16,10 @@ Data: 17/10/2026 UTC. Node 24.19.0; Supabase CLI 2.121.0; PostgreSQL 17 local Do
 
 Sincronização adicional por fast-forward incorporou os sete commits e91a236..0f128b5 de outros agentes. Reexecução concluída sobre esse HEAD consolidado: npm run check passou com **80/80**, zero falhas/skips/cancelamentos, tipos/build exit 0; test:http passou; test:first-seller passou com **16/16 + 2/2**, exit 0 e descarte confirmado. Cleanup posterior exit 0; nenhum container ativo. Os resultados anteriores são preservados como histórico.
 
+## CI remoto confirmado — 2a9fb79
+
+As duas execuções do workflow ampliado concluíram com success: [38999323883](https://github.com/Jonbarcost/SouBarcos/actions/runs/38999323883) e [38999319287](https://github.com/Jonbarcost/SouBarcos/actions/runs/38999319287). Em ambas, verify e first-seller passaram, incluindo instalação do Chromium, integração/E2E, cleanup always() e artifact público. Estado consultado pela API GitHub para o SHA exato; o download adicional de logs foi bloqueado pela rede, sem afetar os resultados dos jobs. Este registro documental não altera o código testado.
+
 ## Cobertura e limites atuais
 
 A suíte rápida inclui testes existentes PGlite e nove novos casos de guardas, lifecycle, TOTP RFC6238 e CSP. PGlite continua rápido, mas não é evidência de múltiplas conexões. A integração usa 16 casos reais com sessão AAL1/AAL2, JWT inválido/expirado, sessão revogada, metadata e grants, política desabilitada, autoaprovação, evidência vencida, revisão antiga, seller/store, RLS, Storage e moderação completa. Seis desses casos comprovam disputas/rollback/quota em PostgreSQL por conexões independentes, observando dois PIDs de backend bloqueados quando necessário.
