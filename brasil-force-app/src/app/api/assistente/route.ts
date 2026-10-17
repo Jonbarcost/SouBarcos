@@ -16,13 +16,23 @@ export async function POST(request: Request) {
   }
   const origin = request.headers.get("origin");
   const host = request.headers.get("host");
-  if (origin && (!host || new URL(origin).host !== host)) return NextResponse.json({ error: "Origem não autorizada." }, { status: 403, headers: noStore });
+  if (origin) {
+    let sameOrigin = false;
+    try { sameOrigin = Boolean(host && new URL(origin).host === host); } catch {}
+    if (!sameOrigin) return NextResponse.json({ error: "Origem não autorizada." }, { status: 403, headers: noStore });
+  }
+  if (request.headers.get("sec-fetch-site") === "cross-site") {
+    return NextResponse.json({ error: "Origem não autorizada." }, { status: 403, headers: noStore });
+  }
   const length = Number(request.headers.get("content-length") || 0);
   if (length > 4096) return NextResponse.json({ error: "Mensagem muito grande." }, { status: 413, headers: noStore });
   let body: unknown;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Requisição inválida." }, { status: 400, headers: noStore }); }
   const parsed = assistantInput.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: "Escreva uma pergunta de 3 a 500 caracteres." }, { status: 400, headers: noStore });
+  const { data: quotaAllowed, error: quotaError } = await db.rpc("bf_ai_consume_quota");
+  if (quotaError) return NextResponse.json({ error: "Controle de uso indisponível." }, { status: 503, headers: noStore });
+  if (quotaAllowed !== true) return NextResponse.json({ error: "Limite de perguntas atingido. Tente novamente mais tarde." }, { status: 429, headers: noStore });
   const question = parsed.data.question;
   const term = safeSearchTerm(question);
   const { data, error } = await db.from("bf_listings")
