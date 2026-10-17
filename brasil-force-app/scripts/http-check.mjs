@@ -41,6 +41,9 @@ try {
   for (const route of [
     "/",
     "/catalogo",
+    "/assistente",
+    "/explorar",
+    "/instituicoes",
     "/cadastro",
     "/entrar",
     "/vender",
@@ -95,6 +98,13 @@ try {
   assert.ok(login.includes('disabled=""'));
   assert.equal((await fetch(base + "/auth/oauth?provider=google")).status, 404);
   console.log("PASS configuration gates and OAuth disabled");
+  const assistant = await fetch(base + "/api/assistente", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question: "Mochila para camping" }),
+  });
+  assert.equal(assistant.status, 503, "AI must be disabled by default");
+  console.log("PASS AI endpoint gated without preview activation");
 } catch (error) {
   console.error(error);
   process.exitCode = 1;
