@@ -309,7 +309,7 @@ test("review RPC requires real staff MFA and rejects self-service approval", asy
     /Staff MFA required/,
   );
   await asUser(staff, "aal2");
-  await assert.rejects(reviewApplication("approved"), /Invalid decision/);
+  await assert.rejects(reviewApplication("approved"), /Invalid transition/);
 });
 test("review stores reason, actor and version atomically, stale decisions fail", async () => {
   await asUser(staff, "aal2");

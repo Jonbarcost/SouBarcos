@@ -53,9 +53,9 @@ export default async function Sell() {
         </div>
       </div>
       <Notice>
-        Pré-abertura: a triagem está disponível. A verificação documental e a
-        habilitação de vendas ainda não estão liberadas. Não envie documentos
-        por canais não verificados.
+        A habilitação depende da verificação e da decisão administrativa. Não
+        envie documentos por canais não verificados. Pagamentos e compras
+        permanecem indisponíveis.
       </Notice>
       <section className="panel">
         <h2>{app ? "Sua solicitação" : "Solicitação inicial"}</h2>
@@ -94,7 +94,7 @@ export default async function Sell() {
             )}
             {app.status === "approved" && (
               <Link href="/painel-vendedor" className="button button-primary">
-                Painel do vendedor
+                Acessar painel e criar anúncio
               </Link>
             )}
             <h3>Histórico recente</h3>

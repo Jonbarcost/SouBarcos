@@ -37,8 +37,8 @@ export default async function SellerPanel({
       />
       <Notice>
         Pré-abertura: preparação de anúncios disponível para vendedores
-        habilitados. Fotografias, publicação e vendas ainda dependem das
-        próximas etapas.
+        habilitados. Cada anúncio depende de moderação antes da publicação.
+        Fotografias e vendas ainda não estão habilitadas.
       </Notice>
       <section className="panel">
         <div className="listing-toolbar">
@@ -47,7 +47,7 @@ export default async function SellerPanel({
             href="/painel-vendedor/anuncios/novo"
             className="button button-primary"
           >
-            Novo anúncio
+            {(count ?? 0) === 0 ? "Criar primeiro anúncio" : "Novo anúncio"}
           </Link>
         </div>
         <form className="search-form" method="get">
