@@ -958,3 +958,15 @@ footer { background: #10251d; }
   html { scroll-behavior: auto; }
   .bf-category-card:hover,.button:hover { transform: none; }
 }
+
+/* Global AI entry point is rendered only when the feature is enabled. */
+.header nav .bf-nav-ai { display: inline-flex; align-items: center; gap: 7px; color: #f1d49c; }
+.bf-assistant-dock { position: fixed; z-index: 40; right: 23px; bottom: 23px; display: inline-flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: 100px; color: #132d21; background: #f0d195; font-size: 13px; font-weight: 900; box-shadow: 0 10px 35px #0c2c2060; border: 1px solid #fff6db; transition: transform .2s ease,background .2s ease; }
+.bf-assistant-dock:hover { transform: translateY(-3px); background: #ffe2ac; }
+.bf-assistant-dock:focus-visible { outline: 3px solid #a36d19; outline-offset: 5px; }
+@media (max-width: 640px) {
+  .bf-assistant-dock { right: 13px; bottom: max(13px,env(safe-area-inset-bottom)); padding: 12px 15px; font-size: 12px; box-shadow: 0 6px 24px #0c2c2042; }
+  .header nav .bf-nav-ai { gap: 5px; }
+  .header nav .bf-nav-ai svg { width: 13px; }
+}
+@media (prefers-reduced-motion:reduce){.bf-assistant-dock:hover{transform:none;}}
