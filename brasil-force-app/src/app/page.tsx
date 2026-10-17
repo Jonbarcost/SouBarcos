@@ -51,6 +51,7 @@ export default function Home() {
               Um novo ponto de encontro para quem serve, explora, coleciona e vive novas jornadas.
               Descubra equipamentos, produtos e serviços em um só lugar.
             </p>
+            <p className="bf-launch-note" role="status">Pré-abertura: o catálogo está sendo preparado e compras ainda não estão disponíveis.</p>
             <div className="actions bf-hero-actions">
               <Link className="button button-primary bf-primary" href="/catalogo">
                 Explorar o catálogo <ArrowUpRight size={19} aria-hidden="true" />
