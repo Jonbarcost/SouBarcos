@@ -90,6 +90,7 @@ test("assistant renders only verified catalog facts and subset selected by struc
   assert.equal(r.status, 200);
   const body = await r.json();
   assert.equal(body.mode, "ai");
+  assert.match(body.answer, /Sim, senhor/);
   assert.deepEqual(body.products, [product]);
   assert.ok(!JSON.stringify(body).includes("undefined"));
   assert.equal(r.headers.get("cache-control"), "no-store");
@@ -113,11 +114,15 @@ test("empty catalog and missing gateway configuration use factual catalog fallba
   const empty = fixture({ search: async () => [] });
   const r = await handleAssistant(request(), empty.deps);
   assert.equal(r.status, 200);
-  assert.deepEqual((await r.json()).products, []);
+  const emptyResult = await r.json();
+  assert.deepEqual(emptyResult.products, []);
+  assert.match(emptyResult.answer, /Às ordens/);
   assert.ok(!empty.calls.includes("gateway"));
   const absent = fixture({ recommend: undefined });
   const fallback = await handleAssistant(request(), absent.deps);
-  assert.equal((await fallback.json()).mode, "catalog");
+  const fallbackResult = await fallback.json();
+  assert.equal(fallbackResult.mode, "catalog");
+  assert.match(fallbackResult.answer, /Positivo, senhor/);
 });
 test("gateway errors are hidden and safe metrics contain no prompts or identities", async () => {
   let metric: unknown;
