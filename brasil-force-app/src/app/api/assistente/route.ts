@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       mode: "catalog",
     }, { headers: noStore });
   }
-  const key = process.env.AI_GATEWAY_API_KEY;
+  const key = process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN;
   const model = process.env.BF_AI_MODEL;
   if (!key || !model) return NextResponse.json({
     answer: "Encontrei anúncios disponíveis. A explicação por IA ainda depende da configuração do serviço.",
