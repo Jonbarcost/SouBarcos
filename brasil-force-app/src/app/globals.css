@@ -127,7 +127,7 @@ p {
   font-size: 14px;
 }
 .hero {
-  background: var(--ink) url("/hero.webp") center center/cover no-repeat;
+  background: linear-gradient(112deg, #141a15 0%, #2b3329 48%, #4c5542 100%);
   color: var(--paper);
 }
 .hero-content {
