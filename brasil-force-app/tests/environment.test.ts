@@ -51,3 +51,27 @@ test("shipping production cannot be accidentally enabled with incomplete configu
     checkEnvironment({ SITE_URL: "http://localhost:3000" }, true).errors.length,
   );
 });
+test("AI activation requires verified model configuration and a server-side credential binding", () => {
+  assert.ok(checkEnvironment({ ...base, BF_AI_ENABLED: "yes" }).errors.length);
+  assert.ok(checkEnvironment({ ...base, BF_AI_ENABLED: "true" }).errors.length);
+  assert.ok(
+    checkEnvironment({
+      ...base,
+      BF_AI_ENABLED: "true",
+      BF_AI_MODEL: "vendor/model",
+    }).errors.length,
+  );
+  assert.equal(
+    checkEnvironment({
+      ...base,
+      BF_AI_ENABLED: "true",
+      BF_AI_MODEL: "vendor/model",
+      VERCEL_OIDC_TOKEN: "test-oidc",
+    }).errors.length,
+    0,
+  );
+  assert.equal(
+    checkEnvironment({ ...base, BF_AI_ENABLED: "false" }).errors.length,
+    0,
+  );
+});

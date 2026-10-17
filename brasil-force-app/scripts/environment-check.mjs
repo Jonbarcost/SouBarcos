@@ -9,6 +9,7 @@ export function checkEnvironment(env, deployed = false) {
     "AUTH_APPLE_ENABLED",
     "SHIPPING_ENABLED",
     "SHIPPING_PRODUCTION_ENABLED",
+    "BF_AI_ENABLED",
   ];
   for (const name of flags)
     if (env[name] && !["true", "false"].includes(env[name]))
@@ -69,6 +70,21 @@ export function checkEnvironment(env, deployed = false) {
       errors.push(`${name}: possível segredo exposto no frontend.`);
   if (env.AUTH_REGISTRATION_ENABLED === "true" && !key)
     errors.push("Cadastro habilitado sem Supabase configurado.");
+  if (env.BF_AI_ENABLED === "true") {
+    if (!env.BF_AI_MODEL || !/^[-\w.]+\/[-\w.:]+$/.test(env.BF_AI_MODEL))
+      errors.push(
+        "BF_AI_MODEL: configure um modelo atual validado no gateway.",
+      );
+    if (!env.VERCEL_OIDC_TOKEN && !env.AI_GATEWAY_API_KEY)
+      errors.push(
+        "IA: configure autenticação OIDC ou chave privada do gateway.",
+      );
+    if (!key)
+      errors.push("IA habilitada sem autenticação Supabase configurada.");
+    pending.push(
+      "Validar modelo, autenticação e orçamento real no AI Gateway antes de liberar o recurso.",
+    );
+  } else pending.push("Assistente de IA desativado.");
   if (env.SHIPPING_ENABLED === "true") {
     for (const name of [
       "MELHOR_ENVIO_TOKEN",

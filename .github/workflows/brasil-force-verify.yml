@@ -26,6 +26,7 @@ jobs:
       AUTH_APPLE_ENABLED: "false"
       SHIPPING_ENABLED: "false"
       SHIPPING_PRODUCTION_ENABLED: "false"
+      BF_AI_ENABLED: "false"
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
