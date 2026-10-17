@@ -3,8 +3,18 @@ import { z } from "zod";
 export const assistantInput = z.object({
   question: z.string().trim().min(3).max(500),
 });
-export const safeSearchTerm = (q: string) =>
-  q.replace(/[%_\\]/g, "").trim().slice(0, 80);
+const ignoredTerms = new Set([
+  "preciso", "quero", "gostaria", "comprar", "procurando", "procurar",
+  "produto", "produtos", "equipamento", "equipamentos", "qual", "quais",
+  "para", "uma", "uns", "com", "sem", "meu", "minha", "onde", "pode",
+  "posso", "ter", "tem", "tens", "você", "voce", "três", "tres", "dias",
+  "estou", "busco", "ajuda", "favor", "pelo", "pelos", "sobre", "faça",
+]);
+export function safeSearchTerm(question: string): string {
+  const words = question.toLocaleLowerCase("pt-BR").match(/[a-zà-ú0-9-]{3,}/gi) ?? [];
+  return (words.find((word) => !ignoredTerms.has(word)) ?? words[0] ?? "")
+    .replace(/[%_\\\\]/g, "").slice(0, 80);
+}
 
 export type CatalogHit = {
   id: string;
