@@ -34,6 +34,18 @@ export default function Help() {
           <p>{a}</p>
         </details>
       ))}
+      <section className="panel" aria-labelledby="support-email">
+        <h2 id="support-email">Fale com o Brasil Force</h2>
+        <p>
+          Dúvidas, parcerias ou interesse em vender? Entre em contato com nossa equipe pelo e-mail corporativo.
+        </p>
+        <p>
+          <a className="button button-primary" href="mailto:contato@brasilforce.com.br?subject=Contato%20Brasil%20Force">
+            contato@brasilforce.com.br
+          </a>
+        </p>
+        <p>O link abre o aplicativo de e-mail do seu dispositivo. Não envia mensagens diretamente por esta página.</p>
+      </section>
       <p>
         Consulte também nossas{" "}
         <Link href="/regras" className="text-link">
