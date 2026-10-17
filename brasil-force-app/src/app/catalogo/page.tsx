@@ -108,9 +108,10 @@ export default async function Catalog({
               ? "Experimente outra busca ou categoria."
               : "Estamos preparando uma comunidade de vendedores e equipamentos selecionados."}
           </p>
-          <Link href="/vender" className="text-link">
-            Quero fazer parte <span aria-hidden="true">→</span>
-          </Link>
+          <div className="actions" style={{ justifyContent: "center", marginTop: 22 }}>
+            <Link href="/catalogo" className="button button-primary">Limpar busca e filtros</Link>
+            <Link href="/vender" className="text-link">Sou fornecedor <span aria-hidden="true">→</span></Link>
+          </div>
         </section>
       )}
     </div>
