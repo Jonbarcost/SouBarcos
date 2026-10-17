@@ -73,3 +73,15 @@ Rascunho salvo com instalação, inicialização, requisitos de variáveis/crede
 ## Próxima etapa
 
 Retomar pelos acessos externos sem repetir o trabalho local: auditoria remota → migrações novas verificadas → homologação Auth/MFA e evidências → aprovação/anúncio comum real → chamada real de IA autorizada → preview completo. Comércio essencial e critérios de produção continuam sem aceite.
+
+## Atualização da homologação remota — 17/10/2026 UTC
+
+- Revisão do commit remoto `13c431a373055ce962bb5dd83d3dbf7eb448cc67` confirmada no GitHub.
+- Migração `verified_seller_approval` aplicada no Supabase existente com versão real `20261017030036`.
+- Migração `listing_moderation` aplicada no mesmo Supabase com versão real `20261017030041`.
+- Ambas operações retornaram `success=true`; objetos novos, RLS das tabelas e view `bf_public_listings` com `security_invoker=true` foram verificados.
+- As políticas de verificação documental permanecem sem registros e desabilitadas por ausência de processo de evidências. Nenhuma aprovação real foi realizada.
+- O deployment Vercel `dpl_711nCmWZgN8XSigNKHoZwgsqBfsB` do commit `13c431a` alcançou `READY`, sem promoção à produção.
+- GitHub Actions para esse commit: duas execuções `success`.
+- Pendente: testes remotos com contas de homologação Auth/MFA, configuração de evidências, validação de chamada de IA real e orçamento; nenhuma transação comercial liberada.
+- Os timestamps dos arquivos SQL versionados e das versões aplicadas diferem; nunca reaplicar estes arquivos sem checar a tabela de migrações e o conteúdo dos objetos.
