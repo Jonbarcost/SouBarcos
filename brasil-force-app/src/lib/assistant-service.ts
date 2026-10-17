@@ -28,11 +28,11 @@ const selectionSchema = z
   .strict();
 const guidance = {
   compare:
-    "Encontrei estes anúncios disponíveis. Compare os dados informados abaixo. Preço e disponibilidade precisam ser conferidos antes de qualquer compra.",
+    "Sim, senhor! Localizei equipamentos no catálogo. Missão: comparar os dados informados abaixo. Preço e disponibilidade devem ser conferidos antes de qualquer compra.",
   refine:
-    "Veja os anúncios encontrados. Informe o nome do equipamento ou uma categoria para refinar a busca.",
+    "Às ordens! Estes são os anúncios encontrados. Informe o nome do equipamento ou uma categoria para refinar a busca, por gentileza.",
   human_review:
-    "Esta dúvida precisa de análise humana. A indicação de anúncios não comprova certificação, compatibilidade institucional ou autorização para uso.",
+    "Sim, senhor! Esta solicitação exige análise humana. A indicação dos equipamentos não comprova certificação, compatibilidade institucional ou autorização para uso.",
 };
 
 /** Read actual bytes; Content-Length is only an early check, never the limit itself. */
@@ -165,7 +165,7 @@ export async function handleAssistant(
       200,
       {
         answer:
-          "Não encontrei anúncios disponíveis com esses termos. Tente um nome de equipamento, como mochila, lanterna ou bota.",
+          "Às ordens, senhor! No momento, não localizei anúncios disponíveis para esta missão. Por gentileza, tente buscar por mochila, lanterna, bota ou outro equipamento.",
         products: [],
         mode: "catalog",
       },
@@ -176,7 +176,7 @@ export async function handleAssistant(
       200,
       {
         answer:
-          "Encontrei anúncios disponíveis. A explicação por IA ainda depende da configuração do serviço.",
+          "Positivo, senhor! Encontrei anúncios disponíveis. O aconselhamento inteligente está temporariamente indisponível; confira os equipamentos abaixo.",
         products,
         mode: "catalog",
       },
