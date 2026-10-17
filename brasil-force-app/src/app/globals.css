@@ -997,3 +997,7 @@ h1,h2,h3,.brand > span,.bf-category-title { font-family: var(--font-display); fo
  .bf-hero-actions .button { font-size: 15px; }
  .footer-bottom { font-size: 13px; }
 }
+
+/* Prelaunch disclosure: visible alongside the homepage's primary actions */
+.bf-launch-note { display: inline-block; max-width: 620px; padding: 12px 17px; margin: 0 0 21px; background: rgba(13,37,25,.65); color: #f5e8ca; border: 1px solid rgba(232,204,143,.55); border-radius: 12px; font-size: 15px; line-height: 1.55; font-weight: 650; }
+@media(max-width:640px){ .bf-launch-note { font-size: 14px; padding: 12px 14px; } }
