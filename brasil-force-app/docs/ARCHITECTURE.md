@@ -1,3 +1,9 @@
+# Consolidação operacional — 16/10/2026
+
+O monólito existente agora inclui aprovação verificada de vendedores, moderação de anúncios e assistente com saída estruturada. Essas mudanças foram implementadas/testadas localmente; as duas novas migrações NÃO foram aplicadas ao projeto remoto nesta execução. DATABASE.md, SELLER-REVIEW.md, LISTINGS.md e AI-ASSISTANT.md descrevem as interfaces atuais.
+
+Administração usa Server Actions autenticadas e RPCs públicas security invoker, encaminhando para funções privadas definer com sessão/role/MFA e revisão sob lock. Catálogo, detalhe e IA consultam bf_public_listings (security_invoker com filtros de publicação explícitos). Eventos de moderação e notas internas são tabelas distintas com RLS. Verificação documental registra apenas referência opaca a processo privado externo; não cria upload/scanner.
+
 # Atualização: projeto compartilhado
 
 A versão atual usa SouBarcos com tabelas `bf_*`, schema `brasil_force_private`, bucket `bf-seller-documents` e adesão explícita via `bf_join`. Auth é compartilhado, sem novo trigger nem cadastro automático dos usuários existentes. O restante deste documento registra decisões gerais da fundação; nomes sem prefixo representam os domínios, não os nomes SQL atuais. Veja SHARED-PROJECT.md para a implantação efetiva.
@@ -27,11 +33,11 @@ Não há credencial privilegiada no frontend nem autorização por `user_metadat
 
 - Identidade vem de `getUser()` no servidor. Claims são verificados para MFA; papéis atuais vêm de `accounts` protegida contra escrita pelo próprio usuário.
 - Todas as tabelas públicas têm RLS e grants explícitos. Perfil pessoal só pode ser lido pelo dono com sessão ativa; administração não recebe acesso irrestrito a dados pessoais.
-- Papéis buyer/seller/store/moderator/admin/superadmin já são diferenciados no banco. A separação de capacidades administrativas por ação será completada com os fluxos da fase 2. Não existe endpoint de mutação administrativa nesta fundação.
+- Papéis buyer/seller/store/moderator/admin/superadmin já são diferenciados no banco. Aprovação de vendedor exige admin/superadmin; triagem e moderação de anúncios admitem equipe com AAL2. Toda mutação administrativa usa RPC com autorização no banco.
 - Dados públicos de loja serão uma projeção explícita separada, nunca `select *` de perfil pessoal.
 - Classificação padrão de anúncio é `additional_review`. Aprovação é impossível para qualquer classificação diferente de `free`; anúncios de vendedor suspenso não são públicos.
 - Estado aprovado sozinho não é autorização legal. A governança de categorias precisa ser concluída antes do catálogo comercial.
-- Histórico administrativo registra ator, entidade, ID, ação e timestamp, sem copiar documentos ou dados pessoais. Justificativa/decisão/versionamento e trilha de contestação entram com a moderação.
+- Histórico administrativo registra ator, entidade, ID, ação e timestamp, sem copiar documentos ou dados pessoais. Justificativa, decisão e revisão de vendedor/anúncio estão em históricos transacionais separados; contestação/reabertura ainda não foi implementada.
 - Funções privilegiadas ficam em schema privado não exposto pela Data API, com `search_path` fixo e `EXECUTE` revogado por padrão. As exceções são helpers de RLS e triggers internos, sem aceitar papel informado pelo usuário.
 - A bucket policy permite leitura apenas do caminho do proprietário. Upload não está liberado. Não se promete segurança de documentos antes de antivírus, retenção e fluxo de revisão.
 

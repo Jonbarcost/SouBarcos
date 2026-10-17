@@ -1,35 +1,29 @@
-# Painel e preparação de anúncios — 16/10/2026
+# Anúncios e moderação
 
-## Entregue
+## Implementado
 
-- `/painel-vendedor`: listagem própria paginada (20), filtro de situação e contagem real.
-- Criação e edição de rascunhos com título, descrição, categoria, condição, preço, estoque, marca/modelo, peso embalado, dimensões e prazo de postagem.
-- Preço convertido em centavos com parser decimal, sem multiplicação de fração binária ou separadores ambíguos.
-- Envio para análise e pausa confirmados pelo usuário, com versão esperada e verificação de proprietário no banco.
-- `bf_save_listing` e `bf_transition_listing`: wrappers invoker e implementação privada com autorização explícita, sessão ativa, conta seller/store e solicitação aprovada. Login isoladamente não habilita escrita.
-- Rascunhos nunca públicos. Edição de aprovado retira publicação, redefine classificação para revisão adicional e exige nova análise.
-- Nenhuma role, classificação livre ou aprovação é aceita do formulário. Sem INSERT/UPDATE direto por authenticated.
-- Atualizações continuam registradas na auditoria genérica existente. Histórico detalhado de decisões de anúncios será uma etapa separada.
+Vendedor aprovado cria/edita rascunhos via bf_save_listing e envia/pausa via bf_transition_listing; não existe escrita paralela pelo navegador. Preço em centavos, estoque inteiro, embalagem e prazo de postagem passam pela validação existente. Edição de anúncio aprovado retira publicação e exige revisão. A nova implementação preserva controlled/prohibited durante correções; o vendedor não apaga a classificação de risco.
 
-## Estados
+/admin/anuncios oferece fila paginada por situação. /admin/anuncios/[id] mostra atributos, vendedor, classificação e histórico paginado. bf_review_listing exige equipe AAL2, não aceita decisão contra anúncio próprio, trava UUID/linha e confere revisão esperada. Sem INSERT/UPDATE direto para authenticated.
 
-Salvar: novo → rascunho; rascunho/correção/pausado → rascunho; aprovado → pendente.
-Enviar: rascunho/correção/pausado → pendente (estoque positivo e embalagem obrigatórios).
-Pausar: aprovado/pendente/em análise → pausado.
-Não existe ação de autoaprovação, exclusão definitiva ou alteração de proprietário.
-UUID estável e trava transacional serializam salvamentos; versão repetida retorna 40001.
+Transições administrativas:
 
-## Evidências e limites
+- pending → in_review / changes_requested / rejected.
+- in_review → approved / changes_requested / rejected.
+- approved → removed.
 
-- 38 testes automatizados passaram, incluindo 5 novos testes de integração SQL de anúncios e 2 de validação de valores/embalagem.
-- TypeScript e build de produção aprovados; teste HTTP validou redirecionamento anônimo nas três novas rotas.
-- Migração `20261016092032_listing_drafts.sql` aplicada ao SouBarcos pelo MCP. O timestamp do histórico remoto é gerado pelo serviço; não reaplicar o SQL.
-- Conferência remota: zero membros BF e zero anúncios; execução anônima de save negada, authenticated pode chamar a RPC mas depende das verificações internas; INSERT direto negado.
-- Advisors permanecem com os avisos preexistentes de messages sem política e proteção contra senhas vazadas desabilitada.
-- Sem usuário vendedor real habilitado: navegação e salvamento autenticados no navegador ainda não foram homologados. Testes PGlite não substituem Supabase Auth real.
+Aprovação comum exige classificação free conferida por humano, vendedor ativo e aprovado, categoria ativa distinta de serviços, estoque positivo e embalagem. controlled/prohibited não podem ser convertidos para free por esta RPC. Não há aprovação automática regulatória nem fluxo especial para comercializar itens controlados.
 
-## Próxima entrega
+bf_listing_review_events registra ator, estados, classificação, justificativa e revisão na transação. bf_listing_review_notes separa nota interna, legível apenas pela equipe AAL2. Vendedor vê retorno e histórico recente; não recebe notas internas nem histórico privado de terceiros. Rejeitado não é editável/reaberto por este fluxo.
 
-Homologar Auth/e-mail e administrador real, implementar verificação documental segura e só então habilitar vendedor de teste controlado. Depois: fotos reais com validação/quarentena, atributos de procedência, fila e decisões auditáveis de moderação de anúncios, catálogo com detalhes e variantes. Serviços continuam fora deste cadastro de produtos físicos.
+## Catálogo público
 
-O envio atual prepara a fila; não significa publicação, venda ou classificação legal definitiva. Nenhuma conta foi artificialmente promovida para demonstrar o painel. Pagamentos e logística continuam desligados. Medidas são dados de entrada futuros, não promessa de frete ou aceitação por transportadora.
+A política RLS e bf_public_listings exigem approved/free, vendedor ativo e aprovado, estoque positivo, categoria ativa e embalagem. A view security_invoker repete os filtros para que donos/equipe não publiquem linhas privadas por terem acesso mais amplo à tabela base. Só projeta campos comerciais públicos, sem identidade privada do vendedor.
+
+/catalogo/[id] usa essa projeção, valida UUID e mostra notFound para item indisponível. UI/assistente vinculam somente detalhes reais. O Next.js pode transmitir HTTP 200 com marcador de 404 quando a página já iniciou streaming; smoke verifica o conteúdo de não encontrado e ausência de dados comerciais.
+
+## Testado e pendente
+
+PGlite cobre revisão, autoaprovação, MFA, conflitos, correções, rejeição terminal, notas privadas, restrições persistentes e retirada do catálogo após suspensão/desaprovação/estoque zero. Tipos/build e smoke HTTP também executados; veja TESTING.md.
+
+Migração 20261017030000_listing_moderation.sql não aplicada remotamente. Nenhum anúncio real foi criado/aprovado nesta execução. Fotografias, comprovação de procedência, carrinho, estoque reservado, pedido, pagamento, split, webhook, etiquetas e rastreio não estão implementados. Compras continuam indisponíveis.

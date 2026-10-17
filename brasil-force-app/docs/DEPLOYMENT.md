@@ -1,24 +1,23 @@
-# Publicação Brasil Force — 15/10/2026 (São Paulo)
+# Homologação e implantação
 
-Projeto Vercel reutilizado: sou-barcos, prj_zhDl1iJuhJHAeB4FRNE09EG0B2FF, equipe VERS. Substituição expressamente autorizada pelo usuário.
+## Identificações fornecidas (não revalidadas remotamente)
 
-Deploy: dpl_GqRwZC3gkM9ryqYZ3HsF9yjHVaoU. Estado confirmado READY, destino production, commit de aplicação 502ff2bf6838eb47114bd507b9d16363720e3b1b. Build remoto: aproximadamente 38 segundos segundo os timestamps.
+Projeto Vercel sou-barcos, prj_zhDl1iJuhJHAeB4FRNE09EG0B2FF. Aplicação em brasil-force-app/. Domínio oficial informado: https://brasilforce.com.br/. Projeto Supabase autorizado: rrymtjzsekmjplyuoqef.
 
-Endereço: https://sou-barcos.vercel.app
-Deploy: https://sou-barcos-2eoqh2amb-vers2.vercel.app
+Homologação histórica do baseline 03f6744: sou-barcos-m17gfxbt5-vers2.vercel.app, informada READY. Isso não comprova disponibilidade atual ou chamada real à IA. Nenhum novo deployment foi criado/validado nesta execução: não há acesso Vercel autenticado disponível.
 
-Framework alterado de Express para Next.js; npm ci / npm run build / Node 24. Variáveis de Supabase publicáveis e SITE_URL configuradas no ambiente Vercel. Cadastro, OAuth e logística mantidos desativados. Nenhuma credencial administrativa do Supabase enviada.
+## Sequência para o candidato atual
 
-Build local limpo e 26 testes aprovados. Cache local Turbopack estava corrompido; foi movido para diretório temporário e a compilação limpa passou.
+1. Auditar versões/migrações do Supabase existente por acesso autorizado. Reconciliar quota remota 20261017010219 com arquivo local; não reaplicar histórico.
+2. Aplicar somente novas migrações verificadas e conferir grants/RLS.
+3. Criar preview da branch codex/brasilforce-production-audit com rootDirectory=brasil-force-app por deployment, preservando configuração global/legado.
+4. Configurar URL/chave publicável Supabase e callbacks exatos. Preview pode compartilhar banco real: não inserir fixtures nem tratar como banco descartável.
+5. Manter cadastro, IA e frete desligados até sua homologação. Tokens nunca são NEXT_PUBLIC. Executar env:check --deployment; a validação estática não prova acesso ao provedor.
+6. Validar Auth/MFA, vendedor autorizado, anúncio comum real, isolamento e IA com orçamento permitido. Não fabricar registros para demonstrar sucesso.
+7. Verificar logs, headers, catálogo, rotas privadas e erros. Registrar ID do preview e resultados, sem confundir build READY com aceite comercial.
 
-Verificação HTTP pública: /, /catalogo e /api/health retornaram 200; páginas identificadas como Brasil Force. Health retornou authenticationConfigured=true e commerceEnabled=false.
+## Produção
 
-Limites: verificação autenticada do link e leitura dos logs remotos retornaram 403/404. READY confirma o build e a atribuição de aliases, não homologa autenticação/pagamentos/frete nem garante teste visual. Proteção Vercel existente foi preservada.
+Não promovida, sem DNS alterado, sem pagamentos ou gastos ativados. Antes de qualquer promoção futura: identificar produção atual e ID de rollback, revisar migrações compatíveis, variáveis/callbacks, checks e aceite comercial; promover somente candidato validado e executar smoke/monitoramento. Rollback Vercel não desfaz SQL. Não substituir o site por recurso incompleto.
 
-Código enviado diretamente pela API. Repositório GitHub antigo não foi substituído nesta etapa: não disparar deploy do código antigo do SouBarcos. A integração contínua precisa apontar para o código Brasil Force antes de novos pushes.
-
-Permanecem pendentes: autenticação/e-mails/callbacks de ponta a ponta, revisão das políticas antigas de products, fluxo de pedidos/pagamentos, conta Melhor Envio e homologação. Não é lançamento comercial.
-
-## Atualização: triagem de vendedores
-
-Deploy dpl_8woTKqY55qYJVXKpiMG4VNoFgnpx confirmado READY em 16/10/2026 UTC, código f57a9dc. Ver docs/SELLER-REVIEW.md para escopo e testes atuais.
+GitHub API retornou Forbidden nesta sessão; autorização Git HTTPS é separada. Push/PR e IDs finais são registrados em RESTORE-STATUS.md conforme resultados observados, nunca inferidos.

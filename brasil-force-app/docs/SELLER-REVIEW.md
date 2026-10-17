@@ -1,17 +1,25 @@
-# Triagem de vendedores — 16/10/2026 UTC
+# Aprovação de vendedores
 
-Entregue: fila administrativa filtrável/paginada; iniciar análise, solicitar correção ou rejeitar com confirmação e motivo; solicitante acompanha histórico privado e reenvia nome/tipo de pessoa após solicitação de correções.
+## Implementado localmente
 
-Decisões registradas em bf_seller_review_events na mesma transação que muda o status. RPC pública security invoker encaminha para função privada com autorização explícita, sessão ativa e AAL2 para equipe. Controle por revision previne sobrescrita de decisão por página antiga. Rejeição é terminal nesta etapa. Nenhuma função aprova vendedor, altera role ou gera selo. Recursos de contestação/reabertura ainda pendentes.
+Fluxo: pending → in_review → approved / changes_requested / rejected. Reenvio de correções retorna a pending e incrementa a revisão. Rejeição é terminal. A RPC bf_review_seller conserva nome e assinatura anteriores.
 
-Aplicada a migração 20261016004302_seller_review_workflow.sql ao SouBarcos. RLS confirmado; leitura anônima, inserção direta no histórico e execução anônima da decisão bloqueadas. Sem usuários fictícios nem decisões em solicitações reais. Zero membros BF e solicitações no momento da verificação inicial.
+Triagem continua disponível à equipe AAL2. Aprovação exige admin/superadmin com sessão ativa e MFA, nunca o próprio solicitante. O banco exige conta destinatária ativa, e-mail confirmado, papel buyer/seller/store, estado in_review, revisão esperada e atestado de verificação vigente para essa mesma revisão e política. Não promove nem rebaixa equipe.
 
-31 testes automatizados aprovados, TypeScript e build aprovados. Testes cobrem permissões, MFA, estados, motivo, concorrência otimista, privacidade e reenvio. Homologação em navegador autenticado com usuário real permanece pendente.
+Na mesma transação, approved habilita seller para pessoa física ou store para empresa, incrementa revisão e registra ator/motivo no histórico. Erros/conflitos não deixam papel ou evento parcialmente atualizado. can_sell e requireSeller continuam exigindo conta habilitada e solicitação aprovada; anúncio ainda precisa de moderação.
 
-Os advisors mantêm apenas os avisos anteriores: messages sem política e proteção contra senhas vazadas desabilitada. Referências:
-- https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy
-- https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
+## Verificação documental
 
-Cadastro público, vendas e logística continuam desligados. Próximo marco: homologação Auth/e-mail, identificação do administrador e verificação documental real, antes de aprovação de vendedores e anúncios.
+A migração cria bf_seller_verification_policies e bf_seller_verifications. Nenhuma política é pré-habilitada. Um operador deve definir o processo privado de evidências, retenção e acesso auditado antes de configurar política versionada para individual/company. Não criar outro banco.
 
-Publicação confirmada READY: dpl_8woTKqY55qYJVXKpiMG4VNoFgnpx, commit de aplicação f57a9dc, https://sou-barcos.vercel.app. Smoke HTTP local aprovado para páginas públicas, rotas protegidas e gates de cadastro/OAuth.
+Requisitos configuráveis: identity, commercial e policy são obrigatórios; fiscal e activity_credentials somente quando pertinentes à modalidade. bf_verify_seller exige administrador AAL2, revisão atual, todos os requisitos exatos da política habilitada e referência opaca de 8–100 caracteres. Não aceita URL, documento ou texto livre como referência. Validade é definida pelo servidor conforme política, entre 1–90 dias. Alterar política, revisar/reencaminhar a solicitação ou expirar a evidência invalida a elegibilidade para uma nova aprovação.
+
+O atestado registra que um administrador conferiu a evidência em processo externo seguro. **Não valida documento automaticamente nem comprova que esse processo externo já existe.** O acesso a documentos e seus logs/retenção pertencem ao processo que ainda precisa ser configurado. Upload no bucket privado continua bloqueado; não há scanner integrado.
+
+Referências de evidência são visíveis somente a administradores AAL2. Dono acompanha decisões e justificativas, sem referência interna. Histórico administrativo completo tem paginação em /admin/vendedores/[id].
+
+## Evidência e implantação
+
+Testes PGlite cobrem MFA/admin, estados, requisitos ausentes, política ausente/alterada, referência inválida, expiração, revisão antiga, autoaprovação, papel, auditoria e criação de rascunho após aprovação. Sem contas fictícias remotas ou decisões reais.
+
+Migração 20261017020000_verified_seller_approval.sql **não aplicada remotamente nesta execução**. Sem política configurada não existe vendedor novo elegível à aprovação. Homologação Auth/MFA e processo de evidência continuam pendentes. Aprovação geral não concede autorização para itens institucionais restritos.
