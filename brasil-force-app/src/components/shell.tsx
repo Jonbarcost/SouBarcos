@@ -38,6 +38,7 @@ export function Footer() {
           <Link href="/regras">Produtos permitidos</Link>
           <Link href="/privacidade">Privacidade</Link>
           <Link href="/termos">Termos</Link>
+          <a href="mailto:contato@brasilforce.com.br">Contato</a>
         </div>
       </div>
     </footer>
