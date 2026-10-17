@@ -124,8 +124,8 @@ export default async function Sell() {
         ) : (
           <>
             <p>
-              Entre na sua conta para solicitar habilitação. Novos cadastros
-              serão liberados após a validação.
+              Entre na sua conta para solicitar habilitação. Criar uma conta
+              não autoriza vendas automaticamente: sua solicitação será analisada.
             </p>
             <Link href="/entrar" className="button button-primary">
               Entrar para solicitar
