@@ -1,24 +1,31 @@
-# Auditoria inicial — Brasil Force (16/10/2026)
+# Auditoria operacional — 16/10/2026 (America/Sao_Paulo)
 
-## Confirmado em serviços conectados
-- Supabase SouBarcos: `rrymtjzsekmjplyuoqef`, ACTIVE_HEALTHY, PostgreSQL 17.
-- 8 tabelas `public.bf_*` com RLS; 6 categorias; 0 anúncios e 0 solicitações de vendedores na consulta.
-- Quatro migrações aplicadas no banco, versões: 20261015211450, 20261016004612, 20261016092818, 20261016103404. Os nomes dos arquivos da branch não coincidem numericamente com as versões registradas; **não executar migrações existentes novamente**.
-- `public.products` é legado, com 1768 registros; não alterar nem reutilizar para Brasil Force.
-- Projeto Vercel `sou-barcos`, ID `prj_zhDl1iJuhJHAeB4FRNE09EG0B2FF`, possui domínio verificado `brasilforce.com.br`. Deployment READY `dpl_DiLWqCWzXBLfL3d59QpVG3g9oJpZ`; a origem Git exata desse deployment não veio em seus metadados. Não assumir que uma branch corresponde ao site publicado.
-- GitHub `Jonbarcost/Brasil-Force`: `main` contém README e .gitattributes; `codex/foundation-seller-listings` contém Next.js 16, testes e fluxo de vendedor; `codex/listing-moderation-triage` apresentou a mesma árvore na inspeção.
-- `Jonbarcost/SouBarcos`: `main` contém legado HTML/Node/Express.
-- Não foi possível inspecionar alterações que estejam apenas em computadores locais, ainda não enviadas ao GitHub.
+## Escopo e evidência atual
 
-## Achados críticos
-- O enum `bf_product_classification` é `free, additional_review, controlled, prohibited`; não substituir por enum novo sem migração compatível.
-- `brasil_force_private.review_seller` não permite `approved` apesar de o campo status da solicitação aceitá-lo. A habilitação precisa de verificação documental, decisão auditada e revisão dos papéis antes de ser implementada.
-- `brasil_force_private.can_sell` requer sessão ativa, papel seller/store e solicitação approved; preservar.
-- O catálogo público exige status approved, classification free e vendedor ativo; preservar.
-- Grants diretos de tabelas bf_ a anon/authenticated são majoritariamente SELECT, com INSERT restrito para bf_seller_applications e UPDATE para bf_profiles; gravação de anúncios ocorre por RPC autorizada.
-- Advisors: `public.messages` tem RLS sem política (não é autorização para abrir acesso); proteção de senhas vazadas desativada. Referências: https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy e https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection.
+Repositório canônico Jonbarcost/SouBarcos; branch codex/brasilforce-production-audit; aplicação brasil-force-app. Baseline remoto confirmado: 03f674442a5b6e7bb9ec1a453283206794a7365a. Fetch/pull sem divergências. Legado Express/static e repositório auxiliar Brasil-Force preservados. Nenhum produto, fornecedor ou pedido foi inserido remotamente.
 
-## Escopo desta branch
-- Páginas informativas `/explorar` e `/instituicoes` e catálogo de descoberta tipado, com testes.
-- Nenhuma alteração de banco, RLS, grants, dados legados, domínio ou deploy.
-- **Pendente:** validação build/typecheck/HTTP em CI e integração de produção. Esta entrega não habilita compras nem aprovação de vendedores.
+Baseline executado: npm ci, tipos, 47 testes e build aprovados. Novos testes cobrem o serviço de IA, quota SQL, aprovação verificada e moderação. Consulte TESTING.md para resultado final e limitações.
+
+## Implementado localmente
+
+- IA: corpo limitado por bytes reais; validação de origem e JSON; sessão confirmada, conta ativa e quota SQL obrigatória; contexto mínimo; gateway estruturado e respostas factuais montadas pelo backend; erros sanitizados e métricas sem conteúdo pessoal.
+- Vendedores: política de verificação por modalidade; atestados administrativos com referência opaca à evidência externa; aprovação AAL2/admin, revisão atual, validade e papel comercial alterados na mesma transação do histórico.
+- Anúncios: fila/detalhe de moderação, decisões e notas internas segregadas, revisão otimista, bloqueio de autoaprovação e classificação restrita preservada em correções. Projeção pública exige vendedor aprovado/ativo, categoria ativa, produto comum, estoque e embalagem.
+- Banco: duas migrações aditivas novas; **testadas em memória, não aplicadas ao Supabase**.
+
+## Riscos e bloqueios observados
+
+| Item | Evidência / consequência | Próxima ação |
+| --- | --- | --- |
+| Supabase remoto | Sem credenciais ou ferramenta autenticada nesta sessão; estrutura/migrações remotas não foram conferidas | Executar scripts/database-audit.sql por conexão autorizada ao projeto existente; comparar versões antes de aplicar somente as novas migrações |
+| GitHub API | gh api repos/Jonbarcost/SouBarcos/pulls/1 retornou Forbidden | Habilitar destino/API e acesso para atualizar PR; Git HTTPS tem autorização separada |
+| Gateway | Lista pública de modelos e documentação Vercel retornaram HTTP 403; sem token/modelo/orçamento aprovado disponível | Validar catálogo atual, credencial OIDC/key e teto de gastos antes de habilitar BF_AI_ENABLED |
+| Verificação documental | Não há processo externo de evidências/retenção configurado | Configurar política após definir processo privado e acesso auditado; nenhuma política habilitada é criada pela migração |
+| Preview | Sem acesso Vercel autenticado para consultar/criar deployment | Configurar acesso; manter rootDirectory por deployment para preservar legado; aplicar/verificar migrações antes dos testes autenticados |
+| Comércio | Carrinho, reserva transacional, pedido e PSP/split/webhook não implementados | Etapa comercial separada; sem pagamentos reais |
+
+O identificador de projeto autorizado continua sendo rrymtjzsekmjplyuoqef. Nenhum outro projeto/banco remoto foi criado. PGlite é apenas o executor PostgreSQL em memória dos testes.
+
+## Decisões de segurança
+
+Não abrir uploads sem scanner, retenção e processo de revisão. Atestado administrativo não é uma validação automática de documento. Não habilitar política para demonstrar aprovação. Não repetir migrações históricas com timestamps divergentes. Não promover produção nem alterar DNS. READY histórico não comprova o estado atual.
