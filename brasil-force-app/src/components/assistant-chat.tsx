@@ -8,6 +8,11 @@ type Turn = {
   products: CatalogHit[];
   error?: string;
 };
+function soldierGreeting(hour: number): string {
+  if (hour >= 5 && hour < 12) return "Bom dia";
+  if (hour >= 12 && hour < 18) return "Boa tarde";
+  return "Boa noite";
+}
 const suggestions = [
   "Preciso de uma mochila para camping.",
   "Estou procurando uma lanterna.",
@@ -18,6 +23,10 @@ export function AssistantChat() {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [loading, setLoading] = useState(false);
   const busy = useRef(false);
+  const [greeting, setGreeting] = useState<string | null>(null);
+  function introduce() {
+    setGreeting(soldierGreeting(new Date().getHours()) + ", senhor! Soldado Virtual Brasil Force à disposição. Qual equipamento procura?");
+  }
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const text = question.trim();
@@ -55,11 +64,15 @@ export function AssistantChat() {
   }
   return (
     <section className="panel" aria-labelledby="assistant-title">
-      <h2 id="assistant-title">Converse sobre equipamentos</h2>
+      <h2 id="assistant-title">Soldado Virtual Brasil Force</h2>
       <p>
-        Busque por nomes e categorias. O histórico permanece apenas nesta página
-        e é descartado ao sair.
+        Às suas ordens! Sou o Soldado Virtual Brasil Force, assistente digital do marketplace.
+        Busque equipamentos por nomes e categorias. O histórico permanece apenas nesta página e é descartado ao sair.
       </p>
+      <div className="listing-toolbar">
+        <button className="button" type="button" onClick={introduce}>Apresentar-se, soldado</button>
+      </div>
+      {greeting && <p role="status">{greeting}</p>}
       <div className="listing-toolbar" aria-label="Sugestões de perguntas">
         {suggestions.map((text) => (
           <button
@@ -85,10 +98,10 @@ export function AssistantChat() {
             <h3>Você</h3>
             <p style={{ whiteSpace: "pre-wrap" }}>{turn.question}</p>
             {turn.error ? (
-              <p role="alert">{turn.error}</p>
+              <p role="alert">Às ordens! {turn.error}</p>
             ) : turn.answer ? (
               <>
-                <h3>Assistente Brasil Force</h3>
+                <h3>Soldado Virtual Brasil Force</h3>
                 <p>{turn.answer}</p>
                 {turn.products.map((product) => (
                   <article key={product.id}>
@@ -108,13 +121,13 @@ export function AssistantChat() {
                 ))}
               </>
             ) : (
-              <p role="status">Consultando o catálogo…</p>
+              <p role="status">Em missão: consultando o catálogo…</p>
             )}
           </article>
         ))}
       </div>
       <form onSubmit={submit} className="search-form">
-        <label htmlFor="bf-ai-question">O que você está procurando?</label>
+        <label htmlFor="bf-ai-question">Qual equipamento deseja localizar, senhor?</label>
         <input
           id="bf-ai-question"
           value={question}
@@ -129,7 +142,7 @@ export function AssistantChat() {
           className="button button-primary"
           disabled={loading || question.trim().length < 3}
         >
-          {loading ? "Consultando…" : "Perguntar"}
+          {loading ? "Em missão…" : "Enviar missão"}
         </button>
       </form>
     </section>
