@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Header, Footer } from "@/components/shell";
+import { Header, Footer, AssistantDock } from "@/components/shell";
 import "./globals.css";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -24,6 +24,7 @@ export default function RootLayout({
         </a>
         <Header />
         <main id="conteudo">{children}</main>
+        <AssistantDock />
         <Footer />
       </body>
     </html>
