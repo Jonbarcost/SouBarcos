@@ -1,3 +1,11 @@
+# Continuidade — 17/10/2026 UTC
+
+Operação Primeiro Vendedor executada em Supabase Docker isolado, sem fixtures ou SQL no banco compartilhado. A jornada local completa foi validada em desktop/mobile e em PostgreSQL/Auth/Storage reais. Consulte FIRST-SELLER-OPERATION.md e TESTING.md para resultados/limites atuais. Migrações já aplicadas remotamente por outra operação não devem ser reaplicadas (versões em DATABASE.md). Sete commits novos de outros agentes foram incorporados até 0f128b5, preservando o Soldado Virtual e EMAIL-CONTACT.md.
+
+Novo preview com fluxo autenticado remoto exige acesso Vercel e banco remoto isolado. O ambiente local está preparado para desenvolvimento, mas carrinho, reserva/pedidos, pagamento e frete sandbox continuam como próxima fase. O histórico abaixo é anterior e conserva seu contexto temporal.
+
+---
+
 # Recuperação e consolidação — estado de 16/10/2026
 
 ## Recuperação preservada

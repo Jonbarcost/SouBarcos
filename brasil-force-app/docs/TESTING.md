@@ -1,3 +1,39 @@
+# Testes — Operação Primeiro Vendedor
+
+Data: 17/10/2026 UTC. Node 24.19.0; Supabase CLI 2.121.0; PostgreSQL 17 local Docker. Lockfile atualizado somente com @playwright/test 1.64.1 e pg 8.23.1 como dependências de desenvolvimento; versões do app preservadas.
+
+| Comando                                                   | Resultado observado                                                                              |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| npm ci --cache /workspace/.npm-cache --no-audit --no-fund | Instalação congelada, 100 pacotes, exit 0                                                        |
+| npm run check antes da sincronização final                | 79/79 testes, zero falhas/skips/cancelamentos; tipos e build exit 0                              |
+| npm run test:integration                                  | 16/16 contra Auth/Storage/Data API/PostgreSQL reais locais                                       |
+| npm run test:first-seller em base nova                    | 16/16 integração + 2/2 E2E, exit 0; stack descartado                                             |
+| Chromium desktop 1440×1000                                | Jornada integral passou; Tab/Enter, confirmação e MFA reais                                      |
+| Chromium mobile 390×844                                   | Jornada integral passou, sem overflow ou erro JS                                                 |
+| npm run test:http                                         | Páginas/headers, nove rotas privadas, gates, método e detalhes indisponíveis passaram            |
+| npm run env:check com gates fechados                      | Exit 0; IA, cadastro e frete aparecem como desativados/pendentes, sem alegar prontidão comercial |
+| npm run test:local:cleanup após descarte                  | Exit 0; nenhum container do stack ativo                                                          |
+
+Sincronização adicional por fast-forward incorporou os sete commits e91a236..0f128b5 de outros agentes. Reexecução concluída sobre esse HEAD consolidado: npm run check passou com **80/80**, zero falhas/skips/cancelamentos, tipos/build exit 0; test:http passou; test:first-seller passou com **16/16 + 2/2**, exit 0 e descarte confirmado. Cleanup posterior exit 0; nenhum container ativo. Os resultados anteriores são preservados como histórico.
+
+## Cobertura e limites atuais
+
+A suíte rápida inclui testes existentes PGlite e nove novos casos de guardas, lifecycle, TOTP RFC6238 e CSP. PGlite continua rápido, mas não é evidência de múltiplas conexões. A integração usa 16 casos reais com sessão AAL1/AAL2, JWT inválido/expirado, sessão revogada, metadata e grants, política desabilitada, autoaprovação, evidência vencida, revisão antiga, seller/store, RLS, Storage e moderação completa. Seis desses casos comprovam disputas/rollback/quota em PostgreSQL por conexões independentes, observando dois PIDs de backend bloqueados quando necessário.
+
+E2E não faz mock de Auth nem força cookies/claims AAL2: cria conta pela UI, lê confirmação no Mailpit, autentica, solicita vendedor e executa MFA, aprovação e moderação na UI. Somente provisionamento de papéis privilegiados e política fictícia usam helpers controlados no banco local. Screenshots finais públicos de ambos viewports foram inspecionados. Sem trace, vídeo, QR, cookies ou dados pessoais nos artifacts.
+
+Correção de produto: CSP bloqueava Auth local em development; agora inclui somente origin loopback configurado/validado, com teste que mantém production/test restritos. Correções de harness: navegação pós-callback, locators, option disabled, snapshot de estatísticas dos waiters PostgreSQL, vínculo privado de atores e limpeza parcial/cancelamento. Uma verificação de tipos identificou callbacks opcionais nas dependências injetadas do teste de lifecycle; tipos corrigidos e check reexecutado. Nenhuma regra de backend foi removida para fazer teste passar.
+
+Os primeiros pulls encontraram registry inacessível e falta de disco com imagem completa/VFS. Solução suportada: registry oficial e imagens slim com digest; proxy removido somente do comando exato de health loopback nas imagens afetadas. Nenhum checksum/TLS/health ignorado.
+
+Não comprovado: E2E em preview remoto com banco isolado, recuperação de senha, documentos reais/processo de evidências, modelo/respostas reais do gateway, frete/pagamento sandbox ou comércio real. Não foram inseridas fixtures no Supabase compartilhado. Ver [FIRST-SELLER-OPERATION.md](FIRST-SELLER-OPERATION.md).
+
+---
+
+# Histórico da consolidação anterior (16/10/2026)
+
+O conteúdo abaixo registra o estado daquela execução. As limitações locais de Auth/Storage/concorrência foram superadas pela operação acima; limitações remotas/comerciais permanecem quando explicitadas.
+
 # Verificações da consolidação operacional
 
 Data de referência: 16/10/2026 (America/Sao_Paulo). Node 24.19.0, dependências fixadas no package-lock; nenhum upgrade do stack.

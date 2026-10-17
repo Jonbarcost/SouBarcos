@@ -26,4 +26,8 @@ A política RLS e bf_public_listings exigem approved/free, vendedor ativo e apro
 
 PGlite cobre revisão, autoaprovação, MFA, conflitos, correções, rejeição terminal, notas privadas, restrições persistentes e retirada do catálogo após suspensão/desaprovação/estoque zero. Tipos/build e smoke HTTP também executados; veja TESTING.md.
 
-Migração 20261017030000_listing_moderation.sql não aplicada remotamente. Nenhum anúncio real foi criado/aprovado nesta execução. Fotografias, comprovação de procedência, carrinho, estoque reservado, pedido, pagamento, split, webhook, etiquetas e rastreio não estão implementados. Compras continuam indisponíveis.
+Migração já aplicada remotamente por operação anterior como 20261017030041, conforme e91a236; não reaplicar o arquivo local. Nenhum anúncio real foi criado/aprovado nesta execução. Fotografias, comprovação de procedência, carrinho, estoque reservado, pedido, pagamento, split, webhook, etiquetas e rastreio não estão implementados. Compras continuam indisponíveis.
+
+## Operação Primeiro Vendedor
+
+Jornada automatizada no Chromium desktop e 390×844: rascunho com título/descrição/categoria/preço/estoque/embalagem/prazo, envio, análise por moderador AAL2, aprovação free e detalhe público anônimo. Integração real local também cobre correção/reenvio, remoção, classe restrita, notas privadas e disputa de revisão. O catálogo recebe exclusivamente produtos TESTE — NÃO COMERCIALIZÁVEL no banco Docker isolado. Sem fotografia no teste: upload de imagens continua uma lacuna comercial. Ver [FIRST-SELLER-OPERATION.md](FIRST-SELLER-OPERATION.md).

@@ -1,6 +1,6 @@
 # Banco e migrações
 
-Projeto remoto autorizado: rrymtjzsekmjplyuoqef. Não criar outro banco/projeto nem resetar linked database. O acesso remoto não estava disponível nesta execução; o estado abaixo distingue arquivos locais e operações efetivas.
+Projeto remoto autorizado: rrymtjzsekmjplyuoqef. Não criar outro projeto remoto nem resetar linked database. A homologação usa exclusivamente um Supabase local Docker descartável, autorizado pelo comando 3.0. O histórico remoto confirmado pelo proprietário foi incorporado em e91a236; esta operação não executou SQL remoto.
 
 ## Histórico a reconciliar
 
@@ -8,7 +8,7 @@ Migrações conhecidas pelo histórico fornecido: brasil_force_shared_foundation
 
 scripts/database-audit.sql contém consultas somente leitura de versões, tabelas, índices, constraints, RLS, grants de tabela/coluna, funções, triggers, Storage e contagens agregadas. Não exporta auth.users/documentos/credenciais. Ainda não foi executado no servidor remoto.
 
-## Novas migrações aditivas, não aplicadas remotamente
+## Migrações aditivas já aplicadas remotamente (não reaplicar)
 
 | Arquivo                                     | Objetos / alterações                                                                                                                                                                                                                                                                                                             |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -17,13 +17,16 @@ scripts/database-audit.sql contém consultas somente leitura de versões, tabela
 
 Todas as tabelas novas têm RLS, sem escrita direta para anon/authenticated. Funções públicas são security invoker. Implementações definer ficam em brasil_force_private com search_path vazio, EXECUTE revogado antes dos grants mínimos e autorização explícita de sessão/role/MFA. Não alteram contas/tabelas do legado nem removem dados.
 
-## Aplicação autorizada futura
+## Histórico remoto e ambiente local
 
-1. Obter acesso ao projeto existente e executar auditoria somente leitura.
-2. Confirmar histórico, assinaturas, objetos existentes e backup/recuperação. Não executar supabase db push cegamente: timestamps históricos divergem.
-3. Aplicar somente as duas novas migrações uma vez, em ordem, após revisar os requisitos de evidência. Cada arquivo tem BEGIN/COMMIT.
-4. Conferir grants/RLS por Data API e executar fluxo autenticado controlado sem fixtures em produção. Não habilitar políticas documentais sem processo privado operacional.
-5. Só então publicar preview dependente desses objetos e homologar com contas autorizadas.
+| Nome                     | Arquivo local  | Versão remota confirmada |
+| ------------------------ | -------------- | ------------------------ |
+| verified_seller_approval | 20261017020000 | 20261017030036           |
+| listing_moderation       | 20261017030000 | 20261017030041           |
+
+Não reaplicar esses arquivos no projeto compartilhado. A quota mantém a divergência histórica já descrita. Antes de qualquer mudança remota futura, executar a auditoria somente leitura e conferir conteúdo/versões; nunca usar db push indiscriminadamente.
+
+O projeto local bf-first-seller usa PostgreSQL 17, portas fixas 55321/55322 e todas as migrações versionadas em uma base nova. Supabase CLI não recebe --linked, project-ref remoto nem credenciais remotas. Fixtures e política TEST-ONLY-v1 só são carregadas depois da prova de isolamento. Consulte [FIRST-SELLER-OPERATION.md](FIRST-SELLER-OPERATION.md).
 
 ## Reversão
 
@@ -31,4 +34,4 @@ Priorizar correção aditiva e rollback da aplicação. Desabilitar políticas d
 
 ## Evidência local
 
-Migrações aplicadas em bancos PostgreSQL em memória PGlite de testes, com fixtures locais. Isso valida syntax/transações/grants/RLS nesses testes, sem validar Auth/Storage reais nem concorrência entre conexões remotas. Não há migração remota aplicada ou banco remoto criado por esta execução.
+PGlite continua como suíte rápida. A nova integração usa Auth/Storage/Data API reais locais e conexões PostgreSQL distintas, observando lock waiters por PID, revisão concorrente, rollback por falha de auditoria e encerramento de transação. A suíte não depende de JWTs simulados para conceder MFA. Nenhuma migração remota foi executada por esta operação.

@@ -21,12 +21,20 @@ Revisão independente do código não encontrou defeitos críticos/importantes n
 
 ## Pendente antes de abertura
 
-- Homologar Supabase Auth real: confirmação, expiração/revogação, recuperação, MFA e isolamento por HTTP com contas autorizadas.
+- Concluir homologação remota de Auth e recuperação de conta. Confirmação, MFA, expiração/revogação e isolamento HTTP já têm evidência em Supabase real local.
 - Verificar proteção contra senhas comprometidas no plano Supabase; o aviso histórico não foi novamente consultado.
 - Configurar processo de evidências com minimização, finalidade, retenção, acesso e logs. Não basta habilitar policy no SQL. Sem scanner, manter upload bloqueado.
 - Confirmar modelo, token OIDC/key, orçamento global e proteção operacional contra múltiplas contas abusivas. Quota por usuário não é teto de gasto do projeto.
-- Ensaiar concorrência em PostgreSQL com conexões independentes, inclusive decisão contra revogação e edição simultânea.
+- Repetir a suíte PostgreSQL no ambiente remoto isolado quando existir. Concorrência local real já cobre aprovação, edição, moderação, suspensão do vendedor, quota e rollback.
 - Definir limpeza dos registros de quota, retenção de auditoria, backup criptografado e restauração ensaiada.
 - Pagamento, split, estoque reservado e webhooks continuam ausentes. Nenhuma flag transforma a aplicação em checkout pronto.
 
 Não desativar RLS, TLS, assinatura de pacotes ou verificações de checksum como solução. Nenhuma alteração remota de segurança foi aplicada nesta execução.
+
+## Isolamento da Operação Primeiro Vendedor
+
+Antes de mutações, o loader confere config local, URLs/portas exatas, status e chaves da CLI, ownership/workdir dos containers, IP real do servidor PostgreSQL e ausência de usuários/anúncios fora dos marcadores de teste. Objetos runtime não podem ser fabricados pelo chamador; atores têm vínculo privado com id/client/runtime. O projeto compartilhado é recusado. Os auxiliares de teste não são importados pelo app.
+
+Auth e MFA TOTP são reais. Alterar user_metadata ou JWT sem assinatura válida não concede papel; UPDATE direto de role é negado. Storage real nega upload e URL de outro dono. Política TEST-ONLY só existe no Docker descartável. Traces, vídeos e screenshots automáticos ficam desligados; CI coleta apenas imagem pública do produto fictício. Segredos, QR, cookies e links de confirmação não são publicados.
+
+A CSP permite o origin loopback configurado somente em development; production/test mantêm os destinos HTTPS anteriores. A suíte verifica essa separação. A revisão detectou e levou à correção de duas falhas no harness: ator mutável sem vínculo de destino e cleanup omitido após falha parcial de startup. CI também executa cleanup com always() após cancelamento. Consulte [FIRST-SELLER-OPERATION.md](FIRST-SELLER-OPERATION.md).
