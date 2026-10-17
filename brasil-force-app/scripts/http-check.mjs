@@ -101,6 +101,12 @@ try {
   assert.ok(login.includes('disabled=""'));
   assert.equal((await fetch(base + "/auth/oauth?provider=google")).status, 404);
   console.log("PASS configuration gates and OAuth disabled");
+  const helpHtml = await (await fetch(base + "/ajuda")).text();
+  assert.ok(helpHtml.includes("mailto:contato@brasilforce.com.br"), "Help must link to corporate mailbox");
+  const homeHtml = await (await fetch(base + "/")).text();
+  assert.ok(homeHtml.includes("mailto:contato@brasilforce.com.br"), "Footer must link to corporate mailbox");
+  console.log("PASS contact links in help and footer");
+
   const assistant = await fetch(base + "/api/assistente", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
