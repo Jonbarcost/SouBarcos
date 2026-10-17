@@ -1,6 +1,9 @@
 import Link from "next/link";
-import { UserRound, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Sparkles, UserRound } from "lucide-react";
 import { Brand } from "./brand";
+
+const aiEnabled = process.env.BF_AI_ENABLED === "true";
+
 export function Header() {
   return (
     <header className="header">
@@ -8,32 +11,41 @@ export function Header() {
         <Brand />
         <nav aria-label="Navegação principal">
           <Link href="/catalogo">Catálogo</Link>
-          <Link href="/assistente">Assistente IA</Link>
+          {aiEnabled && <Link className="bf-nav-ai" href="/assistente"><Sparkles size={15} aria-hidden="true" /> Assistente IA</Link>}
           <Link href="/vender">Como vender</Link>
           <Link href="/ajuda">Ajuda</Link>
         </nav>
         <Link className="account-link" href="/conta">
-          <UserRound size={19} />
+          <UserRound size={19} aria-hidden="true" />
           <span>Minha conta</span>
         </Link>
       </div>
     </header>
   );
 }
+
+export function AssistantDock() {
+  if (!aiEnabled) return null;
+  return (
+    <Link className="bf-assistant-dock" href="/assistente" aria-label="Abrir assistente Brasil Force">
+      <Sparkles size={18} aria-hidden="true" />
+      <span>Fale com a IA</span>
+    </Link>
+  );
+}
+
 export function Footer() {
   return (
     <footer>
       <div className="container footer-top">
         <Brand />
-        <p>Equipamentos, histórias e novas jornadas.</p>
+        <p>Feito no Brasil. Preparado para sua próxima jornada.</p>
         <Link href="/vender">
-          Faça parte <ArrowUpRight size={16} />
+          Faça parte <ArrowUpRight size={16} aria-hidden="true" />
         </Link>
       </div>
       <div className="container footer-bottom">
-        <span>
-          © {new Date().getFullYear()} Brasil Force · Plataforma em preparação
-        </span>
+        <span>© {new Date().getFullYear()} Brasil Force · Anúncios sujeitos a moderação</span>
         <div>
           <Link href="/regras">Produtos permitidos</Link>
           <Link href="/privacidade">Privacidade</Link>
@@ -44,6 +56,7 @@ export function Footer() {
     </footer>
   );
 }
+
 export function PageTitle({
   title,
   description,
@@ -59,6 +72,7 @@ export function PageTitle({
     </div>
   );
 }
+
 export function Notice({ children }: { children: React.ReactNode }) {
   return (
     <div className="notice" role="status">
