@@ -35,6 +35,14 @@ export default async function EditListing({
     throw new Error("Não foi possível carregar o anúncio.");
   if (!itemResult.data) notFound();
   const item = itemResult.data as Listing;
+  const feedback = await db
+    .from("bf_listing_review_events")
+    .select("id,to_status,reason,created_at,revision")
+    .eq("listing_id", id)
+    .order("revision", { ascending: false })
+    .limit(30);
+  if (feedback.error)
+    throw new Error("Não foi possível consultar as decisões.");
   const canSubmit = ["draft", "changes_requested", "paused"].includes(
     item.status,
   );
@@ -47,8 +55,9 @@ export default async function EditListing({
       />
       <Link href="/painel-vendedor">Voltar aos anúncios</Link>
       <Notice>
-        A análise não substitui a classificação legal. Este fluxo ainda não
-        habilita publicação ou compras.
+        A análise não substitui a classificação legal. O anúncio só aparece no
+        catálogo após aprovação e enquanto satisfizer os requisitos de
+        publicação. Compras permanecem indisponíveis.
       </Notice>
       <section className="panel">
         {editableStatuses.includes(item.status) ? (
@@ -72,6 +81,23 @@ export default async function EditListing({
             </p>
             <p>A edição está bloqueada nesta etapa.</p>
           </>
+        )}
+      </section>
+      <section className="panel">
+        <h2>Retorno da moderação</h2>
+        {feedback.data.length ? (
+          feedback.data.map((event) => (
+            <article key={event.id}>
+              <h3>{listingStatus[event.to_status]}</h3>
+              <p>{event.reason}</p>
+              <p>
+                Revisão {event.revision} ·{" "}
+                {new Date(event.created_at).toLocaleString("pt-BR")}
+              </p>
+            </article>
+          ))
+        ) : (
+          <p>Ainda não há decisões.</p>
         )}
       </section>
       {(canSubmit || canPause) && (

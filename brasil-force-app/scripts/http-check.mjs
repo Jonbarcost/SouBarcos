@@ -65,6 +65,9 @@ try {
   for (const route of [
     "/conta",
     "/admin",
+    "/admin/anuncios",
+    "/admin/anuncios/00000000-0000-4000-8000-000000000001",
+    "/admin/vendedores/00000000-0000-4000-8000-000000000001",
     "/conta/seguranca",
     "/painel-vendedor",
     "/painel-vendedor/anuncios/novo",
@@ -105,6 +108,23 @@ try {
   });
   assert.equal(assistant.status, 503, "AI must be disabled by default");
   console.log("PASS AI endpoint gated without preview activation");
+  assert.equal((await fetch(base + "/api/assistente")).status, 405);
+  for (const path of [
+    "/catalogo/invalid-id",
+    "/catalogo/00000000-0000-4000-8000-000000000001",
+  ]) {
+    const response = await fetch(base + path);
+    const html = await response.text();
+    // Next.js preserves HTTP 200 if the loading boundary already streamed.
+    assert.ok(
+      response.status === 404 ||
+        (response.status === 200 &&
+          html.includes("NEXT_HTTP_ERROR_FALLBACK;404")),
+    );
+    assert.ok(html.includes("Rota não encontrada."));
+    assert.ok(!html.includes("Estoque informado:"));
+  }
+  console.log("PASS method guard and unavailable product details");
 } catch (error) {
   console.error(error);
   process.exitCode = 1;

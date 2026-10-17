@@ -81,11 +81,19 @@ test("registration cannot set privileged role through user metadata", async () =
 });
 test("anonymous users see only approved free listings and no profiles", async () => {
   await asUser(null);
+  assert.equal((await rows("select * from public.bf_listings")).length, 0);
+  // Publication also requires seller approval, stock and packaging.
+  await db.exec("reset role");
+  await db.exec(`insert into public.bf_seller_applications(user_id,display_name,person_type,status,policy_version) values('${bob}','Vendedor teste','individual','approved','2026-10-15');
+    update public.bf_listings set stock=1,weight_grams=500,length_cm=30,width_cm=20,height_cm=10 where seller_id='${bob}';`);
+  await asUser(null);
   assert.equal((await rows("select * from public.bf_listings")).length, 1);
   await assert.rejects(
     rows("select * from public.bf_profiles"),
     /permission denied/,
   );
+  await db.exec("reset role");
+  await db.exec(`delete from public.bf_seller_applications where user_id='${bob}'`);
 });
 test("buyer cannot read another profile or change role", async () => {
   await asUser(alice);

@@ -32,10 +32,9 @@ export default async function Catalog({
   if (authConfigured()) {
     const db = await serverClient();
     let query = db
-      .from("bf_listings")
+      .from("bf_public_listings")
       .select("id,title,price_cents,condition")
-      .eq("status", "approved")
-      .eq("classification", "free")
+      .gt("stock", 0)
       .limit(40);
     if (q) query = query.ilike("title", "%" + q.replace(/[%_\\]/g, "") + "%");
     if (category) query = query.eq("category_slug", category);
@@ -82,7 +81,9 @@ export default async function Catalog({
         <div className="products">
           {products.map((p) => (
             <article className="panel" key={p.id}>
-              <h2>{p.title}</h2>
+              <h2>
+                <Link href={`/catalogo/${p.id}`}>{p.title}</Link>
+              </h2>
               <p>{p.condition}</p>
               <strong>
                 {new Intl.NumberFormat("pt-BR", {
