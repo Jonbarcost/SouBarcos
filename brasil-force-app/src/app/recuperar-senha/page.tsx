@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AuthPage } from "@/components/auth-page";
 import { ActionForm } from "@/components/action-form";
 import { recover } from "@/app/auth/actions";
@@ -24,6 +25,7 @@ export default function Recover() {
           />
         </label>
       </ActionForm>
+      <p className="form-foot"><Link href="/entrar">← Voltar para entrar</Link></p>
     </AuthPage>
   );
 }
