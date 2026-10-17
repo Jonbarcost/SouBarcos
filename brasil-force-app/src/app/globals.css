@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 :root {
   --ink: #151916;
@@ -970,3 +970,30 @@ footer { background: #10251d; }
   .header nav .bf-nav-ai svg { width: 13px; }
 }
 @media (prefers-reduced-motion:reduce){.bf-assistant-dock:hover{transform:none;}}
+
+/* Typography and legibility refresh: Brasil Force 2026 */
+:root { --font-site: "Inter", "Segoe UI", Arial, sans-serif; --font-display: "Manrope", "Inter", sans-serif; }
+body { font-family: var(--font-site); font-size: 16px; line-height: 1.65; }
+h1,h2,h3,.brand > span,.bf-category-title { font-family: var(--font-display); font-weight: 800; letter-spacing: -.035em; }
+.brand > span { letter-spacing: .035em; font-size: clamp(18px,1.7vw,23px); }
+.brand small { font-size: 10px; letter-spacing: .075em; }
+.header nav,.account-link { font-size: 15px; }
+.bf-hero h1 { letter-spacing: -.045em; line-height: 1.08; }
+.bf-category-title { font-size: 19px; line-height: 1.3; }
+.bf-category-desc { font-size: 14px; line-height: 1.55; }
+.bf-kicker,.bf-eyebrow { font-size: 12px; letter-spacing: .11em; }
+.page-title > a,.back { font-size: 14px; }
+.notice,.steps p,.form small,.form .check,.form-foot,.footer-top p,.footer-bottom { font-size: 14px; }
+.form label { font-size: 15px; }
+.form input:not([type="checkbox"]),.form select,.form textarea,.search-form input,.search-form select { font-size: 16px; }
+.button,.text-link,.bf-inline-link { font-size: 15px; }
+.footer-bottom { line-height: 1.65; }
+@media (max-width:640px) {
+ .brand > span { font-size: 18px; }
+ .brand small { font-size: 9px; }
+ .header nav { font-size: 14px; }
+ .bf-category-title { font-size: 16px; }
+ .bf-category-desc { font-size: 13px; }
+ .bf-hero-actions .button { font-size: 15px; }
+ .footer-bottom { font-size: 13px; }
+}
