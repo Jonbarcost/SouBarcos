@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { CatalogHit } from "@/lib/assistant";
 type Turn = {
   question: string;
@@ -24,9 +24,9 @@ export function AssistantChat() {
   const [loading, setLoading] = useState(false);
   const busy = useRef(false);
   const [greeting, setGreeting] = useState<string | null>(null);
-  function introduce() {
+  useEffect(() => {
     setGreeting(soldierGreeting(new Date().getHours()) + ", senhor! Soldado Virtual Brasil Force à disposição. Qual equipamento procura?");
-  }
+  }, []);
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const text = question.trim();
@@ -69,9 +69,6 @@ export function AssistantChat() {
         Às suas ordens! Sou o Soldado Virtual Brasil Force, assistente digital do marketplace.
         Busque equipamentos por nomes e categorias. O histórico permanece apenas nesta página e é descartado ao sair.
       </p>
-      <div className="listing-toolbar">
-        <button className="button" type="button" onClick={introduce}>Apresentar-se, soldado</button>
-      </div>
       {greeting && <p role="status">{greeting}</p>}
       <div className="listing-toolbar" aria-label="Sugestões de perguntas">
         {suggestions.map((text) => (
