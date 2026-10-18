@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Sparkles, UserRound } from "lucide-react";
 import { Brand } from "./brand";
+import { FloatingAssistant } from "./floating-assistant";
 
 const aiEnabled = process.env.BF_AI_ENABLED === "true";
 
@@ -26,12 +27,7 @@ export function Header() {
 
 export function AssistantDock() {
   if (!aiEnabled) return null;
-  return (
-    <Link className="bf-assistant-dock" href="/assistente" aria-label="Abrir assistente Brasil Force">
-      <Sparkles size={18} aria-hidden="true" />
-      <span>Fale com a IA</span>
-    </Link>
-  );
+  return <FloatingAssistant />;
 }
 
 export function Footer() {
