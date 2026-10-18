@@ -17,12 +17,12 @@ import {
 export const dynamic = "force-dynamic";
 
 const categories = [
-  { slug: "vestuario", title: "Vestuário", desc: "Para vestir a sua jornada.", icon: Shirt },
-  { slug: "campo", title: "Equipamentos de campo", desc: "Prontos para o próximo destino.", icon: Backpack },
-  { slug: "acessorios", title: "Acessórios", desc: "Os detalhes fazem a diferença.", icon: Compass },
-  { slug: "colecionismo", title: "Colecionismo", desc: "História em cada peça.", icon: BookOpen },
-  { slug: "outdoor", title: "Outdoor & aventura", desc: "Explore novas possibilidades.", icon: Mountain },
-  { slug: "servicos", title: "Serviços", desc: "Profissionais e personalização.", icon: Wrench },
+  { slug: "vestuario", title: "Vestuário", image: "/images/categories/vestuario.svg", desc: "Para vestir a sua jornada.", icon: Shirt },
+  { slug: "campo", title: "Equipamentos de campo", image: "/images/categories/campo.svg", desc: "Prontos para o próximo destino.", icon: Backpack },
+  { slug: "acessorios", title: "Acessórios", image: "/images/categories/acessorios.svg", desc: "Os detalhes fazem a diferença.", icon: Compass },
+  { slug: "colecionismo", title: "Colecionismo", image: "/images/categories/colecionismo.svg", desc: "História em cada peça.", icon: BookOpen },
+  { slug: "outdoor", title: "Outdoor & aventura", image: "/images/categories/outdoor.svg", desc: "Explore novas possibilidades.", icon: Mountain },
+  { slug: "servicos", title: "Serviços", image: "/images/categories/servicos.svg", desc: "Profissionais e personalização.", icon: Wrench },
 ] as const;
 
 function BrazilFlag({ className = "" }: { className?: string }) {
@@ -86,8 +86,9 @@ export default function Home() {
           <Link href="/catalogo" className="bf-inline-link">Ver catálogo completo <ArrowUpRight size={18} aria-hidden="true" /></Link>
         </div>
         <div className="bf-category-grid">
-          {categories.map(({ slug, title, desc, icon: Icon }, index) => (
+          {categories.map(({ slug, title, image, desc, icon: Icon }, index) => (
             <Link className="bf-category-card" href={"/catalogo?categoria=" + slug} key={slug}>
+              <span className="bf-category-media" style={{ backgroundImage: `url("${image}")` }} aria-hidden="true" />
               <span className="bf-category-index">0{index + 1}</span>
               <span className="bf-category-icon"><Icon size={27} strokeWidth={1.7} aria-hidden="true" /></span>
               <span className="bf-category-title">{title}</span>

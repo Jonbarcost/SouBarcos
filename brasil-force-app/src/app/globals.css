@@ -959,6 +959,60 @@ footer { background: #10251d; }
   .bf-category-card:hover,.button:hover { transform: none; }
 }
 
+/* Brasil Force category imagery — original themed SVGs served locally. */
+.bf-section { position: relative; isolation: isolate; }
+.bf-section::before {
+  content: ""; position: absolute; inset: -26px -6vw -36px;
+  z-index: -1; pointer-events: none; opacity: .065;
+  background: url("/images/categories/campo.svg") right center / min(60%, 680px) no-repeat;
+  filter: grayscale(1);
+}
+.bf-category-card {
+  isolation: isolate; background: #f8faf5; min-height: 242px;
+  box-shadow: 0 8px 26px #1026190b;
+}
+.bf-category-media {
+  position: absolute; inset: 0; z-index: -2;
+  background-size: cover; background-position: right center;
+  opacity: .53; filter: saturate(.75) contrast(.95);
+  transition: transform .45s ease, opacity .35s ease, filter .35s ease;
+  will-change: transform;
+}
+.bf-category-card::before {
+  content: ""; position: absolute; z-index: -1; inset: 0;
+  background: linear-gradient(95deg, rgba(252,253,249,.99) 0%,
+    rgba(251,253,248,.91) 39%, rgba(248,251,245,.67) 67%,
+    rgba(241,248,236,.21) 100%);
+  pointer-events: none;
+}
+.bf-category-card:is(:hover,:focus-visible) .bf-category-media {
+  transform: scale(1.055); opacity: .78; filter: saturate(.95) contrast(1);
+}
+.bf-category-card:focus-visible { outline: 3px solid #296444; outline-offset: 3px; }
+.bf-category-icon,.bf-category-title,.bf-category-desc { position: relative; z-index: 1; }
+.bf-category-icon { background: rgba(225,237,224,.88); backdrop-filter: blur(4px); }
+.bf-category-index,.bf-category-link { z-index: 1; }
+.bf-category-index { color: #476452; }
+.bf-category-title { color: #142d21; text-wrap: balance; }
+.bf-category-desc { color: #3f5e4e; max-width: 25ch; }
+@media (max-width: 760px) {
+  .bf-section::before { background-size: 88% auto; opacity: .035; }
+  .bf-category-card { min-height: 215px; }
+  .bf-category-media { opacity: .52; background-position: 62% center; }
+}
+@media (max-width: 480px) {
+  .bf-category-card { min-height: 210px; padding: 20px 17px; }
+  .bf-category-card::before {
+    background: linear-gradient(105deg,rgba(252,253,249,.98) 0%,
+      rgba(251,253,248,.9) 60%,rgba(246,251,240,.35) 100%);
+  }
+  .bf-category-icon { margin-bottom: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bf-category-media { transition: none; will-change: auto; }
+  .bf-category-card:is(:hover,:focus-visible) .bf-category-media { transform: none; }
+}
+
 /* Global AI entry point is rendered only when the feature is enabled. */
 .header nav .bf-nav-ai { display: inline-flex; align-items: center; gap: 7px; color: #f1d49c; }
 .bf-assistant-dock { position: fixed; z-index: 40; right: 23px; bottom: 23px; display: inline-flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: 100px; color: #132d21; background: #f0d195; font-size: 13px; font-weight: 900; box-shadow: 0 10px 35px #0c2c2060; border: 1px solid #fff6db; transition: transform .2s ease,background .2s ease; }
