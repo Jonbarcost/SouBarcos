@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AuthPage } from "@/components/auth-page";
 import { ActionForm } from "@/components/action-form";
+import { PasswordVisibilityInput } from "@/components/password-visibility-input";
 import { authConfigured } from "@/lib/config";
 import { login } from "@/app/auth/actions";
 export default async function Login({
@@ -40,13 +41,7 @@ export default async function Login({
         </label>
         <label>
           Senha
-          <input
-            name="password"
-            type="password"
-            required
-            autoComplete="current-password"
-            maxLength={128}
-          />
+          <PasswordVisibilityInput />
         </label>
         <Link className="text-link" href="/recuperar-senha">
           Esqueci minha senha
