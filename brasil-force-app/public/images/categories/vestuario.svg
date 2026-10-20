@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img"><defs>
+<linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9c8af"/><stop offset=".48" stop-color="#708c71"/><stop offset="1" stop-color="#203f34"/></linearGradient>
+<linearGradient id="m" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#d9d8ba"/><stop offset=".46" stop-color="#79886d"/><stop offset="1" stop-color="#314d3b"/></linearGradient>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f8eccb"/><stop offset="1" stop-color="#718371"/></linearGradient>
+<pattern id="weave" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M0 4H18M4 0V18" fill="none" stroke="#0b2920" stroke-opacity=".075" stroke-width="1"/></pattern>
+<filter id="shade" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="8" dy="14" stdDeviation="10" flood-color="#142b23" flood-opacity=".25"/></filter></defs>
+<rect width="640" height="420" fill="url(#b)"/><circle cx="535" cy="86" r="180" fill="#f5e1a9" opacity=".15"/>
+<path d="M0 322 108 251 194 285 278 205 385 254 490 176 640 256V420H0Z" fill="#284d3c" opacity=".35"/>
+<path d="M0 375 152 287 282 332 370 267 487 306 640 240V420H0Z" fill="#12392d" opacity=".24"/>
+<rect width="640" height="420" fill="url(#weave)"/>
+<path d="M18 74C140 5 214 111 339 42S534 25 664-22M-26 128C115 40 242 140 358 94S524 91 660 34" fill="none" stroke="#ecf2dc" stroke-opacity=".18" stroke-width="2"/>
+<g filter="url(#shade)" transform="translate(160 24)">
+<path d="M171 28q36-24 72 0l31 29 63 26 31 88-47 18-22-52-11 228H107L96 137l-22 52-47-18 31-88 63-26Z" fill="url(#m)" stroke="#294333" stroke-width="9" stroke-linejoin="round"/>
+<path d="M171 28q37 66 72 0l-22 72-26 35-24-35Z" fill="#405c45" stroke="#304535" stroke-width="6"/>
+<path d="M130 65V360M281 65V360" stroke="#283f32" stroke-width="13" opacity=".74"/>
+<path d="M137 147H269M137 165H269M137 183H269" stroke="#d9d7b4" stroke-opacity=".6" stroke-width="6" stroke-dasharray="35 14"/>
+<rect x="139" y="202" width="58" height="84" rx="9" fill="#5a785b" stroke="#293c30" stroke-width="6"/>
+<rect x="215" y="202" width="58" height="84" rx="9" fill="#5a785b" stroke="#293c30" stroke-width="6"/>
+<path d="M145 222H191M220 222H266M145 246H191M220 246H266" stroke="#b8bb8e" stroke-width="5"/>
+<rect x="146" y="105" width="40" height="28" rx="4" fill="#bdab72" stroke="#445840" stroke-width="4"/>
+<path d="M167 110l12 9-12 10-12-10Z" fill="#d8d09b"/>
+</g></svg>
