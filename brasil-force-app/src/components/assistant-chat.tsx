@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import type { CatalogHit } from "@/lib/assistant";
 type Turn = {
   question: string;
@@ -20,6 +20,7 @@ const suggestions = [
   "Quero uma bota impermeável.",
 ];
 export function AssistantChat() {
+  const titleId = useId();
   const [question, setQuestion] = useState("");
   const [turns, setTurns] = useState<Turn[]>([]);
   const [loading, setLoading] = useState(false);
@@ -68,8 +69,8 @@ export function AssistantChat() {
     );
   }
   return (
-    <section className="panel assistant-chat" aria-labelledby="assistant-title">
-      <h2 id="assistant-title">Assistente Brasil Force</h2>
+    <section className="panel assistant-chat" aria-labelledby={titleId}>
+      <h2 id={titleId}>Assistente Brasil Force</h2>
       <p>
         Encontre equipamentos para sua próxima jornada.
         Busque equipamentos por nomes e categorias. O histórico permanece apenas nesta página e é descartado ao sair.
