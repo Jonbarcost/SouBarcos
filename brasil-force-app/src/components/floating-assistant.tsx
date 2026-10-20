@@ -11,6 +11,21 @@ export function FloatingAssistant() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
+  const containerRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+    function resize() {
+      if (!viewport) return;
+      const keyboard = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop);
+      containerRef.current?.style.setProperty("--bf-keyboard", `${keyboard}px`);
+      containerRef.current?.style.setProperty("--bf-viewport", `${viewport.height}px`);
+    }
+    resize();
+    viewport.addEventListener("resize", resize);
+    viewport.addEventListener("scroll", resize);
+    return () => { viewport.removeEventListener("resize", resize); viewport.removeEventListener("scroll", resize); };
+  }, [pathname]);
 
   function closeAssistant() {
     setOpen(false);
@@ -34,7 +49,7 @@ export function FloatingAssistant() {
   if (pathname === "/assistente") return null;
 
   return (
-    <aside className="bf-floating-assistant" aria-label="Assistente Brasil Force">
+    <aside ref={containerRef} className="bf-floating-assistant" aria-label="Assistente Brasil Force">
       {/* Keep the chat mounted while hidden to preserve conversation history. */}
       <section
         id="bf-floating-chat-window"
@@ -73,14 +88,14 @@ export function FloatingAssistant() {
       </button>
       <style jsx>{`
         .bf-floating-assistant {
-          position: fixed; right: 20px; bottom: 20px; z-index: 100;
+          position: fixed; right: 20px; bottom: calc(20px + var(--bf-keyboard, 0px)); z-index: 100;
           display: flex; flex-direction: column; align-items: flex-end;
           gap: 10px; pointer-events: none;
         }
         .bf-floating-assistant > * { pointer-events: auto; }
         .bf-floating-window {
           box-sizing: border-box; width: min(380px, calc(100vw - 26px));
-          height: min(500px, calc(100dvh - 100px));
+          height: min(500px, calc(var(--bf-viewport, 100dvh) - 100px));
           display: flex; flex-direction: column; overflow: hidden;
           border-radius: 17px; background: #fffefb; color: #172d22;
           box-shadow: 0 18px 55px #0005; border: 1px solid #d2d9d0;
@@ -95,7 +110,7 @@ export function FloatingAssistant() {
         .bf-floating-actions { display: flex; gap: 10px; align-items: center; }
         .bf-floating-actions a, .bf-floating-actions button {
           display: inline-flex; border: 0; border-radius: 6px;
-          padding: 5px; background: transparent; color: #fff; cursor: pointer;
+          padding: 10px; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; background: transparent; color: #fff; cursor: pointer;
         }
         .bf-floating-actions a:focus-visible, .bf-floating-actions button:focus-visible {
           outline: 2px solid #f0d195; outline-offset: 2px;
@@ -112,15 +127,15 @@ export function FloatingAssistant() {
         .bf-floating-body :global(section.panel > h2),
         .bf-floating-body :global(section.panel > p:first-of-type) { display: none; }
         .bf-floating-body :global(section.panel > p[role="status"]) {
-          margin: 0; font-size: 12px; line-height: 1.45;
+          margin: 0; font-size: 14px; line-height: 1.45;
         }
         .bf-floating-body :global(section.panel > .listing-toolbar) {
           margin: 0; padding: 0 0 4px; display: flex; flex-wrap: nowrap;
           justify-content: flex-start; gap: 6px; overflow-x: auto; flex-shrink: 0;
         }
         .bf-floating-body :global(.listing-toolbar > button) {
-          flex-shrink: 0; padding: 7px 9px; min-height: 32px;
-          font-size: 11px; border-radius: 9px;
+          flex-shrink: 0; padding: 7px 9px; min-height: 44px;
+          font-size: 12px; border-radius: 9px;
         }
         .bf-floating-body :global(section.panel > [role="log"]) {
           flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
@@ -131,9 +146,9 @@ export function FloatingAssistant() {
           border-radius: 11px; background: #f5f7f2;
           overflow-wrap: anywhere;
         }
-        .bf-floating-body :global([role="log"] h3) { font-size: 12px; margin: 0 0 3px; }
+        .bf-floating-body :global([role="log"] h3) { font-size: 14px; margin: 0 0 3px; }
         .bf-floating-body :global([role="log"] p) {
-          font-size: 12px; line-height: 1.5; margin: 0 0 7px;
+          font-size: 14px; line-height: 1.5; margin: 0 0 7px;
         }
         .bf-floating-body :global(section.panel > form.search-form) {
           flex-shrink: 0; display: flex; align-items: center; gap: 7px;
@@ -146,7 +161,7 @@ export function FloatingAssistant() {
         }
         .bf-floating-body :global(form.search-form > input) {
           min-width: 0; flex: 1; width: auto;
-          min-height: 42px; padding: 8px 10px; font-size: 13px;
+          min-height: 42px; padding: 8px 10px; font-size: 16px;
           border-radius: 9px;
         }
         .bf-floating-body :global(form.search-form > button) {
@@ -159,11 +174,11 @@ export function FloatingAssistant() {
         }
         @media (max-width: 640px) {
           .bf-floating-assistant {
-            right: 13px; bottom: max(13px, env(safe-area-inset-bottom));
+            right: 13px; bottom: calc(max(13px, env(safe-area-inset-bottom)) + var(--bf-keyboard, 0px));
           }
           .bf-floating-window {
             width: min(380px, calc(100vw - 26px));
-            height: min(500px, calc(100dvh - 92px));
+            height: min(500px, calc(var(--bf-viewport, 100dvh) - 92px));
           }
         }
       `}</style>

@@ -7,6 +7,7 @@ type Turn = {
   answer?: string;
   products: CatalogHit[];
   error?: string;
+  requiresLogin?: boolean;
 };
 function soldierGreeting(hour: number): string {
   if (hour >= 5 && hour < 12) return "Bom dia";
@@ -23,9 +24,13 @@ export function AssistantChat() {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [loading, setLoading] = useState(false);
   const busy = useRef(false);
+  const logRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [turns, loading]);
   const [greeting, setGreeting] = useState<string | null>(null);
   useEffect(() => {
-    setGreeting(soldierGreeting(new Date().getHours()) + ", senhor! Soldado Virtual Brasil Force à disposição. Qual equipamento procura?");
+    setGreeting(soldierGreeting(new Date().getHours()) + "! Sou o assistente Brasil Force. Qual equipamento você procura?");
   }, []);
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -47,7 +52,7 @@ export function AssistantChat() {
       const data = await response.json();
       result = response.ok
         ? { answer: data.answer, products: data.products ?? [] }
-        : { error: data.error || "Falha na consulta." };
+        : { error: data.error || "Falha na consulta.", requiresLogin: response.status === 401 };
     } catch {
       result = {
         error: "Não foi possível concluir a consulta. Tente novamente.",
@@ -63,10 +68,10 @@ export function AssistantChat() {
     );
   }
   return (
-    <section className="panel" aria-labelledby="assistant-title">
-      <h2 id="assistant-title">Soldado Virtual Brasil Force</h2>
+    <section className="panel assistant-chat" aria-labelledby="assistant-title">
+      <h2 id="assistant-title">Assistente Brasil Force</h2>
       <p>
-        Às suas ordens! Sou o Soldado Virtual Brasil Force, assistente digital do marketplace.
+        Encontre equipamentos para sua próxima jornada.
         Busque equipamentos por nomes e categorias. O histórico permanece apenas nesta página e é descartado ao sair.
       </p>
       {greeting && <p role="status">{greeting}</p>}
@@ -84,6 +89,7 @@ export function AssistantChat() {
         ))}
       </div>
       <div
+        ref={logRef}
         role="log"
         aria-label="Histórico da conversa"
         aria-live="polite"
@@ -95,10 +101,13 @@ export function AssistantChat() {
             <h3>Você</h3>
             <p style={{ whiteSpace: "pre-wrap" }}>{turn.question}</p>
             {turn.error ? (
-              <p role="alert">Às ordens! {turn.error}</p>
+              <div>
+                <p role="alert">{turn.error}</p>
+                {turn.requiresLogin && <p className="assistant-account-help"><Link href="/entrar">Entrar na conta</Link> ou <Link href="/cadastro">criar uma conta</Link>. Confirme seu e-mail para usar o assistente.</p>}
+              </div>
             ) : turn.answer ? (
               <>
-                <h3>Soldado Virtual Brasil Force</h3>
+                <h3>Assistente Brasil Force</h3>
                 <p>{turn.answer}</p>
                 {turn.products.map((product) => (
                   <article key={product.id}>
@@ -118,13 +127,13 @@ export function AssistantChat() {
                 ))}
               </>
             ) : (
-              <p role="status">Em missão: consultando o catálogo…</p>
+              <p role="status">Consultando o catálogo…</p>
             )}
           </article>
         ))}
       </div>
       <form onSubmit={submit} className="search-form">
-        <label htmlFor="bf-ai-question">Qual equipamento deseja localizar, senhor?</label>
+        <label htmlFor="bf-ai-question">Qual equipamento você procura?</label>
         <input
           id="bf-ai-question"
           value={question}
@@ -139,7 +148,7 @@ export function AssistantChat() {
           className="button button-primary"
           disabled={loading || question.trim().length < 3}
         >
-          {loading ? "Em missão…" : "Enviar missão"}
+          {loading ? "Buscando…" : "Enviar"}
         </button>
       </form>
     </section>

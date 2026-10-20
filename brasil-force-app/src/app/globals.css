@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 :root {
   --ink: #151916;
@@ -962,7 +961,7 @@ footer { background: #10251d; }
 /* Brasil Force category imagery — original themed SVGs served locally. */
 .bf-section { position: relative; isolation: isolate; }
 .bf-section::before {
-  content: ""; position: absolute; inset: -26px -6vw -36px;
+  content: ""; position: absolute; inset: -26px 0 -36px;
   z-index: -1; pointer-events: none; opacity: .065;
   background: url("/images/categories/campo.svg") right center / min(60%, 680px) no-repeat;
   filter: grayscale(1);
@@ -1026,7 +1025,7 @@ footer { background: #10251d; }
 @media (prefers-reduced-motion:reduce){.bf-assistant-dock:hover{transform:none;}}
 
 /* Typography and legibility refresh: Brasil Force 2026 */
-:root { --font-site: "Inter", "Segoe UI", Arial, sans-serif; --font-display: "Manrope", "Inter", sans-serif; }
+:root { --font-site: var(--font-inter), "Segoe UI", Arial, sans-serif; --font-display: var(--font-manrope), var(--font-inter), sans-serif; }
 body { font-family: var(--font-site); font-size: 16px; line-height: 1.65; }
 h1,h2,h3,.brand > span,.bf-category-title { font-family: var(--font-display); font-weight: 800; letter-spacing: -.035em; }
 .brand > span { letter-spacing: .035em; font-size: clamp(18px,1.7vw,23px); }
@@ -1055,3 +1054,37 @@ h1,h2,h3,.brand > span,.bf-category-title { font-family: var(--font-display); fo
 /* Prelaunch disclosure: visible alongside the homepage's primary actions */
 .bf-launch-note { display: inline-block; max-width: 620px; padding: 12px 17px; margin: 0 0 21px; background: rgba(13,37,25,.65); color: #f5e8ca; border: 1px solid rgba(232,204,143,.55); border-radius: 12px; font-size: 15px; line-height: 1.55; font-weight: 650; }
 @media(max-width:640px){ .bf-launch-note { font-size: 14px; padding: 12px 14px; } }
+
+/* Consistent, locally served typography and accessible finishing details. */
+h1,h2,h3 { text-wrap: balance; }
+.panel { box-shadow: 0 8px 30px #10261906; }
+.notice,.feedback { border-radius: 14px; }
+.auth-story { background: radial-gradient(ellipse at top right,#39634b,#142d23 75%); }
+.auth-card { padding: 24px; background: #fffefb; border: 1px solid var(--line); border-radius: 24px; }
+textarea:focus-visible { outline: 3px solid #aa7d2e; outline-offset: 4px; }
+.header nav { flex-wrap: wrap; }
+.header nav a { min-height: 44px; display: inline-flex; align-items: center; }
+.account-link { min-width: 44px; min-height: 44px; justify-content: center; }
+.bf-category-media { will-change: auto; }
+.bf-category-card { min-width: 0; }
+.bf-hero h1 { overflow-wrap: break-word; }
+footer { padding-bottom: 82px; }
+.assistant-chat > .search-form { flex-wrap: wrap; }
+.assistant-chat > .search-form > label { flex-basis: 100%; }
+.assistant-chat > .search-form > input { flex: 1; min-width: 160px; width: auto; }
+.assistant-chat > [role="log"] { overflow-wrap: anywhere; }
+.assistant-chat .listing-toolbar .button { background: #edf2ea; color: #244c39; border-color: #dce2da; }
+.assistant-account-help a { text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
+@media (min-width:641px) and (max-width:1100px) {
+ .header-inner { flex-wrap: wrap; gap: 12px 24px; }
+ .header nav { order: 3; width:100%; justify-content:center; }
+}
+@media (max-width:640px) {
+ .header nav { overflow: visible; gap: 4px 12px; justify-content: flex-start; }
+ .header-inner { gap: 10px; }
+ .brand { gap: 8px; }
+ .brand small { font-size: 8px; }
+ .auth-card { padding: 24px 18px; }
+ .bf-hero h1 { font-size: clamp(34px,9vw,48px); }
+ .footer-top { flex-wrap: wrap; }
+}
