@@ -123,7 +123,7 @@ export default function Home() {
           <h2 id="seller-title">Seu trabalho merece mais alcance.</h2>
           <p>Produz, personaliza ou fornece equipamentos? Conheça o processo de avaliação para vender na Brasil Force.</p>
         </div>
-        <Link href="/vender" className="button button-primary bf-primary">Quero ser fornecedor <ArrowUpRight size={18} aria-hidden="true" /></Link>
+        <Link href="/fornecedores" className="button button-primary bf-primary">Quero ser fornecedor <ArrowUpRight size={18} aria-hidden="true" /></Link>
       </section>
     </>
   );
