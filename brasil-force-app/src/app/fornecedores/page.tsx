@@ -41,7 +41,7 @@ export default function Fornecedores() {
             <Link href="/vender" className="button button-primary">Solicitar habilitação <ArrowRight size={18} aria-hidden="true" /></Link>
             <a href={email} className="button button-outline">Apresentar minha empresa <Mail size={18} aria-hidden="true" /></a>
           </div>
-          <p className={styles.disclaimer}>Cadastro e análise sem cobrança de adesão nesta fase. Aprovação não é automática; o checkout ainda não está disponível.</p>
+          <p className={styles.disclaimer}>Condição de lançamento para os primeiros fornecedores: sem mensalidade e sem comissão durante a campanha promocional. Prazo e condições de encerramento serão informados previamente. Aprovação não é automática; compras ainda não estão disponíveis.</p>
         </div>
       </section>
       <section className={"container " + styles.section}>
@@ -70,7 +70,7 @@ export default function Fornecedores() {
           <aside className={styles.highlight}>
             <BadgeCheck size={33} aria-hidden="true" />
             <h3>Parceria séria, com regras claras.</h3>
-            <p>O Brasil Force está em preparação comercial. Não garantimos vendas, exclusividade ou aprovação. Condições futuras serão comunicadas antes de qualquer cobrança.</p>
+            <p>O Brasil Force está em preparação comercial. Não garantimos vendas, exclusividade ou aprovação. Durante o lançamento, os primeiros fornecedores não pagam mensalidade nem comissão. Qualquer condição posterior será apresentada previamente, sem cobrança retroativa.</p>
             <p><ShieldCheck size={18} aria-hidden="true" /> Produtos controlados, armas e itens para falsa identificação institucional não são aceitos.</p>
             <Link href="/regras">Consultar produtos permitidos <ArrowRight size={16} aria-hidden="true" /></Link>
           </aside>
