@@ -1,0 +1,14 @@
+import Link from "next/link";
+import { ArrowUpRight, BookOpen, Flag, GraduationCap, Shield, Compass } from "lucide-react";
+import type { Metadata } from "next";
+export const metadata: Metadata = {title:"Legado e tradições | Brasil Force",description:"Um espaço editorial sobre símbolos, tradições e formação das instituições militares e de segurança brasileiras."};
+const temas=[
+{title:"Forças Armadas",subtitle:"Marinha, Exército e Aeronáutica",icon:Flag,body:"História, bandeiras e tradições das três Forças, com referência a fontes institucionais.",href:"https://www.gov.br/defesa/pt-br"},
+{title:"Forças auxiliares",subtitle:"Polícias Militares e Corpos de Bombeiros",icon:Shield,body:"Conheça a diversidade de histórias e tradições estaduais. Conteúdos dependem de pesquisa e verificação por instituição.",href:"https://www.gov.br/pt-br"},
+{title:"Cursos e especializações",subtitle:"Formação e qualificação",icon:GraduationCap,body:"Um futuro acervo editorial sobre cursos e distintivos, sem atribuir habilitações a pessoas.",href:"https://www.gov.br/defesa/pt-br"},
+{title:"Símbolos e memória",subtitle:"Insígnias, distintivos e uniformes",icon:BookOpen,body:"Galerias documentadas com origem, contexto histórico e direitos de uso respeitados.",href:"https://www.gov.br/defesa/pt-br"}
+];
+export default function LegadoPage(){return <div className="bf-legacy-page">
+<section className="bf-legacy-hero"><div className="container"><span className="bf-legacy-eyebrow"><Compass size={17}/> BRASIL FORCE / ACERVO EDITORIAL</span><h1>O equipamento acompanha.<br/><em>A história permanece.</em></h1><p>Uma nova área dedicada ao legado, aos símbolos e às tradições das instituições brasileiras. Conhecimento e respeito à história, sem vínculo ou endosso institucional.</p><Link href="/catalogo" className="button button-primary">Explorar equipamentos <ArrowUpRight size={18}/></Link></div></section>
+<section className="container bf-legacy-content"><div className="bf-legacy-heading"><span>MEMÓRIA • FORMAÇÃO • IDENTIDADE</span><h2>Um Brasil de histórias para descobrir.</h2><p>O acervo está em preparação. As referências abaixo são temas editoriais, não produtos, certificações ou representações oficiais.</p></div><div className="bf-legacy-grid">{temas.map(({title,subtitle,icon:Icon,body,href})=><article className="bf-legacy-card" key={title}><div className="bf-legacy-icon"><Icon size={29} strokeWidth={1.5}/></div><span>{subtitle}</span><h3>{title}</h3><p>{body}</p><a href={href} target="_blank" rel="noopener noreferrer">Consultar referência institucional <ArrowUpRight size={16}/></a></article>)}</div><div className="bf-legacy-disclaimer"><strong>Acervo independente.</strong> O Brasil Force não representa as Forças Armadas, polícias ou bombeiros. Marcas, brasões e distintivos oficiais não serão reproduzidos sem verificação de direitos e contexto de uso. Nenhum artigo é uma oferta de credencial ou insígnia restrita.</div></section>
+</div>}
