@@ -4,6 +4,7 @@ import {
   ArrowUpRight,
   Backpack,
   BookOpen,
+  Landmark,
   Compass,
   Fingerprint,
   Mountain,
@@ -107,6 +108,7 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="bf-legacy-teaser" aria-labelledby="legacy-title"><div className="container bf-legacy-teaser-inner"><div><span className="bf-kicker bf-kicker-light">ALÉM DO EQUIPAMENTO</span><h2 id="legacy-title">A tradição inspira.<br/><span>O futuro nos move.</span></h2><p>Conheça nosso novo espaço editorial sobre a história, os símbolos e as tradições das instituições brasileiras. Um acervo independente em construção.</p><Link className="button bf-assistant-button" href="/legado">Explorar legado e história <ArrowUpRight size={18} aria-hidden="true" /></Link></div><Landmark size={155} strokeWidth={0.75} aria-hidden="true"/></div></section>
       <section className="container bf-assistant-section" aria-labelledby="assistant-title">
         <div className="bf-assistant-panel">
           <div className="bf-assistant-symbol"><Sparkles size={36} strokeWidth={1.6} aria-hidden="true" /></div>
