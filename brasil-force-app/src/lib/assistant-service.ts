@@ -5,6 +5,7 @@ import {
   assistantContext,
   safeSearchTerm,
   type CatalogHit,
+  type ConversationMessage,
 } from "./assistant";
 
 export type AssistantMetric = {
@@ -18,23 +19,37 @@ export type AssistantDependencies = {
   authenticate: () => Promise<boolean>;
   consumeQuota: () => Promise<boolean>;
   search: (term: string) => Promise<CatalogHit[]>;
-  recommend?: (question: string, products: CatalogHit[]) => Promise<unknown>;
+  recommend?: (
+    question: string,
+    products: CatalogHit[],
+    history: ConversationMessage[],
+  ) => Promise<unknown>;
   metric?: (event: AssistantMetric) => void;
 };
 const selectionSchema = z
   .object({
+    answer: z.string().trim().min(2).max(1800),
     product_ids: z.array(z.uuid()).max(8),
-    guidance: z.enum(["compare", "refine", "human_review", "greeting", "help", "sell", "contact", "account", "payment", "rules"]),
+    guidance: z.enum([
+      "compare",
+      "refine",
+      "human_review",
+      "greeting",
+      "help",
+      "sell",
+      "contact",
+      "account",
+      "payment",
+      "rules",
+    ]),
   })
   .strict();
-const guidance = {
-  compare:
-    "Encontrei estes equipamentos no catálogo. Compare as informações abaixo. Preço e disponibilidade devem ser conferidos antes de qualquer compra.",
-  refine:
-    "Estes são os anúncios encontrados. Informe o nome do equipamento ou uma categoria para refinar a busca, por gentileza.",
-  human_review:
-    "Esta solicitação precisa da avaliação da equipe. A indicação dos equipamentos não comprova certificação, compatibilidade institucional ou autorização para uso.",
-};
+// Commercial cards and navigation are server-owned. Generated text cannot supply them.
+function validConversationText(answer: string) {
+  return !/(?:https?:|www\.|mailto:|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}|R\$|US\$|€|\$|\b\d+[.,]?\d*\s*(?:reais|euros|d[oó]lares)|(?:pagamento|pedido)\s+(?:foi\s+)?confirmado|voc[eê]\s+foi\s+aprovad[oa])/i.test(
+    answer,
+  );
+}
 
 /** Read actual bytes; Content-Length is only an early check, never the limit itself. */
 export async function readLimitedJson(
@@ -115,7 +130,7 @@ export async function handleAssistant(
     return error(415, "Envie uma mensagem em JSON.", "content_type");
   let body: unknown;
   try {
-    body = await readLimitedJson(request);
+    body = await readLimitedJson(request, 32768);
   } catch (e) {
     return error(
       e instanceof RangeError ? 413 : 400,
@@ -127,7 +142,11 @@ export async function handleAssistant(
   }
   const parsed = assistantInput.safeParse(body);
   if (!parsed.success)
-    return error(400, "Escreva uma pergunta de 2 a 500 caracteres.", "input");
+    return error(
+      400,
+      "Envie uma pergunta de 2 a 500 caracteres e um histórico válido.",
+      "input",
+    );
   try {
     if (!(await deps.authenticate()))
       return error(
@@ -149,13 +168,39 @@ export async function handleAssistant(
     return error(503, "Controle de uso indisponível.", "quota_error");
   }
   const topic = directHelpTopic(parsed.data.question);
-  if (topic) return finish(200, { ...helpTopics[topic], products: [], mode: "help" }, "help_" + topic);
+  const basicHelp = () =>
+    finish(
+      200,
+      {
+        ...helpTopics[topic!],
+        products: [],
+        mode: "help",
+        notice:
+          "A conversa com IA está indisponível no momento. Esta é uma orientação básica da plataforma.",
+      },
+      "help_" + topic,
+    );
+  if (topic && !deps.recommend) return basicHelp();
   let products: CatalogHit[];
   try {
-    const term = safeSearchTerm(parsed.data.question);
-    products = term
-      ? assistantContext(await deps.search(term)).slice(0, 8)
-      : [];
+    // Include recent user context so short follow-ups can still retrieve the equipment.
+    const questions = [
+      parsed.data.question,
+      ...parsed.data.history
+        .filter((m) => m.role === "user")
+        .slice(-2)
+        .reverse()
+        .map((m) => m.content),
+    ];
+    const terms = [
+      ...new Set(questions.map(safeSearchTerm).filter(Boolean)),
+    ].slice(0, 3);
+    const hits = topic
+      ? []
+      : (await Promise.all(terms.map((term) => deps.search(term)))).flat();
+    products = assistantContext(
+      [...new Map(hits.map((hit) => [hit.id, hit])).values()].slice(0, 8),
+    );
   } catch {
     return error(
       503,
@@ -163,18 +208,28 @@ export async function handleAssistant(
       "catalog_error",
     );
   }
-  const catalogFallback = () => finish(200, {
-    answer: products.length
-      ? "Encontrei estes anúncios. A seleção por IA está indisponível no momento; você pode conferir os dados abaixo."
-      : "Não encontrei anúncios com esse termo. Tente o nome do equipamento, como mochila ou lanterna, ou explore as categorias. Se sua pergunta não era uma busca, conte um pouco mais para eu orientar você.",
-    products,
-    links: [{ href: "/catalogo", label: "Explorar catálogo" }, { href: "/ajuda", label: "Central de ajuda" }],
-    mode: "catalog",
-  }, products.length ? "catalog" : "empty");
+  const catalogFallback = () =>
+    finish(
+      200,
+      {
+        answer: products.length
+          ? "Encontrei estes anúncios. A seleção por IA está indisponível no momento; você pode conferir os dados abaixo."
+          : "Não encontrei anúncios com esse termo. Tente o nome do equipamento, como mochila ou lanterna, ou explore as categorias. Se sua pergunta não era uma busca, conte um pouco mais para eu orientar você.",
+        products,
+        links: [
+          { href: "/catalogo", label: "Explorar catálogo" },
+          { href: "/ajuda", label: "Central de ajuda" },
+        ],
+        mode: "catalog",
+        notice:
+          "A conversa com IA está indisponível no momento. Mostrando apenas o resultado da busca.",
+      },
+      products.length ? "catalog" : "empty",
+    );
   if (!deps.recommend) return catalogFallback();
   try {
     const selection = selectionSchema.parse(
-      await deps.recommend(parsed.data.question, products),
+      await deps.recommend(parsed.data.question, products, parsed.data.history),
     );
     const ids = new Set(selection.product_ids);
     if (
@@ -182,23 +237,35 @@ export async function handleAssistant(
       selection.product_ids.some((id) => !products.some((p) => p.id === id))
     )
       throw Error();
-    if (selection.guidance in helpTopics) {
-      return finish(200, { ...helpTopics[selection.guidance as HelpTopic], products: [], mode: "ai" }, "ai_help");
-    }
-    if (!products.length && selection.guidance !== "human_review") return catalogFallback();
+    if (!validConversationText(selection.answer)) throw Error();
+    const links =
+      selection.guidance in helpTopics
+        ? helpTopics[selection.guidance as HelpTopic].links
+        : [
+            {
+              href:
+                selection.guidance === "human_review" ? "/ajuda" : "/catalogo",
+              label:
+                selection.guidance === "human_review"
+                  ? "Falar com a equipe"
+                  : "Explorar catálogo",
+            },
+          ];
     return finish(
       200,
       {
-        answer: guidance[selection.guidance as keyof typeof guidance],
+        answer: selection.answer,
         products: products.filter((p) => ids.has(p.id)),
+        links,
         mode: "ai",
       },
       "ai",
     );
   } catch {
+    if (topic) return basicHelp();
     return error(
       503,
-      "Serviço de IA temporariamente indisponível.",
+      "Não consegui elaborar a resposta agora. Tente novamente em instantes ou consulte a central de ajuda.",
       "gateway_error",
     );
   }

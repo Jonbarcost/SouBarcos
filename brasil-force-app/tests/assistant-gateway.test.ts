@@ -29,7 +29,7 @@ test("gateway uses OIDC first, fixed HTTPS destination, structured output and re
       const body = JSON.parse(init?.body as string);
       assert.equal(body.response_format.type, "json_object");
       assert.match(body.messages[0].content, /product_ids/);
-      assert.ok(body.max_tokens <= 350);
+      assert.ok(body.max_tokens <= 1000);
       return Response.json({
         choices: [
           {
@@ -64,4 +64,38 @@ test("gateway rejects provider errors, malformed envelopes and oversized respons
       /Gateway unavailable/,
     );
   }
+});
+
+test("gateway includes conversation as untrusted data and reserves output for the answer", async () => {
+  const history = [
+    { role: "user" as const, content: "Preciso de mochila" },
+    { role: "assistant" as const, content: "Para quantos dias?" },
+  ];
+  await gatewayRecommendation(
+    "Três dias",
+    [],
+    { BF_AI_MODEL: "alibaba/qwen-3-14b", AI_GATEWAY_API_KEY: "key-test" },
+    async (_url, init) => {
+      const body = JSON.parse(init!.body as string);
+      assert.equal(body.reasoning_effort, "none");
+      assert.equal(body.messages.length, 2);
+      assert.equal(body.messages[0].role, "system");
+      assert.match(body.messages[0].content, /REGRAS DA PLATAFORMA/);
+      assert.deepEqual(JSON.parse(body.messages[1].content).history, history);
+      return Response.json({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                answer: "Você vai caminhar com ela?",
+                product_ids: [],
+                guidance: "refine",
+              }),
+            },
+          },
+        ],
+      });
+    },
+    history,
+  );
 });

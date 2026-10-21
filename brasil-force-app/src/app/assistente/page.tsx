@@ -5,7 +5,8 @@ import { authConfigured } from "@/lib/config";
 
 export const metadata = {
   title: "Assistente inteligente | Brasil Force",
-  description: "Converse sobre equipamentos realmente disponíveis no Brasil Force.",
+  description:
+    "Converse sobre equipamentos, vendas e sua jornada no Brasil Force.",
 };
 
 export default function Assistente() {
@@ -15,16 +16,21 @@ export default function Assistente() {
     <div className="container page narrow">
       <PageTitle
         title="Assistente Brasil Force"
-        description="Seu equipamento, com informações do catálogo real."
+        description="Conte o que precisa. Vamos pensar no seu próximo passo."
       />
       {enabled ? (
         <>
           <Notice>
-            Acesso mediante login verificado. O assistente consulta apenas anúncios
-            comuns aprovados e disponíveis. Não realiza compras nem autoriza itens restritos.
+            Acesso mediante login verificado. O assistente consulta apenas
+            anúncios comuns aprovados e disponíveis. Não realiza compras nem
+            autoriza itens restritos.
           </Notice>
           <AssistantChat />
-          <p><Link className="text-link" href="/entrar">Entrar na minha conta →</Link></p>
+          <p>
+            <Link className="text-link" href="/entrar">
+              Entrar na minha conta →
+            </Link>
+          </p>
         </>
       ) : (
         <Notice>
@@ -32,7 +38,11 @@ export default function Assistente() {
           Enquanto isso, explore os anúncios reais do catálogo.
         </Notice>
       )}
-      <p><Link className="text-link" href="/catalogo">Explorar o catálogo →</Link></p>
+      <p>
+        <Link className="text-link" href="/catalogo">
+          Explorar o catálogo →
+        </Link>
+      </p>
     </div>
   );
 }

@@ -41,12 +41,18 @@ export async function POST(request: Request) {
     recommend:
       (process.env.VERCEL_OIDC_TOKEN || process.env.AI_GATEWAY_API_KEY) &&
       process.env.BF_AI_MODEL
-        ? (question, products) =>
-            gatewayRecommendation(question, products, {
-              BF_AI_MODEL: process.env.BF_AI_MODEL,
-              VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
-              AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
-            })
+        ? (question, products, history) =>
+            gatewayRecommendation(
+              question,
+              products,
+              {
+                BF_AI_MODEL: process.env.BF_AI_MODEL,
+                VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
+                AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
+              },
+              fetch,
+              history,
+            )
         : undefined,
     metric: (event) => console.info(JSON.stringify(event)),
   });
