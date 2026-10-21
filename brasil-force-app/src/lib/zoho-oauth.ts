@@ -5,7 +5,7 @@ export const ZOHO_CALLBACK_PATH = "/api/integrations/zoho/callback";
 const MAX_AGE_SECONDS = 600;
 function signingKey(): string {
   const key = process.env.ZOHO_OAUTH_STATE_SECRET;
-  if (!key || key.length < 32) throw new Error("ZOHO_OAUTH_STATE_SECRET is not configured securely");
+  if (!key || key.length < 32 || /^(sk_(live|test)_|zoho)/i.test(key)) throw new Error("ZOHO_OAUTH_STATE_SECRET must be a dedicated random secret");
   return key;
 }
 export function zohoClientConfig() {
