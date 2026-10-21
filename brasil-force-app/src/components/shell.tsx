@@ -46,6 +46,8 @@ export function Footer() {
       <div className="container footer-bottom">
         <span>© {new Date().getFullYear()} Brasil Force · Anúncios sujeitos a moderação</span>
         <div>
+          <Link href="/quero-comprar">Quero comprar</Link>
+          <Link href="/legado">Legado</Link>
           <Link href="/regras">Produtos permitidos</Link>
           <Link href="/privacidade">Privacidade</Link>
           <Link href="/termos">Termos</Link>
