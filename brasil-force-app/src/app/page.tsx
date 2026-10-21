@@ -8,6 +8,8 @@ import {
   Fingerprint,
   Mountain,
   ScanSearch,
+  Search,
+  Globe2,
   ShieldCheck,
   Shirt,
   Sparkles,
@@ -52,6 +54,12 @@ export default function Home() {
               Descubra equipamentos, produtos e serviços em um só lugar.
             </p>
             <p className="bf-launch-note" role="status">Pré-abertura: o catálogo está sendo preparado e compras ainda não estão disponíveis.</p>
+            <form className="bf-premium-search" action="/catalogo" method="get" role="search">
+              <Search size={21} aria-hidden="true" />
+              <label className="sr-only" htmlFor="bf-home-search">Pesquisar equipamentos no catálogo</label>
+              <input id="bf-home-search" type="search" name="q" placeholder="Busque mochilas, vestuário, camping..." maxLength={100} />
+              <button type="submit" aria-label="Buscar no catálogo">Buscar <ArrowRight size={17} aria-hidden="true" /></button>
+            </form>
             <div className="actions bf-hero-actions">
               <Link className="button button-primary bf-primary" href="/catalogo">
                 Explorar o catálogo <ArrowUpRight size={19} aria-hidden="true" />
@@ -117,6 +125,18 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="container bf-global-section" aria-labelledby="global-title">
+        <div className="bf-global-copy">
+          <span className="bf-kicker">BRASIL FORCE GLOBAL</span>
+          <h2 id="global-title">Do Brasil para novas conexões.</h2>
+          <p>Fabricantes, distribuidores e lojistas podem conhecer nossa proposta comercial e participar da preparação do marketplace. Cadastros e anúncios passam por avaliação.</p>
+          <div className="actions">
+            <Link href="/fornecedores" className="button button-primary">Sou fornecedor <ArrowUpRight size={18} aria-hidden="true" /></Link>
+            <a href="mailto:contato@brasilforce.com.br?subject=Parceria%20internacional%20Brasil%20Force" className="button button-outline">Parceria internacional <Globe2 size={18} aria-hidden="true" /></a>
+          </div>
+        </div>
+        <div className="bf-global-art" aria-hidden="true"><Globe2 size={110} strokeWidth={0.8} /><span>BR / GLOBAL SUPPLY</span></div>
+      </section>
       <section className="container bf-seller-section" aria-labelledby="seller-title">
         <div>
           <span className="bf-kicker">FAÇA PARTE</span>
