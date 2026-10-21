@@ -6,6 +6,7 @@ type Turn = {
   question: string;
   answer?: string;
   products: CatalogHit[];
+  links?: { href: string; label: string }[];
   error?: string;
   requiresLogin?: boolean;
 };
@@ -15,9 +16,9 @@ function soldierGreeting(hour: number): string {
   return "Boa noite";
 }
 const suggestions = [
-  "Preciso de uma mochila para camping.",
-  "Estou procurando uma lanterna.",
-  "Quero uma bota impermeável.",
+  "Como vender?",
+  "Quero mochila",
+  "Tenho uma dúvida",
 ];
 export function AssistantChat() {
   const titleId = useId();
@@ -31,12 +32,12 @@ export function AssistantChat() {
   }, [turns, loading]);
   const [greeting, setGreeting] = useState<string | null>(null);
   useEffect(() => {
-    setGreeting(soldierGreeting(new Date().getHours()) + "! Sou o assistente Brasil Force. Qual equipamento você procura?");
+    setGreeting(soldierGreeting(new Date().getHours()) + "! Sou o assistente Brasil Force. Como posso ajudar?");
   }, []);
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const text = question.trim();
-    if (busy.current || text.length < 3) return;
+    if (busy.current || text.length < 2) return;
     busy.current = true;
     setLoading(true);
     setQuestion("");
@@ -52,7 +53,7 @@ export function AssistantChat() {
       });
       const data = await response.json();
       result = response.ok
-        ? { answer: data.answer, products: data.products ?? [] }
+        ? { answer: data.answer, products: data.products ?? [], links: data.links ?? [] }
         : { error: data.error || "Falha na consulta.", requiresLogin: response.status === 401 };
     } catch {
       result = {
@@ -72,8 +73,7 @@ export function AssistantChat() {
     <section className="panel assistant-chat" aria-labelledby={titleId}>
       <h2 id={titleId}>Assistente Brasil Force</h2>
       <p>
-        Encontre equipamentos para sua próxima jornada.
-        Busque equipamentos por nomes e categorias. O histórico permanece apenas nesta página e é descartado ao sair.
+        Tire dúvidas sobre o Brasil Force, saiba como vender e encontre equipamentos. O histórico permanece apenas nesta página e é descartado ao sair.
       </p>
       {greeting && <p role="status">{greeting}</p>}
       <div className="listing-toolbar" aria-label="Sugestões de perguntas">
@@ -110,6 +110,9 @@ export function AssistantChat() {
               <>
                 <h3>Assistente Brasil Force</h3>
                 <p>{turn.answer}</p>
+                {turn.links?.map((link) => (
+                  <p key={link.href}><Link className="text-link" href={link.href}>{link.label}</Link></p>
+                ))}
                 {turn.products.map((product) => (
                   <article key={product.id}>
                     <h4>
@@ -128,28 +131,28 @@ export function AssistantChat() {
                 ))}
               </>
             ) : (
-              <p role="status">Consultando o catálogo…</p>
+              <p role="status">Preparando orientação…</p>
             )}
           </article>
         ))}
       </div>
       <form onSubmit={submit} className="search-form">
-        <label htmlFor="bf-ai-question">Qual equipamento você procura?</label>
+        <label htmlFor="bf-ai-question">Como posso ajudar?</label>
         <input
           id="bf-ai-question"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          minLength={3}
+          minLength={2}
           maxLength={500}
           required
           disabled={loading}
-          placeholder="Ex.: mochila para camping"
+          placeholder="Escreva sua pergunta"
         />
         <button
           className="button button-primary"
-          disabled={loading || question.trim().length < 3}
+          disabled={loading || question.trim().length < 2}
         >
-          {loading ? "Buscando…" : "Enviar"}
+          {loading ? "Enviando…" : "Enviar"}
         </button>
       </form>
     </section>

@@ -10,7 +10,7 @@ test("extract a meaningful term from a complete Brazilian Portuguese question", 
   assert.equal(safeSearchTerm("bota"), "bota");
 });
 test("reject oversized messages and bound valid prompts", () => {
-  assert.equal(assistantInput.safeParse({ question: "oi" }).success, false);
+  assert.equal(assistantInput.safeParse({ question: "oi" }).success, true);
   assert.equal(assistantInput.safeParse({ question: "x".repeat(501) }).success, false);
   assert.equal(assistantInput.safeParse({ question: "Preciso de uma mochila" }).success, true);
 });
@@ -21,11 +21,9 @@ test("AI context includes only approved and provided listing fields", () => {
   } as never]), [{ id: "sample-id", title: "Mochila", price_cents: 1000, category_slug: "campo", stock: 1 }]);
 });
 
-test("soldier persona is courteous, does not impersonate official military, and preserves business safeguards", () => {
-  assert.match(assistantRules, /Soldado Virtual Brasil Force/);
-  assert.match(assistantRules, /Bom dia, boa tarde ou boa noite/);
-  assert.match(assistantRules, /Sim, senhor/);
-  assert.match(assistantRules, /Não é militar real/);
+test("assistant guides platform questions without military treatment or invented facts", () => {
+  assert.match(assistantRules, /Não use tratamento militar/);
   assert.match(assistantRules, /Não invente preços/);
   assert.match(assistantRules, /formato JSON solicitado/);
+  assert.match(assistantRules, /Catálogo vazio não impede/);
 });

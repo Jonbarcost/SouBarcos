@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { directHelpTopic, helpTopics, type HelpTopic } from "./assistant-help";
 import {
   assistantInput,
   assistantContext,
@@ -23,16 +24,16 @@ export type AssistantDependencies = {
 const selectionSchema = z
   .object({
     product_ids: z.array(z.uuid()).max(8),
-    guidance: z.enum(["compare", "refine", "human_review"]),
+    guidance: z.enum(["compare", "refine", "human_review", "greeting", "help", "sell", "contact", "account", "payment", "rules"]),
   })
   .strict();
 const guidance = {
   compare:
-    "Sim, senhor! Localizei equipamentos no catálogo. Missão: comparar os dados informados abaixo. Preço e disponibilidade devem ser conferidos antes de qualquer compra.",
+    "Encontrei estes equipamentos no catálogo. Compare as informações abaixo. Preço e disponibilidade devem ser conferidos antes de qualquer compra.",
   refine:
-    "Às ordens! Estes são os anúncios encontrados. Informe o nome do equipamento ou uma categoria para refinar a busca, por gentileza.",
+    "Estes são os anúncios encontrados. Informe o nome do equipamento ou uma categoria para refinar a busca, por gentileza.",
   human_review:
-    "Sim, senhor! Esta solicitação exige análise humana. A indicação dos equipamentos não comprova certificação, compatibilidade institucional ou autorização para uso.",
+    "Esta solicitação precisa da avaliação da equipe. A indicação dos equipamentos não comprova certificação, compatibilidade institucional ou autorização para uso.",
 };
 
 /** Read actual bytes; Content-Length is only an early check, never the limit itself. */
@@ -126,7 +127,7 @@ export async function handleAssistant(
   }
   const parsed = assistantInput.safeParse(body);
   if (!parsed.success)
-    return error(400, "Escreva uma pergunta de 3 a 500 caracteres.", "input");
+    return error(400, "Escreva uma pergunta de 2 a 500 caracteres.", "input");
   try {
     if (!(await deps.authenticate()))
       return error(
@@ -147,6 +148,8 @@ export async function handleAssistant(
   } catch {
     return error(503, "Controle de uso indisponível.", "quota_error");
   }
+  const topic = directHelpTopic(parsed.data.question);
+  if (topic) return finish(200, { ...helpTopics[topic], products: [], mode: "help" }, "help_" + topic);
   let products: CatalogHit[];
   try {
     const term = safeSearchTerm(parsed.data.question);
@@ -160,28 +163,15 @@ export async function handleAssistant(
       "catalog_error",
     );
   }
-  if (!products.length)
-    return finish(
-      200,
-      {
-        answer:
-          "Às ordens, senhor! No momento, não localizei anúncios disponíveis para esta missão. Por gentileza, tente buscar por mochila, lanterna, bota ou outro equipamento.",
-        products: [],
-        mode: "catalog",
-      },
-      "empty",
-    );
-  if (!deps.recommend)
-    return finish(
-      200,
-      {
-        answer:
-          "Positivo, senhor! Encontrei anúncios disponíveis. O aconselhamento inteligente está temporariamente indisponível; confira os equipamentos abaixo.",
-        products,
-        mode: "catalog",
-      },
-      "catalog",
-    );
+  const catalogFallback = () => finish(200, {
+    answer: products.length
+      ? "Encontrei estes anúncios. A seleção por IA está indisponível no momento; você pode conferir os dados abaixo."
+      : "Não encontrei anúncios com esse termo. Tente o nome do equipamento, como mochila ou lanterna, ou explore as categorias. Se sua pergunta não era uma busca, conte um pouco mais para eu orientar você.",
+    products,
+    links: [{ href: "/catalogo", label: "Explorar catálogo" }, { href: "/ajuda", label: "Central de ajuda" }],
+    mode: "catalog",
+  }, products.length ? "catalog" : "empty");
+  if (!deps.recommend) return catalogFallback();
   try {
     const selection = selectionSchema.parse(
       await deps.recommend(parsed.data.question, products),
@@ -192,10 +182,14 @@ export async function handleAssistant(
       selection.product_ids.some((id) => !products.some((p) => p.id === id))
     )
       throw Error();
+    if (selection.guidance in helpTopics) {
+      return finish(200, { ...helpTopics[selection.guidance as HelpTopic], products: [], mode: "ai" }, "ai_help");
+    }
+    if (!products.length && selection.guidance !== "human_review") return catalogFallback();
     return finish(
       200,
       {
-        answer: guidance[selection.guidance],
+        answer: guidance[selection.guidance as keyof typeof guidance],
         products: products.filter((p) => ids.has(p.id)),
         mode: "ai",
       },

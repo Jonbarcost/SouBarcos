@@ -130,8 +130,8 @@ export function FloatingAssistant() {
           margin: 0; font-size: 14px; line-height: 1.45;
         }
         .bf-floating-body :global(section.panel > .listing-toolbar) {
-          margin: 0; padding: 0 0 4px; display: flex; flex-wrap: nowrap;
-          justify-content: flex-start; gap: 6px; overflow-x: auto; flex-shrink: 0;
+          margin: 0; padding: 0 0 4px; display: flex; flex-wrap: wrap;
+          justify-content: flex-start; gap: 6px; flex-shrink: 0;
         }
         .bf-floating-body :global(.listing-toolbar > button) {
           flex-shrink: 0; padding: 7px 9px; min-height: 44px;

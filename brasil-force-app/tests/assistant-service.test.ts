@@ -90,7 +90,7 @@ test("assistant renders only verified catalog facts and subset selected by struc
   assert.equal(r.status, 200);
   const body = await r.json();
   assert.equal(body.mode, "ai");
-  assert.match(body.answer, /Sim, senhor/);
+  assert.match(body.answer, /Encontrei/);
   assert.deepEqual(body.products, [product]);
   assert.ok(!JSON.stringify(body).includes("undefined"));
   assert.equal(r.headers.get("cache-control"), "no-store");
@@ -110,19 +110,19 @@ test("assistant rejects invented IDs and free-form provider claims", async () =>
     assert.ok(!(await r.text()).includes("inventado"));
   }
 });
-test("empty catalog and missing gateway configuration use factual catalog fallback without paid calls", async () => {
-  const empty = fixture({ search: async () => [] });
+test("empty catalog and missing gateway configuration use factual catalog fallback", async () => {
+  const empty = fixture({ search: async () => [], recommend: undefined });
   const r = await handleAssistant(request(), empty.deps);
   assert.equal(r.status, 200);
   const emptyResult = await r.json();
   assert.deepEqual(emptyResult.products, []);
-  assert.match(emptyResult.answer, /Às ordens/);
+  assert.match(emptyResult.answer, /Não encontrei/);
   assert.ok(!empty.calls.includes("gateway"));
   const absent = fixture({ recommend: undefined });
   const fallback = await handleAssistant(request(), absent.deps);
   const fallbackResult = await fallback.json();
   assert.equal(fallbackResult.mode, "catalog");
-  assert.match(fallbackResult.answer, /Positivo, senhor/);
+  assert.match(fallbackResult.answer, /Encontrei/);
 });
 test("gateway errors are hidden and safe metrics contain no prompts or identities", async () => {
   let metric: unknown;
@@ -139,4 +139,32 @@ test("gateway errors are hidden and safe metrics contain no prompts or identitie
   assert.ok(!(await r.text()).includes("secret"));
   assert.ok(!JSON.stringify(metric).includes("mochila"));
   assert.equal((metric as { status: number }).status, 503);
+});
+
+test("support questions from production screenshots work with an empty catalog", async () => {
+  for (const [question, expected, href] of [
+    ["oi tudo bem ?", /Oi!/, "/ajuda"],
+    ["como faço pra vender ?", /habilitação/, "/vender"],
+    ["poderia me ajudar com uma dúvida ?", /Qual é a sua dúvida/, "/ajuda"],
+    ["gostaria de entrar em contato com tal fornecedor", /nome do fornecedor/, "/ajuda"],
+    ["como pagar?", /indisponíveis/, "/ajuda"],
+    ["oi", /Oi!/, "/ajuda"],
+  ] as const) {
+    const { deps } = fixture({ search: async () => [] });
+    const response = await handleAssistant(request({ question }), deps);
+    assert.equal(response.status, 200, question);
+    const body = await response.json();
+    assert.match(body.answer, expected, question);
+    assert.ok(body.links.some((link: { href: string }) => link.href === href));
+    assert.doesNotMatch(body.answer, /senhor|não localizei anúncios/i);
+  }
+});
+
+test("empty catalog still allows semantic help classification by the model", async () => {
+  const { deps } = fixture({ search: async () => [], recommend: async () => ({ product_ids: [], guidance: "sell" }) });
+  const response = await handleAssistant(request({ question: "Tenho uma loja e quero fazer parte da plataforma" }), deps);
+  const body = await response.json();
+  assert.equal(body.mode, "ai");
+  assert.match(body.answer, /habilitação/);
+  assert.equal(body.links[0].href, "/vender");
 });
