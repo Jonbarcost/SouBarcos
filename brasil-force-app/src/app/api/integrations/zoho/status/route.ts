@@ -1,30 +1,31 @@
 import { NextResponse } from "next/server";
-import { requireStaff } from "@/lib/auth";
-
+import { zohoAdmin } from "@/lib/zoho-server";
+import { configStatus } from "@/lib/zoho-security";
 export const dynamic = "force-dynamic";
-
-/** Administrative readiness check; never returns secret values or tokens. */
 export async function GET() {
-  const { account } = await requireStaff();
-  if (!["admin", "superadmin"].includes(account.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
-  const required = ["ZOHO_CLIENT_ID", "ZOHO_CLIENT_SECRET", "ZOHO_OAUTH_STATE_SECRET"] as const;
-  const missing = required.filter((key) => !process.env[key]);
-  const state = process.env.ZOHO_OAUTH_STATE_SECRET ?? "";
-  const stateSecretLengthValid = state.length >= 32;
-  const stateSecretLooksLikeProviderKey = /^(sk_(live|test)_|zoho)/i.test(state);
-  const configured = missing.length === 0 && stateSecretLengthValid && !stateSecretLooksLikeProviderKey;
+  const { db } = await zohoAdmin();
+  const config = configStatus(process.env);
+  const { data, error } = await db
+    .from("bf_zoho_connection")
+    .select("id,mailbox,updated_at")
+    .eq("id", "corporate")
+    .maybeSingle();
   return NextResponse.json(
     {
       integration: "zoho-mail",
-      configured,
-      missing,
-      stateSecretValid: stateSecretLengthValid && !stateSecretLooksLikeProviderKey,
-      mailboxConnected: false,
-      sendingEnabled: false,
-      oauthFlowEnabled: false,
-      nextStep: "Implement secure one-time state, encrypted refresh-token storage and credential review before authorization",
+      ...config,
+      schemaReady: !error,
+      mailboxConnected: !!data,
+      oauthFlowEnabled:
+        config.configured && process.env.ZOHO_OAUTH_ENABLED === "true",
+      mailboxReadingEnabled:
+        config.configured &&
+        !!data &&
+        process.env.ZOHO_MAIL_READ_ENABLED === "true",
+      sendingEnabled:
+        config.configured &&
+        !!data &&
+        process.env.ZOHO_MAIL_SEND_ENABLED === "true",
     },
     { headers: { "Cache-Control": "no-store" } },
   );

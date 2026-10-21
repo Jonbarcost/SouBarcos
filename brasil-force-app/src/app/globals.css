@@ -1162,3 +1162,14 @@ footer { padding-bottom: 82px; }
 .bf-legacy-disclaimer{padding:20px 24px;margin-top:25px;background:#ebece5;border-left:3px solid #8e9b7e;border-radius:8px;color:#4c584b;font-size:13px}
 @media(max-width:700px){.bf-legacy-teaser-inner>svg{display:none}.bf-legacy-grid{grid-template-columns:1fr}.bf-legacy-content{padding-block:45px 70px}}
 @media(prefers-reduced-motion:reduce){.bf-legacy-card{transition:none}.bf-legacy-card:hover{transform:none}}
+
+/* Administrative supplier workspace, using existing brand tokens. */
+.supplier-central { max-width: 1040px; overflow-wrap: anywhere; }
+.supplier-card { padding: clamp(16px,3vw,28px); border: 1px solid #d6dfd4; border-radius: 18px; background: #fffefa; margin: 20px 0; }
+.supplier-card summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
+.supplier-form { display: grid; gap: 16px; margin: 20px 0; max-width: 720px; }
+.supplier-form label { display: grid; gap: 6px; }
+.supplier-form input:not([type=checkbox]), .supplier-form textarea, .supplier-form select { width: 100%; min-width: 0; padding: 12px; font: inherit; border: 1px solid #aebfad; border-radius: 10px; background: white; color: #183529; }
+.supplier-row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin: 14px 0; }
+.supplier-body { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
+.supplier-central button:disabled { opacity: .55; cursor: not-allowed; }
