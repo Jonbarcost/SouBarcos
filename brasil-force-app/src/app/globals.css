@@ -1115,3 +1115,19 @@ footer { padding-bottom: 82px; }
 .assistant-chat > form textarea { resize: vertical; flex: 1; min-width: 0; width: auto; min-height: 50px; max-height: 120px; border: 1px solid #bfcab8; border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 16px; line-height: 1.4; background: #fffefa; }
 .assistant-chat > form button { display: inline-flex; gap: 6px; align-items: center; justify-content: center; }
 .assistant-privacy { display: block; font-size: 11px; line-height: 1.45; color: #5d6b60; margin-top: 8px; flex-shrink: 0; }
+
+
+/* Premium discovery and global supplier invitation */
+.bf-premium-search { display:flex;align-items:center;gap:12px;width:min(100%,650px);min-height:60px;padding:7px 7px 7px 18px;margin:24px 0 20px;background:#fffdf8;color:#284435;border:1px solid #d6dfd3;border-radius:17px;box-shadow:0 14px 40px #07160e28; }
+.bf-premium-search input { flex:1;min-width:0;min-height:42px;border:0;outline:0;background:transparent;color:#1d2b21;font:inherit;font-size:15px; }
+.bf-premium-search input:focus-visible {outline:2px solid #94713c;outline-offset:2px;border-radius:4px;}
+.bf-premium-search button { display:inline-flex;align-items:center;gap:9px;justify-content:center;min-height:45px;padding:9px 17px;border:0;border-radius:12px;background:#27553b;color:#fff;font-weight:700;transition:background .2s,transform .2s; }
+.bf-premium-search button:hover {background:#173d29;transform:translateY(-1px);}
+.bf-global-section { display:grid;grid-template-columns:minmax(0,1.5fr) minmax(210px,0.6fr);gap:32px;align-items:center;margin-block:34px 68px;padding:clamp(25px,4vw,56px);border:1px solid #d3d9ca;border-radius:26px;background:linear-gradient(130deg,#f5f2e9,#e7ece3);overflow:hidden; }
+.bf-global-copy h2 {max-width:620px;margin:12px 0 18px;}
+.bf-global-copy p {max-width:680px;}
+.bf-global-section .button-outline {border-color:#53634b;color:#264833;}
+.bf-global-art { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;min-height:180px;color:#53745b;background:radial-gradient(circle,#d4e1d0 0%,transparent 70%);}
+.bf-global-art span {font-size:11px;letter-spacing:.2em;font-weight:800;}
+@media(max-width:720px){.bf-global-section{grid-template-columns:1fr}.bf-global-art{min-height:90px}.bf-global-art svg{width:60px;height:60px}.bf-premium-search{gap:8px;padding-left:12px}.bf-premium-search button{padding-inline:12px}.bf-premium-search input{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.bf-premium-search button{transition:none}.bf-premium-search button:hover{transform:none}}
