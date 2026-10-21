@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Sparkles, UserRound } from "lucide-react";
 import { Brand } from "./brand";
+import { LanguageSwitcher } from "./language-switcher";
 import { FloatingAssistant } from "./floating-assistant";
 
 const aiEnabled = process.env.BF_AI_ENABLED === "true";
@@ -16,6 +17,7 @@ export function Header() {
           <Link href="/fornecedores">Fornecedores</Link>
           <Link href="/ajuda">Ajuda</Link>
         </nav>
+        <LanguageSwitcher />
         <Link className="account-link" href="/conta">
           <UserRound size={19} aria-hidden="true" />
           <span>Minha conta</span>
