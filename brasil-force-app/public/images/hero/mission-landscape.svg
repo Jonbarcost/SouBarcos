@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" role="img" aria-label="Paisagem abstrata de montanhas e horizonte brasileiro">
+<defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#0b3028"/><stop offset=".55" stop-color="#1d5d49"/><stop offset="1" stop-color="#071c17"/></linearGradient><radialGradient id="sun"><stop stop-color="#efd7a1" stop-opacity=".65"/><stop offset="1" stop-color="#efd7a1" stop-opacity="0"/></radialGradient><linearGradient id="hill" x2="0" y2="1"><stop stop-color="#2c6048"/><stop offset="1" stop-color="#0b211b"/></linearGradient><pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M60 0H0V60" fill="none" stroke="#cce7d2" stroke-opacity=".08"/></pattern></defs>
+<rect width="1440" height="900" fill="url(#sky)"/><rect width="1440" height="900" fill="url(#grid)"/><circle cx="1020" cy="290" r="300" fill="url(#sun)"/><circle cx="1020" cy="290" r="90" fill="#e6cf96" opacity=".32"/>
+<path d="M0 610 150 510 280 580 460 360 620 545 785 425 960 565 1120 340 1280 495 1440 390V900H0Z" fill="#235543" opacity=".7"/>
+<path d="M0 700 170 630 340 670 530 490 690 635 880 550 1050 645 1220 530 1440 650V900H0Z" fill="url(#hill)"/>
+<path d="M0 780 170 725 370 765 560 665 740 755 920 680 1150 750 1440 690V900H0Z" fill="#071c17"/>
+<path d="M70 690H1370M70 740H1370" stroke="#b9d5b9" stroke-opacity=".12"/><path d="M720 50V850M70 450H1370" stroke="#f5e6b8" stroke-opacity=".11" stroke-dasharray="8 12"/>
+<g fill="none" stroke="#e8d6a4" stroke-opacity=".42"><circle cx="1020" cy="290" r="140"/><circle cx="1020" cy="290" r="170" stroke-dasharray="7 18"/><path d="M1020 100V480M830 290H1210"/></g>
+</svg>
