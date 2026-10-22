@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeroLandscape } from "@/components/hero-landscape";
+import { OperationsHeroHUD } from "@/components/operations-hero-hud";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -187,6 +188,8 @@ export default function Home() {
           <span>Paisagem ilustrativa criada para Brasil Force</span>
         </div>
       </section>
+
+      <section className="container" aria-label="Painel de operações Brasil Force" style={{marginTop:"-12px",position:"relative",zIndex:2}}><OperationsHeroHUD /></section>
 
       <section
         className="container bf-section"

@@ -3,6 +3,8 @@ import { Inter, Manrope } from "next/font/google";
 import { Header, Footer, AssistantDock } from "@/components/shell";
 import "./globals.css";
 import "./immersive.css";
+import "./operations-tokens.css";
+import "./operations-hero.css";
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-manrope" });
 export const dynamic = "force-dynamic";
