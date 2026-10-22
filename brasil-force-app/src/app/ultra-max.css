@@ -37,3 +37,16 @@
 @media(max-width:370px){.bf-ultra-categories .bf-category-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.bf-ultra-hero *{scroll-behavior:auto!important}}
 .ops-focus-mode .bf-ultra-hero .bf-living-landscape *{animation-play-state:paused!important}
+
+/* Phase 1 refinement: compact command panel and resilient small-screen layout. */
+.bf-ultra-hero .bf-ultra-command .ops-hud-shell{width:100%;max-width:none}
+.bf-ultra-hero .bf-ultra-command .ops-hud-map{width:100%}
+.bf-ultra-hero .bf-ultra-command .ops-hud-panels{grid-template-columns:repeat(2,minmax(0,1fr))}
+.bf-ultra-hero .bf-ultra-command .ops-hud-panel:last-child{grid-column:1/-1}
+.bf-ultra-hero .bf-ultra-command .ops-hud-top{font-size:9px}
+.bf-ultra-hero .bf-ultra-command .ops-hud-ticker{gap:8px}
+.bf-ultra-hero .bf-ultra-command .ops-hud-ticker p{font-size:12px}
+.bf-ultra-hero .bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media(max-width:1100px){.bf-ultra-hero .bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:640px){.bf-ultra-hero .bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-ultra-hero .bf-ultra-command .ops-hud-panels{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-ultra-hero .bf-ultra-command .ops-hud-content{grid-template-columns:1fr}.bf-ultra-hero .bf-ultra-command .ops-hud-panel strong{font-size:12px}}
+@media(max-width:370px){.bf-ultra-hero .bf-ultra-categories .bf-category-grid{grid-template-columns:1fr}}
