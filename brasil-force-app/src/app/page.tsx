@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HeroLandscape } from "@/components/hero-landscape";
 import { OperationsHeroHUD } from "@/components/operations-hero-hud";
 import { MissionModule } from "@/components/mission-module";
+import { InspirationGallery } from "@/components/inspiration-gallery";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -214,6 +215,8 @@ export default function Home() {
             <MissionModule key={slug} href={"/catalogo?categoria=" + slug} title={title} description={desc} image={image} index={index} icon={<Icon size={27} strokeWidth={1.7} aria-hidden="true" />} />
           ))}       </div>
       </section>
+
+      <InspirationGallery />
 
       <section className="bf-legacy-teaser" aria-labelledby="legacy-title">
         <div className="container bf-legacy-teaser-inner">
