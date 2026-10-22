@@ -20,7 +20,7 @@ export function OperationsHeroHUD() {
          <path d="M110 15 154 27 184 50 215 49 245 83 270 96 264 126 282 151 259 180 240 198 230 231 210 249 197 279 174 302 159 335 139 312 130 282 108 258 89 237 77 205 55 184 49 153 29 136 48 107 52 80 78 65 81 39Z" fill="#293c303f" stroke="#f28b35" strokeWidth="1.5" strokeLinejoin="round"/>
          <path d="M105 74 154 153 192 231 152 292M105 74 192 231M154 153 152 292" fill="none" stroke="#e9e1d1" strokeOpacity=".36" strokeDasharray="4 7"/>
          {stations.map((s,i)=><g key={s.n}><circle cx={s.x} cy={s.y} r="13" fill="none" stroke="#f28b35" className="ops-pulse" style={{animationDelay:`${i*.6}s`}}/><circle cx={s.x} cy={s.y} r="4" fill="#f28b35"/><text x={s.x+10} y={s.y-9} fontSize="8" fill="#e9e1d1" fontFamily="monospace">{s.n}</text></g>)}
-       </svg><span className="ops-map-label ops-hud">BR / REDE ILUSTRATIVA</span>
+       </svg><span className="ops-map-label ops-hud">BR / MAPA ILUSTRATIVO — SEM DADOS OPERACIONAIS</span>
      </div>
      <div className="ops-hud-panels">
        <div className="ops-hud-panel"><span className="ops-hud">SISTEMA / 01</span><strong>PRÉ-ABERTURA</strong><small>Compras ainda indisponíveis</small></div>
