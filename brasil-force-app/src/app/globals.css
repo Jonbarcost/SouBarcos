@@ -1012,7 +1012,7 @@ footer { background: #10251d; }
   .bf-category-card:is(:hover,:focus-visible) .bf-category-media { transform: none; }
 }
 
-/* Global AI entry point is rendered only when the feature is enabled. */
+/* Entry points stay visible; server enforces availability and authentication. */
 .header nav .bf-nav-ai { display: inline-flex; align-items: center; gap: 7px; color: #f1d49c; }
 .bf-assistant-dock { position: fixed; z-index: 40; right: 23px; bottom: 23px; display: inline-flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: 100px; color: #132d21; background: #f0d195; font-size: 13px; font-weight: 900; box-shadow: 0 10px 35px #0c2c2060; border: 1px solid #fff6db; transition: transform .2s ease,background .2s ease; }
 .bf-assistant-dock:hover { transform: translateY(-3px); background: #ffe2ac; }
