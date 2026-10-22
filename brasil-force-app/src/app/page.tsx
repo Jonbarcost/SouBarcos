@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HeroLandscape } from "@/components/hero-landscape";
 import { OperationsHeroHUD } from "@/components/operations-hero-hud";
+import { MissionModule } from "@/components/mission-module";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -210,28 +211,8 @@ export default function Home() {
         </p>
         <div className="bf-category-grid">
           {categories.map(({ slug, title, image, desc, icon: Icon }, index) => (
-            <Link
-              className="bf-category-card"
-              href={"/catalogo?categoria=" + slug}
-              key={slug}
-            >
-              <span
-                className="bf-category-media"
-                style={{ backgroundImage: `url("${image}")` }}
-                aria-hidden="true"
-              />
-              <span className="bf-category-index">0{index + 1}</span>
-              <span className="bf-category-icon">
-                <Icon size={27} strokeWidth={1.7} aria-hidden="true" />
-              </span>
-              <span className="bf-category-title">{title}</span>
-              <span className="bf-category-desc">{desc}</span>
-              <span className="bf-category-link">
-                <ArrowUpRight size={20} aria-hidden="true" />
-              </span>
-            </Link>
-          ))}
-        </div>
+            <MissionModule key={slug} href={"/catalogo?categoria=" + slug} title={title} description={desc} image={image} index={index} icon={<Icon size={27} strokeWidth={1.7} aria-hidden="true" />} />
+          ))}       </div>
       </section>
 
       <section className="bf-legacy-teaser" aria-labelledby="legacy-title">

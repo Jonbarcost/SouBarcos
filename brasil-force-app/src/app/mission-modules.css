@@ -1,0 +1,16 @@
+/* Phase 3: six opt-in mission modules; original catalog routes unchanged. */
+.ops-mission-module{--ops-tilt-x:0deg;--ops-tilt-y:0deg;transform:perspective(900px) rotateX(var(--ops-tilt-x)) rotateY(var(--ops-tilt-y));transform-style:preserve-3d;will-change:transform;position:relative;isolation:isolate;overflow:hidden;border:1px solid #f28b3550;box-shadow:0 15px 35px #07140d35,inset 0 0 0 1px #e9e1d115;transition:transform .18s ease-out,box-shadow .25s,border-color .25s}
+.ops-mission-module::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(110deg,transparent 35%,#f28b351c 50%,transparent 65%);transform:translateX(-140%);transition:transform .6s ease}
+.ops-mission-module:hover{transform:perspective(900px) rotateX(var(--ops-tilt-x)) rotateY(var(--ops-tilt-y));border-color:#f28b35;box-shadow:0 26px 55px #07140d75,0 0 24px #f28b3522}
+.ops-mission-module:hover::after,.ops-mission-module:focus-visible::after{transform:translateX(140%)}
+.ops-mission-module .bf-category-media{transform:translateZ(-1px) scale(1.04);transition:transform .45s ease,filter .45s ease}
+.ops-mission-module:hover .bf-category-media{transform:translateZ(-1px) scale(1.12);filter:saturate(1.13)}
+.ops-mission-module .bf-category-index{font-family:var(--ops-font-hud);letter-spacing:.12em;color:#ffcb8e;font-size:10px}
+.ops-mission-module .bf-category-title,.ops-mission-module .bf-category-desc,.ops-mission-module .bf-category-icon{transform:translateZ(22px)}
+.ops-mission-module .bf-category-title{font-family:var(--ops-font-display)}
+.ops-module-scan{position:absolute;z-index:2;inset:0;pointer-events:none;opacity:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#e9e1d112 6px,transparent 7px);transition:opacity .25s}
+.ops-mission-module:hover .ops-module-scan,.ops-mission-module:focus-visible .ops-module-scan{opacity:.55}
+.ops-route-scan{position:fixed;inset:0;z-index:9999;pointer-events:none;background:linear-gradient(to bottom,transparent 0%,#f28b3533 44%,#f28b35a8 50%,#10171455 55%,transparent 100%);animation:ops-route-sweep .27s ease-in forwards}
+@keyframes ops-route-sweep{from{transform:translateY(-100%);opacity:0}25%{opacity:1}to{transform:translateY(100%);opacity:0}}
+@media(hover:none),(pointer:coarse){.ops-mission-module,.ops-mission-module:hover{transform:none;will-change:auto}.ops-mission-module .bf-category-media{transform:none}.ops-mission-module:hover .bf-category-media{transform:none}}
+@media(prefers-reduced-motion:reduce){.ops-mission-module,.ops-mission-module:hover,.ops-mission-module .bf-category-media,.ops-mission-module:hover .bf-category-media{transform:none!important;transition:none!important}.ops-route-scan{display:none}.ops-module-scan{display:none}}
