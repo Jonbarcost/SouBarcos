@@ -10,6 +10,7 @@ import "./mission-modules.css";
 import "./assistant-terminal.css";
 import "./inspiration-gallery.css";
 import "./experience-controls.css";
+import "./ultra-max.css";
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-manrope" });
 export const dynamic = "force-dynamic";
