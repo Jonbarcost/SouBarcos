@@ -67,6 +67,13 @@ export default async function Admin({
     throw new Error("Não foi possível consultar a verificação.");
   return (
     <div className="container page">
+      {administrator && (
+        <p>
+          <Link className="text-link" href="/admin/fornecedores">
+            Central de fornecedores e Zoho Mail →
+          </Link>
+        </p>
+      )}
       <PageTitle
         title="Central de análise"
         description="Solicitações reais, decisões justificadas e histórico auditável."
