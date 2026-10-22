@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Sparkles, UserRound } from "lucide-react";
 import { Brand } from "./brand";
+import { LanguageSwitcher } from "./language-switcher";
 import { FloatingAssistant } from "./floating-assistant";
 
 const aiEnabled = process.env.BF_AI_ENABLED === "true";
@@ -14,8 +15,10 @@ export function Header() {
           <Link href="/catalogo">Catálogo</Link>
           {aiEnabled && <Link className="bf-nav-ai" href="/assistente"><Sparkles size={15} aria-hidden="true" /> Assistente IA</Link>}
           <Link href="/vender">Como vender</Link>
+          <Link href="/fornecedores">Fornecedores</Link>
           <Link href="/ajuda">Ajuda</Link>
         </nav>
+        <LanguageSwitcher />
         <Link className="account-link" href="/conta">
           <UserRound size={19} aria-hidden="true" />
           <span>Minha conta</span>
@@ -43,6 +46,8 @@ export function Footer() {
       <div className="container footer-bottom">
         <span>© {new Date().getFullYear()} Brasil Force · Anúncios sujeitos a moderação</span>
         <div>
+          <Link href="/quero-comprar">Quero comprar</Link>
+          <Link href="/legado">Legado</Link>
           <Link href="/regras">Produtos permitidos</Link>
           <Link href="/privacidade">Privacidade</Link>
           <Link href="/termos">Termos</Link>
