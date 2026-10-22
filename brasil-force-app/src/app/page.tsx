@@ -143,9 +143,9 @@ export default function Home() {
         <div>
           <span className="bf-kicker">FAÇA PARTE</span>
           <h2 id="seller-title">Seu trabalho merece mais alcance.</h2>
-          <p>Produz, personaliza ou fornece equipamentos? Conheça o processo de avaliação para vender na Brasil Force.</p>
+          <p>Produz, personaliza ou fornece equipamentos? Os primeiros parceiros terão 0% de comissão e nenhuma mensalidade durante a campanha de lançamento. Conheça o processo de avaliação.</p>
         </div>
-        <Link href="/vender" className="button button-primary bf-primary">Quero ser fornecedor <ArrowUpRight size={18} aria-hidden="true" /></Link>
+        <Link href="/fornecedores" className="button button-primary bf-primary">Quero ser fornecedor <ArrowUpRight size={18} aria-hidden="true" /></Link>
       </section>
     </>
   );
