@@ -42,13 +42,13 @@ function BrazilFlag({ className = "" }: { className?: string }) {
 export default function Home() {
   return (
     <>
-      <section className="bf-hero" aria-labelledby="hero-title">
+      <section className="bf-hero bf-ultra-safe" aria-labelledby="hero-title">
         <div className="container bf-hero-grid">
           <div className="bf-hero-copy">
-            <div className="bf-eyebrow"><BrazilFlag className="bf-mini-flag" /> FEITO PARA QUEM VIVE O BRASIL</div>
+            <div className="bf-eyebrow"><BrazilFlag className="bf-mini-flag" /> BRASIL FORCE / SUA JORNADA COMEÇA AQUI</div>
             <h1 id="hero-title">
-              Seu mundo é grande.<br />
-              <span>Seu equipamento acompanha.</span>
+              SUA MISSÃO.<br />
+              <span>SEU EQUIPAMENTO.</span>
             </h1>
             <p className="bf-hero-description">
               Um novo ponto de encontro para quem serve, explora, coleciona e vive novas jornadas.
@@ -74,7 +74,7 @@ export default function Home() {
               <span><Fingerprint size={17} aria-hidden="true" /> Vendedores analisados</span>
             </div>
           </div>
-          <div className="bf-hero-art" aria-hidden="true">
+          <div className="bf-hero-art bf-ultra-safe-art" aria-hidden="true">
             <div className="bf-art-rings" />
             <div className="bf-art-topline"><span>BRASIL FORCE</span><span>01 — 06</span></div>
             <div className="bf-art-center">
@@ -89,7 +89,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="container bf-section" aria-labelledby="categories-title">
+      <section className="container bf-section bf-ultra-safe-categories" aria-labelledby="categories-title">
         <div className="bf-section-heading">
           <div><span className="bf-kicker">ENCONTRE O QUE PROCURA</span><h2 id="categories-title">Cada missão tem seu equipamento.</h2></div>
           <Link href="/catalogo" className="bf-inline-link">Ver catálogo completo <ArrowUpRight size={18} aria-hidden="true" /></Link>
