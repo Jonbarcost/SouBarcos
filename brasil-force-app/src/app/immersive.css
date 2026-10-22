@@ -472,3 +472,223 @@ footer {
     transform: none;
   }
 }
+
+/* Living landscape: transform/opacity layers, no video, canvas or per-frame JS.
+   All layers freeze together on pause, tab hiding or leaving the viewport. */
+.bf-living-landscape {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+  background: #10231f;
+}
+.bf-landscape-photo {
+  object-fit: cover;
+  object-position: center 46%;
+  animation: bf-camera-journey 64s ease-in-out infinite alternate;
+}
+.bf-sunset-wash,
+.bf-nightfall,
+.bf-solar-glow,
+.bf-cloud-bank,
+.bf-valley-mist {
+  position: absolute;
+  pointer-events: none;
+}
+.bf-sunset-wash {
+  inset: 0;
+  background: linear-gradient(165deg, #f799452e, transparent 45%, #41232d36);
+  opacity: 0;
+  animation: bf-golden-hour 64s ease-in-out infinite;
+}
+.bf-solar-glow {
+  width: clamp(160px, 26vw, 420px);
+  aspect-ratio: 1;
+  right: -3%;
+  top: -14%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #fff3c7b3 0%,
+    #ffd47766 12%,
+    #f7ad3d29 38%,
+    transparent 68%
+  );
+  mix-blend-mode: screen;
+  animation: bf-sun-descent 64s ease-in-out infinite;
+}
+.bf-cloud-bank {
+  width: 150%;
+  height: 32%;
+  left: -25%;
+  opacity: 0.26;
+  background:
+    radial-gradient(ellipse at 14% 60%, #e3ddc865, transparent 20%),
+    radial-gradient(ellipse at 38% 43%, #f1e6ce80, transparent 24%),
+    radial-gradient(ellipse at 66% 58%, #e4dfd965, transparent 24%),
+    radial-gradient(ellipse at 88% 35%, #e3ddc865, transparent 19%);
+}
+.bf-cloud-bank-far {
+  top: 0;
+  animation: bf-high-clouds 48s linear infinite alternate;
+}
+.bf-cloud-bank-near {
+  top: 19%;
+  opacity: 0.17;
+  transform: scaleY(0.65);
+  animation: bf-low-clouds 34s ease-in-out infinite alternate;
+}
+.bf-valley-mist {
+  inset: 35% -25% 5%;
+  background:
+    radial-gradient(ellipse at 65% 35%, #dedcc14f, transparent 40%),
+    radial-gradient(ellipse at 35% 60%, #bcc9bd33, transparent 32%);
+  opacity: 0.6;
+  animation: bf-valley-drift 28s ease-in-out infinite alternate;
+}
+.bf-nightfall {
+  inset: 0;
+  background: linear-gradient(180deg, #091d35f5, #102723e6 65%, #071713e8);
+  opacity: 0;
+  animation: bf-dusk-cycle 64s ease-in-out infinite;
+}
+.bf-living-landscape *,
+.bf-living-landscape::before {
+  animation-play-state: paused;
+}
+.bf-living-landscape[data-playing="true"] * {
+  animation-play-state: running;
+}
+.bf-landscape-toggle {
+  position: absolute;
+  top: 17px;
+  right: max(20px, calc((100vw - 1280px) / 2));
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 8px 12px;
+  color: #f8edda;
+  background: #10251dc7;
+  border: 1px solid #eedab54f;
+  border-radius: 24px;
+  font-size: 11px;
+}
+.bf-landscape-toggle:hover {
+  background: #203d2e;
+}
+.bf-landscape-toggle:focus-visible {
+  outline: 3px solid #efd49e;
+  outline-offset: 4px;
+}
+@keyframes bf-camera-journey {
+  from {
+    transform: scale(1.035) translate3d(-0.7%, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(1.3%, 1%, 0);
+  }
+}
+@keyframes bf-high-clouds {
+  from {
+    transform: translate3d(-9%, 0, 0);
+  }
+  to {
+    transform: translate3d(11%, 3%, 0);
+  }
+}
+@keyframes bf-low-clouds {
+  from {
+    transform: translate3d(12%, 0, 0) scaleY(0.65);
+  }
+  to {
+    transform: translate3d(-12%, 5%, 0) scaleY(0.8);
+  }
+}
+@keyframes bf-valley-drift {
+  from {
+    transform: translate3d(-5%, 4%, 0);
+    opacity: 0.35;
+  }
+  to {
+    transform: translate3d(7%, -2%, 0);
+    opacity: 0.7;
+  }
+}
+@keyframes bf-sun-descent {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.7;
+  }
+  45% {
+    transform: translate3d(-10%, 65%, 0) scale(0.75);
+    opacity: 0.5;
+  }
+  65%,
+  82% {
+    transform: translate3d(-18%, 115%, 0) scale(0.4);
+    opacity: 0;
+  }
+}
+@keyframes bf-golden-hour {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  35%,
+  55% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.15;
+  }
+}
+@keyframes bf-dusk-cycle {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.12;
+  }
+  65%,
+  80% {
+    opacity: 0.88;
+  }
+}
+@media (max-width: 760px) {
+  .bf-hero-grid {
+    padding-top: 78px;
+  }
+  .bf-landscape-toggle {
+    top: 12px;
+    right: 20px;
+  }
+  .bf-cloud-bank-near {
+    display: none;
+  }
+  .bf-solar-glow {
+    right: -12%;
+    top: -4%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bf-living-landscape * {
+    animation: none !important;
+  }
+  .bf-nightfall,
+  .bf-sunset-wash,
+  .bf-solar-glow {
+    display: none;
+  }
+  .bf-landscape-toggle {
+    display: none;
+  }
+  .bf-landscape-photo {
+    transform: none;
+  }
+}

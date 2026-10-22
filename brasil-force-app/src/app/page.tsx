@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { HeroLandscape } from "@/components/hero-landscape";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -90,14 +90,7 @@ export default function Home() {
   return (
     <>
       <section className="bf-hero" aria-labelledby="hero-title">
-        <Image
-          className="bf-hero-landscape"
-          src="/images/hero/serra-dawn.webp"
-          alt=""
-          fill
-          sizes="100vw"
-          preload
-        />
+        <HeroLandscape />
         <div className="container bf-hero-grid">
           <div className="bf-hero-copy">
             <div className="bf-eyebrow">
