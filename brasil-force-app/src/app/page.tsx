@@ -92,23 +92,20 @@ function BrazilFlag({ className = "" }: { className?: string }) {
 export default function Home() {
   return (
     <>
-      <section className="bf-hero" aria-labelledby="hero-title">
+      <section className="bf-hero bf-ultra-hero" aria-labelledby="hero-title">
         <HeroLandscape />
         <div className="container bf-hero-grid">
           <div className="bf-hero-copy">
             <div className="bf-eyebrow">
-              <BrazilFlag className="bf-mini-flag" /> FEITO PARA QUEM VIVE O
-              BRASIL
+              <BrazilFlag className="bf-mini-flag" /> BRASIL FORCE / SUA JORNADA COMEÇA AQUI
             </div>
             <h1 id="hero-title">
-              Sua missão.
+              SUA MISSÃO.
               <br />
-              <span>Seu equipamento.</span>
+              <span>SEU EQUIPAMENTO.</span>
             </h1>
             <p className="bf-hero-description">
-              O marketplace de quem serve, explora e vai além. Equipamentos
-              táticos, outdoor, colecionismo e serviços — com identidade
-              brasileira.
+              Uma plataforma brasileira para descobrir equipamentos, explorar novos caminhos e conectar pessoas que compartilham o mesmo propósito.
             </p>
             <p className="bf-launch-note" role="status">
               Pré-abertura: o catálogo está sendo preparado e compras ainda não
@@ -138,9 +135,9 @@ export default function Home() {
             <div className="actions bf-hero-actions">
               <Link
                 className="button button-primary bf-primary"
-                href="/catalogo"
+                href="#categories-title"
               >
-                Explorar o catálogo{" "}
+                Explorar categorias{" "}
                 <ArrowUpRight size={19} aria-hidden="true" />
               </Link>
               <Link
@@ -160,47 +157,16 @@ export default function Home() {
               </span>
             </div>
           </div>
-          <aside
-            className="bf-mission-card"
-            aria-label="Seu assistente na jornada"
-          >
-            <div className="bf-mission-top">
-              <span>BRASIL FORCE / ASSISTENTE</span>
-              <Sparkles size={22} aria-hidden="true" />
-            </div>
-            <div className="bf-mission-orbit" aria-hidden="true">
-              <Compass size={68} strokeWidth={1} />
-            </div>
-            <h2>Uma boa jornada começa com a pergunta certa.</h2>
-            <p>
-              Encontre seu caminho entre equipamentos, dúvidas e os primeiros
-              passos para vender.
-            </p>
-            <Link href="/assistente" className="button bf-assistant-button">
-              Conversar com o assistente{" "}
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </Link>
-            <span className="bf-mission-foot">
-              Acesso com conta verificada · Sem realizar compras
-            </span>
-          </aside>
+          <aside className="bf-ultra-command" aria-label="Centro de Operações ilustrativo"><OperationsHeroHUD /></aside>
         </div>
-        <div className="container bf-hero-credit">
-          <span>BRASIL É O NOSSO PONTO DE PARTIDA.</span>
-          <span>Paisagem ilustrativa criada para Brasil Force</span>
-        </div>
-      </section>
-
-      <section className="container" aria-label="Painel de operações Brasil Force" style={{marginTop:"-12px",position:"relative",zIndex:2}}><OperationsHeroHUD /></section>
-
       <section
-        className="container bf-section"
+        className="container bf-section bf-ultra-categories"
         aria-labelledby="categories-title"
       >
         <div className="bf-section-heading">
           <div>
             <span className="bf-kicker">ENCONTRE O QUE PROCURA</span>
-            <h2 id="categories-title">Cada missão tem seu equipamento.</h2>
+            <h2 id="categories-title">Explore seu próximo horizonte.</h2>
           </div>
           <Link href="/catalogo" className="bf-inline-link">
             Ver catálogo completo <ArrowUpRight size={18} aria-hidden="true" />
@@ -214,6 +180,12 @@ export default function Home() {
           {categories.map(({ slug, title, image, desc, icon: Icon }, index) => (
             <MissionModule key={slug} href={"/catalogo?categoria=" + slug} title={title} description={desc} image={image} index={index} icon={<Icon size={27} strokeWidth={1.7} aria-hidden="true" />} />
           ))}       </div>
+      </section>
+
+        <div className="container bf-hero-credit">
+          <span>BRASIL É O NOSSO PONTO DE PARTIDA.</span>
+          <span>Paisagem ilustrativa criada para Brasil Force</span>
+        </div>
       </section>
 
       <InspirationGallery />
