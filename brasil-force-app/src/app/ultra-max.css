@@ -56,3 +56,16 @@
 .bf-ultra-hero .bf-hero-actions .button:focus-visible,.bf-ultra-hero .bf-premium-search button:focus-visible,.bf-ultra-hero .bf-ultra-categories a:focus-visible{outline:3px solid #f5d9a4;outline-offset:4px}
 .bf-ultra-hero .bf-ultra-command .ops-hud-panel{background:#091a16e8}
 @media(prefers-contrast:more){.bf-ultra-hero::before{background:linear-gradient(90deg,#06120ff2,#06120fca)}.bf-ultra-hero .bf-hero-description,.bf-ultra-hero .bf-ultra-categories .bf-section-intro{color:#fff}}
+
+/* Quality presets: only decorative work changes, never content or navigation. */
+html[data-ops-quality="balanced"] .bf-cloud-bank-near{display:none}
+html[data-ops-quality="balanced"] .bf-valley-mist{opacity:.3}
+html[data-ops-quality="essential"] .bf-living-landscape *{animation:none!important;transition:none!important}
+html[data-ops-quality="essential"] .bf-living-landscape :is(.bf-cloud-bank,.bf-valley-mist,.bf-sunset-wash,.bf-solar-glow,.bf-nightfall){display:none!important}
+html[data-ops-quality="essential"] .bf-landscape-photo{transform:none!important}
+html[data-ops-quality="essential"] .ops-mission-module,html[data-ops-quality="essential"] .ops-mission-module:hover{transform:none!important;transition:none!important;will-change:auto}
+html[data-ops-quality="essential"] .ops-mission-module .bf-category-media{transform:none!important;transition:none!important}
+html[data-ops-quality="essential"] .ops-module-scan,html[data-ops-quality="essential"] .ops-route-scan{display:none!important}
+html[data-ops-quality="essential"] .ops-hud-map,html[data-ops-quality="essential"] .ops-hud-panels{transform:none!important;transition:none!important}
+html[data-ops-quality="essential"] .ops-pulse,html[data-ops-quality="essential"] .ops-hud-ticker p{animation:none!important}
+@media(prefers-reduced-motion:reduce){.bf-living-landscape *,.ops-pulse,.ops-hud-ticker p{animation:none!important}}
