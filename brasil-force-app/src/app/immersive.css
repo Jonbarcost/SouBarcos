@@ -1,6 +1,6 @@
 /* Immersive visual layer: CSS-only, progressive, no tracking or heavy animation libraries. */
 .bf-hero{isolation:isolate;min-height:680px;background:radial-gradient(circle at 80% 24%,#327a60 0%,transparent 38%),linear-gradient(120deg,#07150f 0%,#143529 54%,#071e17 100%)}
-.bf-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(5,18,13,.83),rgba(5,18,13,.12)),url("/images/categories/outdoor.svg") center 47%/cover no-repeat;opacity:.2;mix-blend-mode:screen}
+.bf-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(5,18,13,.83),rgba(5,18,13,.12)),url("/images/hero/mission-landscape.svg") center 47%/cover no-repeat;opacity:.2;mix-blend-mode:screen}
 .bf-hero-grid{min-height:680px}
 .bf-hero h1{font-size:clamp(3.4rem,6vw,6.5rem);text-wrap:balance}
 .bf-hero h1 span{background:linear-gradient(110deg,#f7e8c1,#c5a96a,#fff4d9);background-clip:text;-webkit-background-clip:text;color:transparent}
@@ -25,3 +25,8 @@
 @keyframes bf-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 @media(max-width:900px){.bf-hero,.bf-hero-grid{min-height:auto}.bf-hero-art{transform:none}.bf-hero h1{font-size:clamp(2.7rem,9vw,4.7rem)}}
 @media(prefers-reduced-motion:reduce){.bf-art-rings,.bf-art-shield,.bf-assistant-panel::before,.bf-global-art svg{animation:none!important}.bf-hero-art,.bf-category-card,.bf-category-media,.bf-category-link{transition:none!important}.bf-hero-art:hover,.bf-category-card:hover,.bf-category-card:hover .bf-category-media{transform:none!important}}
+
+/* Keep photography/illustration visible while preserving legibility. */
+.bf-hero::after{opacity:.42;background-position:center 42%;background-size:cover}
+.bf-hero-copy{text-shadow:0 2px 20px rgba(0,0,0,.1)}
+@media(max-width:640px){.bf-hero::after{opacity:.23;background-position:65% center}.bf-hero-art{box-shadow:none}}
