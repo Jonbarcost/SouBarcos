@@ -4,10 +4,9 @@ const lines = ["Preparação é a primeira ferramenta de cada jornada.", "Cada r
 const stations = [{x:105,y:74,n:"NORTE"},{x:154,y:153,n:"CENTRO"},{x:192,y:231,n:"SUDESTE"},{x:152,y:292,n:"SUL"}];
 export function OperationsHeroHUD() {
  const [clock,setClock]=useState("--:--:--"); const [phrase,setPhrase]=useState(0);
- const [coords,setCoords]=useState("LOCALIZAÇÃO NÃO AUTORIZADA"); const [geoError,setGeoError]=useState("");
+
  const [offset,setOffset]=useState({x:0,y:0}); const frame=useRef<number|null>(null);
  useEffect(()=>{const tick=()=>setClock(new Intl.DateTimeFormat("pt-BR",{timeZone:"America/Sao_Paulo",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date()));tick();const t=setInterval(tick,1000);const p=setInterval(()=>setPhrase(v=>(v+1)%lines.length),6500);return()=>{clearInterval(t);clearInterval(p);if(frame.current!==null)cancelAnimationFrame(frame.current)}},[]);
- function locate(){if(!navigator.geolocation){setGeoError("Geolocalização indisponível");return}navigator.geolocation.getCurrentPosition(p=>{setCoords(p.coords.latitude.toFixed(4)+"°, "+p.coords.longitude.toFixed(4)+"°");setGeoError("")},()=>setGeoError("Localização não autorizada ou indisponível"),{enableHighAccuracy:false,timeout:9000,maximumAge:60000})}
  function move(e:React.PointerEvent<HTMLElement>){if(e.pointerType!=="mouse"||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const r=e.currentTarget.getBoundingClientRect();setOffset({x:((e.clientX-r.left)/r.width-.5)*10,y:((e.clientY-r.top)/r.height-.5)*10})}
  return <div className="ops-hud-shell ops-surface ops-surface--grain" onPointerMove={move} onPointerLeave={()=>setOffset({x:0,y:0})}>
    <div className="ops-hud-top ops-hud"><span><i className="ops-led"/> BF / CENTRO DE OPERAÇÕES</span><span>BRASÍLIA · BRT {clock}</span></div>
@@ -23,7 +22,7 @@ export function OperationsHeroHUD() {
      </div>
      <div className="ops-hud-panels" style={{transform:`translate3d(${-offset.x*.55}px,${-offset.y*.55}px,0)`}}>
        <div className="ops-hud-panel"><span className="ops-hud">SISTEMA / 01</span><strong>PRÉ-ABERTURA</strong><small>Compras ainda indisponíveis</small></div>
-       <div className="ops-hud-panel"><span className="ops-hud">POSIÇÃO / OPT-IN</span><strong className="ops-coords">{coords}</strong><button type="button" onClick={locate}>Usar minha localização</button>{geoError&&<small role="status">{geoError}</small>}</div>
+       <div className="ops-hud-panel"><span className="ops-hud">COORDENADAS / ILUSTRATIVO</span><strong className="ops-coords">15°47′ S · 47°52′ W</strong><small>Referência ilustrativa — não é a localização do visitante</small></div>
        <div className="ops-hud-panel"><span className="ops-hud">CATÁLOGO / STATUS</span><strong>EM PREPARAÇÃO</strong><small>Anúncios sujeitos à moderação</small></div>
      </div>
    </div>
