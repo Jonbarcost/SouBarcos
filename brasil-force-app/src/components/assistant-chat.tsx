@@ -92,7 +92,8 @@ export function AssistantChat() {
     );
   }
   return (
-    <section className="panel assistant-chat" aria-labelledby={titleId}>
+    <section className="panel assistant-chat ops-terminal" aria-labelledby={titleId}>
+      <div className="ops-terminal-bar" aria-hidden="true"><span className="ops-terminal-dots"><i/><i/><i/></span><span>BF / TERMINAL DE MISSÃO</span><span>SYS 04</span></div>
       <h2 id={titleId}>Assistente Brasil Force</h2>
       <p>
         Uma conversa para encontrar seu equipamento e orientar seus próximos
@@ -130,6 +131,7 @@ export function AssistantChat() {
             <span className="assistant-avatar" aria-hidden="true">
               <Sparkles size={22} />
             </span>
+            <div className="ops-terminal-prompt" aria-hidden="true"><span>bf@operacoes:~$</span> <span className="ops-typewriter">iniciar assistência</span><span className="ops-cursor">_</span></div>
             <h3>Vamos encontrar seu próximo passo?</h3>
             <p>
               Conte o que você precisa. Posso ajudar a escolher equipamentos,
@@ -157,12 +159,12 @@ export function AssistantChat() {
         {turns.map((turn, index) => (
           <article key={index} className="assistant-turn">
             <div className="assistant-message assistant-message-user">
-              <span className="assistant-speaker">Você</span>
+              <span className="assistant-speaker">OPERADOR / VOCÊ</span>
               <p>{turn.question}</p>
             </div>
             <div className="assistant-message assistant-message-reply">
               <span className="assistant-speaker">
-                <Sparkles size={13} aria-hidden="true" /> Brasil Force
+                <Sparkles size={13} aria-hidden="true" /> BF / ASSISTENTE
               </span>
               {turn.error ? (
                 <>
@@ -257,7 +259,7 @@ export function AssistantChat() {
           maxLength={500}
           required
           disabled={loading}
-          placeholder="Conte como posso ajudar…"
+          placeholder="Digite sua solicitação…"
         />
         <button
           className="button button-primary"

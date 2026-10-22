@@ -1012,7 +1012,7 @@ footer { background: #10251d; }
   .bf-category-card:is(:hover,:focus-visible) .bf-category-media { transform: none; }
 }
 
-/* Global AI entry point is rendered only when the feature is enabled. */
+/* Entry points stay visible; server enforces availability and authentication. */
 .header nav .bf-nav-ai { display: inline-flex; align-items: center; gap: 7px; color: #f1d49c; }
 .bf-assistant-dock { position: fixed; z-index: 40; right: 23px; bottom: 23px; display: inline-flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: 100px; color: #132d21; background: #f0d195; font-size: 13px; font-weight: 900; box-shadow: 0 10px 35px #0c2c2060; border: 1px solid #fff6db; transition: transform .2s ease,background .2s ease; }
 .bf-assistant-dock:hover { transform: translateY(-3px); background: #ffe2ac; }
@@ -1162,3 +1162,14 @@ footer { padding-bottom: 82px; }
 .bf-legacy-disclaimer{padding:20px 24px;margin-top:25px;background:#ebece5;border-left:3px solid #8e9b7e;border-radius:8px;color:#4c584b;font-size:13px}
 @media(max-width:700px){.bf-legacy-teaser-inner>svg{display:none}.bf-legacy-grid{grid-template-columns:1fr}.bf-legacy-content{padding-block:45px 70px}}
 @media(prefers-reduced-motion:reduce){.bf-legacy-card{transition:none}.bf-legacy-card:hover{transform:none}}
+
+/* Administrative supplier workspace, using existing brand tokens. */
+.supplier-central { max-width: 1040px; overflow-wrap: anywhere; }
+.supplier-card { padding: clamp(16px,3vw,28px); border: 1px solid #d6dfd4; border-radius: 18px; background: #fffefa; margin: 20px 0; }
+.supplier-card summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
+.supplier-form { display: grid; gap: 16px; margin: 20px 0; max-width: 720px; }
+.supplier-form label { display: grid; gap: 6px; }
+.supplier-form input:not([type=checkbox]), .supplier-form textarea, .supplier-form select { width: 100%; min-width: 0; padding: 12px; font: inherit; border: 1px solid #aebfad; border-radius: 10px; background: white; color: #183529; }
+.supplier-row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin: 14px 0; }
+.supplier-body { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
+.supplier-central button:disabled { opacity: .55; cursor: not-allowed; }

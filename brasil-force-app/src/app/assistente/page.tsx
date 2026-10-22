@@ -38,6 +38,7 @@ export default function Assistente() {
           Enquanto isso, explore os anúncios reais do catálogo.
         </Notice>
       )}
+      {!enabled && <AssistantChat />}
       <p>
         <Link className="text-link" href="/catalogo">
           Explorar o catálogo →

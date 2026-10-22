@@ -68,6 +68,16 @@ export default async function Catalog({
         </select>
         <button className="button button-primary">Buscar</button>
       </form>
+      <div className="bf-catalog-help">
+        <span>
+          {q || category
+            ? "Resultados para os filtros selecionados"
+            : "Explore os anúncios disponíveis"}
+        </span>
+        <Link href={q || category ? "/catalogo" : "/assistente"}>
+          {q || category ? "Limpar filtros" : "Precisa de ajuda para escolher?"}
+        </Link>
+      </div>
       {!authConfigured() && (
         <Notice>
           Catálogo em preparação. Ainda não há anúncios disponíveis para compra.
@@ -108,9 +118,16 @@ export default async function Catalog({
               ? "Experimente outra busca ou categoria."
               : "Estamos preparando uma comunidade de vendedores e equipamentos selecionados."}
           </p>
-          <div className="actions" style={{ justifyContent: "center", marginTop: 22 }}>
-            <Link href="/catalogo" className="button button-primary">Limpar busca e filtros</Link>
-            <Link href="/vender" className="text-link">Sou fornecedor <span aria-hidden="true">→</span></Link>
+          <div
+            className="actions"
+            style={{ justifyContent: "center", marginTop: 22 }}
+          >
+            <Link href="/catalogo" className="button button-primary">
+              Limpar busca e filtros
+            </Link>
+            <Link href="/vender" className="text-link">
+              Sou fornecedor <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </section>
       )}

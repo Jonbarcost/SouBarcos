@@ -1,0 +1,71 @@
+/* ULTRA MAX — artistic composition, scoped to the public homepage. */
+.bf-ultra-hero{min-height:100svh;overflow:hidden;background:#07120f;isolation:isolate}
+.bf-ultra-hero::before{background:linear-gradient(90deg,rgba(3,13,11,.9),rgba(4,15,12,.57) 46%,rgba(4,14,12,.24) 77%),linear-gradient(0deg,#06110f 1%,transparent 44%)}
+.bf-ultra-hero .bf-hero-grid{width:min(1480px,calc(100% - clamp(32px,5vw,90px)));min-height:clamp(540px,66vh,760px);grid-template-columns:minmax(0,1.12fr) minmax(330px,.85fr);gap:clamp(28px,4vw,80px);padding-top:clamp(92px,12vh,155px);padding-bottom:40px}
+.bf-ultra-hero .bf-hero-copy{position:relative;z-index:2;max-width:790px}
+.bf-ultra-hero .bf-eyebrow{border:0;border-radius:0;background:none;backdrop-filter:none;padding:0;color:#e4c38d;letter-spacing:.25em;font-weight:650}
+.bf-ultra-hero h1{font-size:clamp(3.4rem,6.25vw,7.8rem);font-weight:850;letter-spacing:-.062em;line-height:.99;text-transform:uppercase;text-shadow:0 8px 38px #0009;margin:24px 0 22px}
+.bf-ultra-hero h1 span{color:#f1e8d8}
+.bf-ultra-hero .bf-hero-description{max-width:580px;font-size:clamp(14px,1.3vw,17px);line-height:1.85;color:#e4e6dc}
+.bf-ultra-hero .bf-launch-note{display:inline-block;border:1px solid #e5c89b61;background:#07140fbd;color:#f0e6d5;padding:9px 13px}
+.bf-ultra-hero .bf-premium-search{background:#0b1b17e8;border-color:#e8d2ac4d;backdrop-filter:blur(12px);max-width:580px}
+.bf-ultra-hero .bf-primary{background:linear-gradient(135deg,#e6c793,#b99256);color:#0c1812;border-radius:8px}
+.bf-ultra-hero .bf-secondary{border-color:#e4c38d88;color:#fff4e1;border-radius:8px}
+.bf-ultra-hero .bf-hero-trust{display:flex;gap:clamp(12px,2vw,30px);flex-wrap:wrap}
+.bf-ultra-command{min-width:0;position:relative;z-index:2;align-self:center}
+.bf-ultra-command .ops-hud-shell{padding:20px;border-color:#d8b77b65;border-radius:14px;background:linear-gradient(145deg,#071713e8,#0d241dd9);backdrop-filter:blur(16px);box-shadow:0 30px 80px #0008}
+.bf-ultra-command .ops-hud-content{grid-template-columns:1fr}
+.bf-ultra-command .ops-hud-map{max-width:340px}
+.bf-ultra-command .ops-hud-map svg{max-height:235px}
+.bf-ultra-command .ops-hud-panels{grid-template-columns:repeat(2,minmax(0,1fr))}
+.bf-ultra-command .ops-hud-panel{padding:11px;min-width:0}
+.bf-ultra-command .ops-hud-panel strong{font-size:clamp(11px,1.15vw,15px)}
+.bf-ultra-command .ops-hud-panel:last-child{grid-column:1/-1}
+.bf-ultra-command .ops-hud{color:#e9c995}
+.bf-ultra-hero .bf-ultra-categories{position:relative;z-index:2;width:min(1480px,calc(100% - clamp(32px,5vw,90px)));padding-top:12px;padding-bottom:45px}
+.bf-ultra-categories .bf-section-heading{align-items:end}
+.bf-ultra-categories .bf-section-heading h2{color:#f7f0e6;font-size:clamp(23px,2.8vw,38px)}
+.bf-ultra-categories .bf-kicker,.bf-ultra-categories .bf-inline-link{color:#e6c48c}
+.bf-ultra-categories .bf-section-intro{color:#e4e4d8}
+.bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.bf-ultra-categories .bf-category-card{min-height:260px;border-color:#c6ad7a65;border-radius:11px;padding:17px}
+.bf-ultra-categories .bf-category-title{font-size:clamp(14px,1.25vw,19px)}
+.bf-ultra-categories .bf-category-desc{font-size:11px}
+.bf-ultra-hero .bf-hero-credit{width:min(1480px,calc(100% - clamp(32px,5vw,90px)));border-color:#e0c2913b}
+@media(max-width:1100px){.bf-ultra-hero .bf-hero-grid{grid-template-columns:1fr;min-height:0;padding-top:100px}.bf-ultra-command{max-width:740px;width:100%;margin:auto}.bf-ultra-command .ops-hud-content{grid-template-columns:1fr 1fr}.bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:640px){.bf-ultra-hero .bf-hero-grid{padding-top:88px;padding-bottom:20px}.bf-ultra-hero h1{font-size:clamp(2.75rem,11.3vw,4.4rem)}.bf-ultra-command .ops-hud-content{grid-template-columns:1fr}.bf-ultra-command .ops-hud-map svg{max-height:200px}.bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-ultra-categories .bf-category-card{min-height:225px}.bf-ultra-categories .bf-section-heading{align-items:start;flex-direction:column}.bf-ultra-hero .bf-hero-trust{font-size:11px}}
+@media(max-width:370px){.bf-ultra-categories .bf-category-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.bf-ultra-hero *{scroll-behavior:auto!important}}
+.ops-focus-mode .bf-ultra-hero .bf-living-landscape *{animation-play-state:paused!important}
+
+/* Phase 1 refinement: compact command panel and resilient small-screen layout. */
+.bf-ultra-hero .bf-ultra-command .ops-hud-shell{width:100%;max-width:none}
+.bf-ultra-hero .bf-ultra-command .ops-hud-map{width:100%}
+.bf-ultra-hero .bf-ultra-command .ops-hud-panels{grid-template-columns:repeat(2,minmax(0,1fr))}
+.bf-ultra-hero .bf-ultra-command .ops-hud-panel:last-child{grid-column:1/-1}
+.bf-ultra-hero .bf-ultra-command .ops-hud-top{font-size:9px}
+.bf-ultra-hero .bf-ultra-command .ops-hud-ticker{gap:8px}
+.bf-ultra-hero .bf-ultra-command .ops-hud-ticker p{font-size:12px}
+.bf-ultra-hero .bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media(max-width:1100px){.bf-ultra-hero .bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:640px){.bf-ultra-hero .bf-ultra-categories .bf-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-ultra-hero .bf-ultra-command .ops-hud-panels{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-ultra-hero .bf-ultra-command .ops-hud-content{grid-template-columns:1fr}.bf-ultra-hero .bf-ultra-command .ops-hud-panel strong{font-size:12px}}
+@media(max-width:370px){.bf-ultra-hero .bf-ultra-categories .bf-category-grid{grid-template-columns:1fr}}
+
+/* Keep foreground readable as the atmosphere moves behind it. */
+.bf-ultra-hero .bf-hero-copy{filter:drop-shadow(0 2px 10px #0006)}
+.bf-ultra-hero .bf-hero-actions .button:focus-visible,.bf-ultra-hero .bf-premium-search button:focus-visible,.bf-ultra-hero .bf-ultra-categories a:focus-visible{outline:3px solid #f5d9a4;outline-offset:4px}
+.bf-ultra-hero .bf-ultra-command .ops-hud-panel{background:#091a16e8}
+@media(prefers-contrast:more){.bf-ultra-hero::before{background:linear-gradient(90deg,#06120ff2,#06120fca)}.bf-ultra-hero .bf-hero-description,.bf-ultra-hero .bf-ultra-categories .bf-section-intro{color:#fff}}
+
+/* Quality presets: only decorative work changes, never content or navigation. */
+html[data-ops-quality="balanced"] .bf-cloud-bank-near{display:none}
+html[data-ops-quality="balanced"] .bf-valley-mist{opacity:.3}
+html[data-ops-quality="essential"] .bf-living-landscape *{animation:none!important;transition:none!important}
+html[data-ops-quality="essential"] .bf-living-landscape :is(.bf-cloud-bank,.bf-valley-mist,.bf-sunset-wash,.bf-solar-glow,.bf-nightfall){display:none!important}
+html[data-ops-quality="essential"] .bf-landscape-photo{transform:none!important}
+html[data-ops-quality="essential"] .ops-mission-module,html[data-ops-quality="essential"] .ops-mission-module:hover{transform:none!important;transition:none!important;will-change:auto}
+html[data-ops-quality="essential"] .ops-mission-module .bf-category-media{transform:none!important;transition:none!important}
+html[data-ops-quality="essential"] .ops-module-scan,html[data-ops-quality="essential"] .ops-route-scan{display:none!important}
+html[data-ops-quality="essential"] .ops-hud-map,html[data-ops-quality="essential"] .ops-hud-panels{transform:none!important;transition:none!important}
+html[data-ops-quality="essential"] .ops-pulse,html[data-ops-quality="essential"] .ops-hud-ticker p{animation:none!important}
+@media(prefers-reduced-motion:reduce){.bf-living-landscape *,.ops-pulse,.ops-hud-ticker p{animation:none!important}}

@@ -1,0 +1,317 @@
+{
+  "captured_at": "2026-10-21T21:55:47.269Z",
+  "target": {
+    "project_id": "long-paper-36480042",
+    "branch_id": "br-jolly-waterfall-b7v4zwy5",
+    "database_name": "brasil_force_test"
+  },
+  "source_commit": "7c4d177737560e20c2b01ce76c2afec9d3b9ab58",
+  "migration_sha256": "0a56ed857e50a3b42fc441e3023af80a9365924452e9c347f6168e1d3affce6e",
+  "passed_groups": [
+    "anonymous RPC denied",
+    "buyer forged metadata, moderator and AAL1 denied",
+    "suspended account and revoked session denied",
+    "OAuth user/session binding, single use and expiry",
+    "consent, revision, audit, no restart and 30-day expiry",
+    "approval required, immutable draft, claim once, uncertain not retried",
+    "24-hour approval expiry",
+    "opt-out cancels pending mail and suppresses duplicate addresses",
+    "60/hour database read quota",
+    "RLS hides all administrative data from buyer"
+  ],
+  "catalog": {
+    "tables": 6,
+    "all_rls": true,
+    "indexes": [
+      {
+        "name": "bf_supplier_events_pkey",
+        "ready": true,
+        "valid": true
+      },
+      {
+        "name": "bf_supplier_events_supplier_idx",
+        "ready": true,
+        "valid": true
+      },
+      {
+        "name": "bf_supplier_mail_pkey",
+        "ready": true,
+        "valid": true
+      },
+      {
+        "name": "bf_supplier_mail_supplier",
+        "ready": true,
+        "valid": true
+      },
+      {
+        "name": "bf_supplier_prospects_pkey",
+        "ready": true,
+        "valid": true
+      },
+      {
+        "name": "bf_supplier_prospects_stage_idx",
+        "ready": true,
+        "valid": true
+      },
+      {
+        "name": "bf_zoho_connection_pkey",
+        "ready": true,
+        "valid": true
+      },
+      {
+        "name": "bf_zoho_states_pkey",
+        "ready": true,
+        "valid": true
+      },
+      {
+        "name": "zoho_read_usage_pkey",
+        "ready": true,
+        "valid": true
+      }
+    ],
+    "database": "brasil_force_test",
+    "policies": [
+      {
+        "name": "bf_supplier_events_admin_insert",
+        "check": "((actor_id = auth.uid()) AND (EXISTS ( SELECT 1\n   FROM bf_accounts a\n  WHERE ((a.id = auth.uid()) AND (a.role = ANY (ARRAY['admin'::bf_account_role, 'superadmin'::bf_account_role])) AND (a.status = 'active'::bf_account_status)))) AND ((auth.jwt() ->> 'aal'::text) = 'aal2'::text))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "bf_supplier_events",
+        "using": null,
+        "command": "INSERT"
+      },
+      {
+        "name": "bf_supplier_events_admin_read",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "table": "bf_supplier_events",
+        "using": "brasil_force_private.is_admin()",
+        "command": "SELECT"
+      },
+      {
+        "name": "bf_supplier_mail_read",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "table": "bf_supplier_mail",
+        "using": "brasil_force_private.is_admin()",
+        "command": "SELECT"
+      },
+      {
+        "name": "bf_supplier_admin_insert",
+        "check": "((created_by = auth.uid()) AND (EXISTS ( SELECT 1\n   FROM bf_accounts a\n  WHERE ((a.id = auth.uid()) AND (a.role = ANY (ARRAY['admin'::bf_account_role, 'superadmin'::bf_account_role])) AND (a.status = 'active'::bf_account_status)))) AND ((auth.jwt() ->> 'aal'::text) = 'aal2'::text))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "bf_supplier_prospects",
+        "using": null,
+        "command": "INSERT"
+      },
+      {
+        "name": "bf_supplier_admin_read",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "table": "bf_supplier_prospects",
+        "using": "brasil_force_private.is_admin()",
+        "command": "SELECT"
+      },
+      {
+        "name": "bf_supplier_admin_update",
+        "check": "((EXISTS ( SELECT 1\n   FROM bf_accounts a\n  WHERE ((a.id = auth.uid()) AND (a.role = ANY (ARRAY['admin'::bf_account_role, 'superadmin'::bf_account_role])) AND (a.status = 'active'::bf_account_status)))) AND ((auth.jwt() ->> 'aal'::text) = 'aal2'::text))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "bf_supplier_prospects",
+        "using": "((EXISTS ( SELECT 1\n   FROM bf_accounts a\n  WHERE ((a.id = auth.uid()) AND (a.role = ANY (ARRAY['admin'::bf_account_role, 'superadmin'::bf_account_role])) AND (a.status = 'active'::bf_account_status)))) AND ((auth.jwt() ->> 'aal'::text) = 'aal2'::text))",
+        "command": "UPDATE"
+      },
+      {
+        "name": "bf_zoho_connection_read",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "table": "bf_zoho_connection",
+        "using": "brasil_force_private.is_admin()",
+        "command": "SELECT"
+      }
+    ],
+    "rpc_count": 18,
+    "constraints": [
+      {
+        "name": "activation_only_active",
+        "validated": true,
+        "definition": "CHECK (((activated_at IS NULL) OR (stage = ANY (ARRAY['catalog_active'::text, 'cancelled'::text, 'expired'::text]))))"
+      },
+      {
+        "name": "bf_supplier_events_actor_id_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (actor_id) REFERENCES auth.users(id)"
+      },
+      {
+        "name": "bf_supplier_events_event_type_check",
+        "validated": true,
+        "definition": "CHECK ((event_type = ANY (ARRAY['created'::text, 'stage_changed'::text, 'note_added'::text, 'contact_logged'::text, 'consent_recorded'::text, 'activated'::text, 'cancelled'::text, 'opted_out'::text])))"
+      },
+      {
+        "name": "bf_supplier_events_pkey",
+        "validated": true,
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "bf_supplier_events_supplier_id_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (supplier_id) REFERENCES bf_supplier_prospects(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "bf_supplier_mail_approved_by_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (approved_by) REFERENCES auth.users(id)"
+      },
+      {
+        "name": "bf_supplier_mail_body_check",
+        "validated": true,
+        "definition": "CHECK (((length(body) >= 1) AND (length(body) <= 10000)))"
+      },
+      {
+        "name": "bf_supplier_mail_claimed_by_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (claimed_by) REFERENCES auth.users(id)"
+      },
+      {
+        "name": "bf_supplier_mail_created_by_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (created_by) REFERENCES auth.users(id)"
+      },
+      {
+        "name": "bf_supplier_mail_pkey",
+        "validated": true,
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "bf_supplier_mail_status_check",
+        "validated": true,
+        "definition": "CHECK ((status = ANY (ARRAY['draft'::text, 'approved'::text, 'sending'::text, 'sent'::text, 'uncertain'::text, 'cancelled'::text])))"
+      },
+      {
+        "name": "bf_supplier_mail_subject_check",
+        "validated": true,
+        "definition": "CHECK ((((length(subject) >= 1) AND (length(subject) <= 200)) AND (subject !~ '[\\r\\n]'::text)))"
+      },
+      {
+        "name": "bf_supplier_mail_supplier_id_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (supplier_id) REFERENCES bf_supplier_prospects(id)"
+      },
+      {
+        "name": "bf_supplier_prospects_category_check",
+        "validated": true,
+        "definition": "CHECK (((char_length(category) >= 2) AND (char_length(category) <= 100)))"
+      },
+      {
+        "name": "bf_supplier_prospects_company_name_check",
+        "validated": true,
+        "definition": "CHECK (((char_length(company_name) >= 2) AND (char_length(company_name) <= 180)))"
+      },
+      {
+        "name": "bf_supplier_prospects_created_by_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (created_by) REFERENCES auth.users(id)"
+      },
+      {
+        "name": "bf_supplier_prospects_pkey",
+        "validated": true,
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "bf_supplier_prospects_stage_check",
+        "validated": true,
+        "definition": "CHECK ((stage = ANY (ARRAY['identified'::text, 'contact_pending'::text, 'contacted'::text, 'interested'::text, 'consented'::text, 'catalog_active'::text, 'declined'::text, 'cancelled'::text, 'expired'::text])))"
+      },
+      {
+        "name": "bf_zoho_connection_account_id_check",
+        "validated": true,
+        "definition": "CHECK ((account_id ~ '^[0-9]{1,30}$'::text))"
+      },
+      {
+        "name": "bf_zoho_connection_ciphertext_check",
+        "validated": true,
+        "definition": "CHECK (((ciphertext ~~ 'v1.%'::text) AND (length(ciphertext) < 20000)))"
+      },
+      {
+        "name": "bf_zoho_connection_connected_by_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (connected_by) REFERENCES auth.users(id)"
+      },
+      {
+        "name": "bf_zoho_connection_id_check",
+        "validated": true,
+        "definition": "CHECK ((id = 'corporate'::text))"
+      },
+      {
+        "name": "bf_zoho_connection_mailbox_check",
+        "validated": true,
+        "definition": "CHECK ((mailbox = 'contato@brasilforce.com.br'::text))"
+      },
+      {
+        "name": "bf_zoho_connection_pkey",
+        "validated": true,
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "bf_zoho_connection_region_check",
+        "validated": true,
+        "definition": "CHECK ((region = ANY (ARRAY['us'::text, 'eu'::text, 'in'::text, 'au'::text])))"
+      },
+      {
+        "name": "bf_zoho_states_pkey",
+        "validated": true,
+        "definition": "PRIMARY KEY (state_hash)"
+      },
+      {
+        "name": "bf_zoho_states_state_hash_check",
+        "validated": true,
+        "definition": "CHECK ((state_hash ~ '^[a-f0-9]{64}$'::text))"
+      },
+      {
+        "name": "bf_zoho_states_user_id_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id)"
+      },
+      {
+        "name": "consent_before_activation",
+        "validated": true,
+        "definition": "CHECK (((activated_at IS NULL) OR ((consent_at IS NOT NULL) AND (consent_at <= activated_at))))"
+      },
+      {
+        "name": "zoho_read_usage_pkey",
+        "validated": true,
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "name": "zoho_read_usage_user_id_fkey",
+        "validated": true,
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id)"
+      }
+    ],
+    "invoker_view": true,
+    "rpc_permissions": true,
+    "empty_after_tests": true,
+    "fixed_search_paths": true,
+    "no_direct_application_writes": true,
+    "definer_private_invoker_public": true
+  },
+  "local_validation": {
+    "tests": 102,
+    "pass": 102,
+    "fail": 0,
+    "typecheck": "passed"
+  },
+  "scope": "SQL authentication simulated; no provider OAuth or actual Supabase services tested"
+}
