@@ -11,6 +11,7 @@ export function HeroLandscape() {
   const [paused, setPaused] = useState(false);
   const [visible, setVisible] = useState(false);
   const [activeTab, setActiveTab] = useState(true);
+  const [focused, setFocused] = useState(false);
 
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -20,6 +21,10 @@ export function HeroLandscape() {
     syncVisibility();
     preference.addEventListener("change", syncPreference);
     document.addEventListener("visibilitychange", syncVisibility);
+    const syncFocus = () => setFocused(document.documentElement.classList.contains("ops-focus-mode"));
+    syncFocus();
+    const focusObserver = new MutationObserver(syncFocus);
+    focusObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     const observer = new IntersectionObserver(([entry]) =>
       setVisible(entry.isIntersecting),
     );
@@ -28,10 +33,11 @@ export function HeroLandscape() {
       preference.removeEventListener("change", syncPreference);
       document.removeEventListener("visibilitychange", syncVisibility);
       observer.disconnect();
+      focusObserver.disconnect();
     };
   }, []);
 
-  const playing = !reduced && !paused && visible && activeTab;
+  const playing = !reduced && !paused && !focused && visible && activeTab;
   return (
     <>
       <div
