@@ -6,6 +6,7 @@ import "./immersive.css";
 import "./operations-tokens.css";
 import "./operations-hero.css";
 import "./mission-modules.css";
+import "./assistant-terminal.css";
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-manrope" });
 export const dynamic = "force-dynamic";

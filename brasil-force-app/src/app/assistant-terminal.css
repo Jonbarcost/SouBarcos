@@ -1,0 +1,33 @@
+/* Phase 4: visual-only terminal skin; assistant state, authentication and API untouched. */
+.ops-terminal{--ops-terminal-bg:#101714;--ops-terminal-pane:#1b2520;--ops-terminal-ink:#f3f0e8;--ops-terminal-muted:#c3cabb;--ops-terminal-signal:#f28b35;background:var(--ops-terminal-bg);color:var(--ops-terminal-ink);border:1px solid #f28b3566;border-radius:18px;box-shadow:0 18px 45px #0003;overflow:hidden}
+.ops-terminal-bar{display:flex;align-items:center;gap:12px;justify-content:space-between;background:#1b2520;color:#e9e1d1;border-bottom:1px solid #f28b353d;margin:-30px -30px 22px;padding:12px 18px;font:11px var(--ops-font-hud);letter-spacing:.08em}
+.ops-terminal-dots{display:flex;gap:5px}.ops-terminal-dots i{width:8px;height:8px;border-radius:50%;background:#f28b35}.ops-terminal-dots i:nth-child(2){background:#d9bb7e}.ops-terminal-dots i:nth-child(3){background:#66876d}
+.ops-terminal h2,.ops-terminal h3{color:var(--ops-terminal-ink);font-family:var(--ops-font-display)}.ops-terminal p,.ops-terminal small,.ops-terminal label{color:var(--ops-terminal-muted)}
+.ops-terminal .assistant-conversation-bar{border:1px solid #f28b353a;border-radius:9px;background:#1b2520;color:#f3f0e8}
+.ops-terminal .assistant-conversation-bar span{color:#f3f0e8}
+.ops-terminal .assistant-conversation-bar button{color:#f3f0e8}
+.ops-terminal [role="log"]{background:#101714;color:#f3f0e8}
+.ops-terminal .assistant-welcome{background:#101714}
+.ops-terminal .assistant-message{background:#1b2520;border:1px solid #e9e1d125;border-radius:10px;color:#f3f0e8}
+.ops-terminal .assistant-message p,.ops-terminal .assistant-welcome p{color:#d9dfd5}
+.ops-terminal .assistant-speaker{color:#f28b35;font:11px var(--ops-font-hud);letter-spacing:.05em}
+.ops-terminal .assistant-suggestions{display:flex;gap:9px;flex-wrap:wrap}
+.ops-terminal .assistant-suggestions button{background:#293c30;border:1px solid #f28b3570;color:#f3f0e8;border-radius:30px;padding:9px 13px;font:12px var(--ops-font-hud);min-height:40px}
+.ops-terminal .assistant-suggestions button:hover,.ops-terminal .assistant-suggestions button:focus-visible{background:#3d523f;border-color:#f28b35}
+.ops-terminal form.search-form{background:#1b2520;border:1px solid #e9e1d12e;border-radius:10px;padding:12px}
+.ops-terminal form.search-form textarea{background:#101714;color:#f3f0e8;border:1px solid #a8b9a25c}
+.ops-terminal form.search-form textarea::placeholder{color:#a9b8a9}
+.ops-terminal form.search-form button{background:#f28b35;color:#101714;border-color:#f28b35}
+.ops-terminal .assistant-message a,.ops-terminal .assistant-actions a{color:#ffbd79}
+.ops-terminal .assistant-products article{background:#1b2520;border-color:#e9e1d12b}
+.ops-terminal-prompt{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font:12px var(--ops-font-hud);color:#f3f0e8;margin:0 0 18px}
+.ops-terminal-prompt>span:first-child{color:#f28b35}
+.ops-typewriter{display:inline-block;overflow:hidden;white-space:nowrap;width:18ch;max-width:100%;animation:ops-type 1.3s steps(18,end) both}
+.ops-cursor{color:#f28b35;animation:ops-blink .9s steps(1,end) infinite}
+@keyframes ops-type{from{width:0}to{width:18ch}}
+@keyframes ops-blink{50%{opacity:0}}
+@media(max-width:640px){.ops-terminal-bar{margin:-22px -22px 18px;font-size:9px;padding:10px}.ops-terminal{border-radius:12px}}
+@media(prefers-reduced-motion:reduce){.ops-typewriter,.ops-cursor{animation:none!important}}
+/* Floating chat uses the same component, retaining its existing docking and viewport logic. */
+.bf-floating-body .ops-terminal-bar{margin:0 0 10px;border-radius:7px;padding:8px;font-size:9px}
+.bf-floating-body .ops-terminal{background:#101714!important;padding:8px!important;color:#f3f0e8!important}
