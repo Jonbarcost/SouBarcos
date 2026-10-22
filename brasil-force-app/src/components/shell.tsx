@@ -3,7 +3,6 @@ import { ArrowUpRight, Sparkles, UserRound } from "lucide-react";
 import { Brand } from "./brand";
 import { FloatingAssistant } from "./floating-assistant";
 
-const aiEnabled = process.env.BF_AI_ENABLED === "true";
 
 export function Header() {
   return (
@@ -12,7 +11,7 @@ export function Header() {
         <Brand />
         <nav aria-label="Navegação principal">
           <Link href="/catalogo">Catálogo</Link>
-          {aiEnabled && <Link className="bf-nav-ai" href="/assistente"><Sparkles size={15} aria-hidden="true" /> Assistente IA</Link>}
+          <Link className="bf-nav-ai" href="/assistente"><Sparkles size={15} aria-hidden="true" /> Assistente IA</Link>
           <Link href="/vender">Como vender</Link>
           <Link href="/ajuda">Ajuda</Link>
         </nav>
@@ -26,7 +25,6 @@ export function Header() {
 }
 
 export function AssistantDock() {
-  if (!aiEnabled) return null;
   return <FloatingAssistant />;
 }
 

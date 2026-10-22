@@ -1,0 +1,32 @@
+/* Immersive visual layer: CSS-only, progressive, no tracking or heavy animation libraries. */
+.bf-hero{isolation:isolate;min-height:680px;background:radial-gradient(circle at 80% 24%,#327a60 0%,transparent 38%),linear-gradient(120deg,#07150f 0%,#143529 54%,#071e17 100%)}
+.bf-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(5,18,13,.83),rgba(5,18,13,.12)),url("/images/hero/mission-landscape.svg") center 47%/cover no-repeat;opacity:.2;mix-blend-mode:screen}
+.bf-hero-grid{min-height:680px}
+.bf-hero h1{font-size:clamp(3.4rem,6vw,6.5rem);text-wrap:balance}
+.bf-hero h1 span{background:linear-gradient(110deg,#f7e8c1,#c5a96a,#fff4d9);background-clip:text;-webkit-background-clip:text;color:transparent}
+.bf-eyebrow{border:1px solid rgba(234,207,147,.25);border-radius:100px;padding:10px 16px;background:rgba(255,255,255,.055);backdrop-filter:blur(12px)}
+.bf-hero-art{transform:perspective(900px) rotateY(-7deg);box-shadow:0 40px 100px #0007,0 0 70px #d6c48b13;transition:transform .65s cubic-bezier(.2,.7,.2,1),box-shadow .65s}
+.bf-hero-art:hover{transform:perspective(900px) rotateY(0) translateY(-9px);box-shadow:0 50px 100px #0009,0 0 90px #d6c48b25}
+.bf-art-rings{animation:bf-orbit 28s linear infinite}
+.bf-art-shield{animation:bf-float 6s ease-in-out infinite}
+.bf-premium-search{box-shadow:0 18px 55px #0004;border:1px solid #ffffff32;backdrop-filter:blur(14px)}
+.bf-category-card{overflow:hidden;isolation:isolate;transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s,border-color .4s}
+.bf-category-card:hover{transform:translateY(-9px);box-shadow:0 28px 60px #10291c24;border-color:#c8ae77}
+.bf-category-media{transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .7s}
+.bf-category-card:hover .bf-category-media{transform:scale(1.09);filter:saturate(1.15)}
+.bf-category-link{transition:transform .3s}
+.bf-category-card:hover .bf-category-link{transform:translate(3px,-3px)}
+.bf-assistant-panel{position:relative;overflow:hidden;isolation:isolate}
+.bf-assistant-panel::before{content:"";position:absolute;inset:-80%;pointer-events:none;z-index:-1;background:conic-gradient(from 0deg,transparent 0 62%,#d5b67e14 70%,transparent 77%);animation:bf-orbit 24s linear infinite}
+.bf-assistant-symbol{filter:drop-shadow(0 0 18px #c3b77b80)}
+.bf-global-art svg{animation:bf-float 8s ease-in-out infinite}
+.bf-section-heading h2,.bf-global-copy h2,.bf-seller-section h2{letter-spacing:-.055em;text-wrap:balance}
+@keyframes bf-orbit{to{transform:rotate(360deg)}}
+@keyframes bf-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@media(max-width:900px){.bf-hero,.bf-hero-grid{min-height:auto}.bf-hero-art{transform:none}.bf-hero h1{font-size:clamp(2.7rem,9vw,4.7rem)}}
+@media(prefers-reduced-motion:reduce){.bf-art-rings,.bf-art-shield,.bf-assistant-panel::before,.bf-global-art svg{animation:none!important}.bf-hero-art,.bf-category-card,.bf-category-media,.bf-category-link{transition:none!important}.bf-hero-art:hover,.bf-category-card:hover,.bf-category-card:hover .bf-category-media{transform:none!important}}
+
+/* Keep photography/illustration visible while preserving legibility. */
+.bf-hero::after{opacity:.42;background-position:center 42%;background-size:cover}
+.bf-hero-copy{text-shadow:0 2px 20px rgba(0,0,0,.1)}
+@media(max-width:640px){.bf-hero::after{opacity:.23;background-position:65% center}.bf-hero-art{box-shadow:none}}
