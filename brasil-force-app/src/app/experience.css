@@ -620,3 +620,23 @@ html[data-bf-fx="on"] [data-reveal].is-visible {
     animation: none;
   }
 }
+
+/* Category photos: graded toward the forest/gold palette so text stays legible. */
+.bf-category-media {
+  background-position: center;
+  opacity: 1;
+  filter: saturate(0.85) contrast(1.06) brightness(0.88);
+}
+.bf-category-card:is(:hover, :focus-visible) .bf-category-media {
+  opacity: 1;
+  filter: saturate(1) contrast(1.06) brightness(0.95);
+}
+.bf-category-card::before {
+  background: linear-gradient(
+    0deg,
+    #08160fF2 0%,
+    #0b1f16b8 38%,
+    #0f2a1d33 72%,
+    transparent 100%
+  );
+}
