@@ -1,5 +1,10 @@
 import { PageTitle } from "@/components/shell";
 import Link from "next/link";
+import { ActionForm } from "@/components/action-form";
+import { CaptchaField } from "@/components/captcha-field";
+import { captchaSiteKey } from "@/lib/captcha";
+import { contactTopics } from "@/lib/email-templates";
+import { sendContact } from "./actions";
 export default function Help() {
   return (
     <div className="container page narrow">
@@ -34,17 +39,42 @@ export default function Help() {
           <p>{a}</p>
         </details>
       ))}
-      <section className="panel" aria-labelledby="support-email">
+      <section className="panel bf-contact" aria-labelledby="support-email">
         <h2 id="support-email">Fale com o Brasil Force</h2>
         <p>
-          Dúvidas, parcerias ou interesse em vender? Entre em contato com nossa equipe pelo e-mail corporativo.
+          Dúvidas, parcerias ou interesse em vender? Envie sua mensagem: ela chega à nossa equipe em{" "}
+          <a className="text-link" href="mailto:contato@brasilforce.com.br">contato@brasilforce.com.br</a>{" "}
+          e você recebe a confirmação por e-mail.
         </p>
-        <p>
-          <a className="button button-primary" href="mailto:contato@brasilforce.com.br?subject=Contato%20Brasil%20Force">
-            contato@brasilforce.com.br
-          </a>
-        </p>
-        <p>O link abre o aplicativo de e-mail do seu dispositivo. Não envia mensagens diretamente por esta página.</p>
+        <ActionForm action={sendContact} label="Enviar mensagem">
+          <div className="bf-contact-grid">
+            <label>
+              Nome
+              <input name="name" required minLength={2} maxLength={80} autoComplete="name" />
+            </label>
+            <label>
+              E-mail
+              <input name="email" type="email" required maxLength={254} autoComplete="email" />
+            </label>
+          </div>
+          <label>
+            Assunto
+            <select name="topic" required defaultValue="duvida">
+              {Object.entries(contactTopics).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Mensagem
+            <textarea name="message" required minLength={10} maxLength={2000} rows={5} />
+          </label>
+          <label className="bf-honeypot" aria-hidden="true">
+            Site
+            <input name="website" tabIndex={-1} autoComplete="off" />
+          </label>
+          <CaptchaField siteKey={captchaSiteKey()} />
+        </ActionForm>
       </section>
       <p>
         Consulte também nossas{" "}

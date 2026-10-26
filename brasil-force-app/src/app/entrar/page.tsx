@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { AuthPage } from "@/components/auth-page";
 import { ActionForm } from "@/components/action-form";
+import { CaptchaField } from "@/components/captcha-field";
+import { captchaSiteKey } from "@/lib/captcha";
 import { PasswordVisibilityInput } from "@/components/password-visibility-input";
 import { authConfigured } from "@/lib/config";
 import { login } from "@/app/auth/actions";
@@ -46,6 +48,7 @@ export default async function Login({
         <Link className="text-link" href="/recuperar-senha">
           Esqueci minha senha
         </Link>
+        <CaptchaField siteKey={captchaSiteKey()} />
       </ActionForm>
       {authConfigured() &&
         ["google", "apple"]

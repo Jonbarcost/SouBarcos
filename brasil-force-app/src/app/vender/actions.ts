@@ -1,5 +1,8 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { sendAll } from "@/lib/mailer";
+import { sellerApplicationEmails } from "@/lib/email-templates";
 import { requireUser } from "@/lib/auth";
 import type { Result } from "@/components/action-form";
 import { z } from "zod";
@@ -28,11 +31,15 @@ export async function applySeller(_: Result, form: FormData): Promise<Result> {
       message: "Você já possui uma solicitação. Consulte o status abaixo.",
     };
   if (error) return { message: "Não foi possível enviar a solicitação." };
+  if (user.email) {
+    const to = user.email;
+    after(() => sendAll(sellerApplicationEmails(to, parsed.data.display_name, parsed.data.person_type)));
+  }
   revalidatePath("/vender");
   return {
     ok: true,
     message:
-      "Solicitação registrada. A habilitação depende de análise documental e aprovação. A venda ainda não está liberada.",
+      "Solicitação registrada! Enviamos a confirmação para o seu e-mail. A habilitação depende de análise documental e aprovação; a venda ainda não está liberada.",
   };
 }
 

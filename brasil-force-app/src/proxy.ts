@@ -6,7 +6,7 @@ import { supabaseConnectSources } from "@/lib/content-security";
 export async function proxy(request: NextRequest) {
   const nonce = randomBytes(16).toString("base64");
   const dev = process.env.NODE_ENV !== "production";
-  const csp = `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${dev ? "'unsafe-eval'" : ""}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' ${supabaseConnectSources(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NODE_ENV)} ${dev ? "ws://localhost:* ws://127.0.0.1:*" : ""}; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`;
+  const csp = `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com ${dev ? "'unsafe-eval'" : ""}; frame-src https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' ${supabaseConnectSources(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NODE_ENV)} ${dev ? "ws://localhost:* ws://127.0.0.1:*" : ""}; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`;
   const headers = new Headers(request.headers);
   headers.set("x-nonce", nonce);
   headers.set("Content-Security-Policy", csp);

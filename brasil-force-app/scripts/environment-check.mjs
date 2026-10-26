@@ -101,6 +101,17 @@ export function checkEnvironment(env, deployed = false) {
     )
       errors.push("Frete de produção exige habilitação explícita.");
   } else pending.push("Cotação de frete desativada.");
+  const smtp = ["SMTP_HOST", "SMTP_USER", "SMTP_PASSWORD"];
+  const smtpSet = smtp.filter((name) => env[name]?.trim());
+  if (smtpSet.length && smtpSet.length < smtp.length)
+    errors.push(`SMTP incompleto: configure ${smtp.join(", ")}.`);
+  if (env.SMTP_PORT && !["465", "587"].includes(env.SMTP_PORT))
+    errors.push("SMTP_PORT: use 465 (SSL) ou 587 (STARTTLS).");
+  if (!smtpSet.length) pending.push("E-mails do site (boas-vindas, vendedor, contato) desativados: SMTP ausente.");
+  if (!!env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() !== !!env.TURNSTILE_SECRET_KEY?.trim())
+    errors.push("Captcha: configure NEXT_PUBLIC_TURNSTILE_SITE_KEY e TURNSTILE_SECRET_KEY juntos.");
+  if (env.AUTH_REGISTRATION_ENABLED === "true" && !env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim())
+    pending.push("Cadastro aberto sem captcha: configure o Turnstile.");
   if (env.AUTH_REGISTRATION_ENABLED !== "true")
     pending.push("Cadastro público desativado.");
   pending.push(

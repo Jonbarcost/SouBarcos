@@ -6,6 +6,7 @@ import { authConfigured, siteUrl, registrationEnabled } from "@/lib/config";
 import { emailSchema, passwordSchema, profileSchema } from "@/lib/validation";
 import { requireUser } from "@/lib/auth";
 import type { Result } from "@/components/action-form";
+import { captchaMissing, captchaToken } from "@/lib/captcha";
 const unavailable = {
   message:
     "Cadastro e login aguardam a configuração do serviço de autenticação.",
@@ -16,10 +17,13 @@ export async function login(_: Result, form: FormData): Promise<Result> {
   const password = form.get("password");
   if (!email.success || typeof password !== "string" || password.length > 128)
     return { message: "Confira o e-mail e a senha." };
+  const captcha = captchaToken(form);
+  if (captcha === undefined) return captchaMissing;
   const db = await serverClient();
   const { error } = await db.auth.signInWithPassword({
     email: email.data,
     password,
+    options: captcha ? { captchaToken: captcha } : undefined,
   });
   if (error)
     return {
@@ -38,6 +42,7 @@ export async function signup(_: Result, form: FormData): Promise<Result> {
   const email = emailSchema.safeParse(form.get("email"));
   const password = passwordSchema.safeParse(form.get("password"));
   const name = profileSchema.shape.display_name.safeParse(form.get("name"));
+  const intent = form.get("intent") === "seller" ? "seller" : "buyer";
   if (
     !email.success ||
     !password.success ||
@@ -48,13 +53,17 @@ export async function signup(_: Result, form: FormData): Promise<Result> {
       message:
         "Informe nome, e-mail válido, senha com 12 a 128 caracteres e aceite os termos.",
     };
+  const captcha = captchaToken(form);
+  if (captcha === undefined) return captchaMissing;
+  const next = intent === "seller" ? "/vender" : "/conta";
   const db = await serverClient();
   const { error } = await db.auth.signUp({
     email: email.data,
     password: password.data,
     options: {
-      emailRedirectTo: siteUrl() + "/auth/callback",
-      data: { display_name: name.data },
+      emailRedirectTo: `${siteUrl()}/auth/callback?welcome=1&next=${encodeURIComponent(next)}`,
+      data: { display_name: name.data, intent },
+      captchaToken: captcha ?? undefined,
     },
   });
   if (error)
@@ -65,16 +74,19 @@ export async function signup(_: Result, form: FormData): Promise<Result> {
   return {
     ok: true,
     message:
-      "Se o cadastro puder ser realizado, você receberá um e-mail de confirmação. Confira também o spam.",
+      "Quase lá! Se o cadastro puder ser realizado, você receberá em instantes um e-mail de contato@brasilforce.com.br com o link de confirmação. Confira também o spam.",
   };
 }
 export async function recover(_: Result, form: FormData): Promise<Result> {
   if (!registrationEnabled()) return unavailable;
   const email = emailSchema.safeParse(form.get("email"));
   if (!email.success) return { message: "Informe um e-mail válido." };
+  const captcha = captchaToken(form);
+  if (captcha === undefined) return captchaMissing;
   const db = await serverClient();
   await db.auth.resetPasswordForEmail(email.data, {
     redirectTo: siteUrl() + "/auth/callback?next=/redefinir-senha",
+    captchaToken: captcha ?? undefined,
   });
   return {
     ok: true,

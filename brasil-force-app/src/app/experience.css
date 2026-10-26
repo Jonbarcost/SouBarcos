@@ -819,3 +819,98 @@ html {
   font-weight: 700;
   color: #3f7856;
 }
+
+/* ---------- Sign-up intent, captcha and contact form ---------- */
+.bf-intent {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 6px;
+  padding: 0;
+  border: 0;
+}
+.bf-intent legend {
+  grid-column: 1 / -1;
+  margin-bottom: 10px;
+  font-weight: 800;
+  font-size: 14px;
+}
+.bf-intent-option {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.bf-intent-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.bf-intent-option span {
+  display: grid;
+  gap: 4px;
+  height: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid #d9d4c3;
+  border-radius: 14px;
+  background: #fffdf7;
+  color: #173b2d;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+.bf-intent-option svg {
+  color: #3f7856;
+}
+.bf-intent-option strong {
+  font-size: 15px;
+}
+.bf-intent-option small {
+  color: #5d6e62;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.bf-intent-option:hover span {
+  border-color: #c9b07a;
+}
+.bf-intent-option input:checked + span {
+  border-color: #1a5940;
+  background: linear-gradient(160deg, #f4f8f1, #fffdf7);
+  box-shadow:
+    0 0 0 3px #1a594022,
+    0 10px 24px #10291c14;
+}
+.bf-intent-option input:focus-visible + span {
+  outline: 3px solid #aa7d2e;
+  outline-offset: 3px;
+}
+.bf-captcha {
+  min-height: 65px;
+  margin: 4px 0 2px;
+}
+.bf-captcha small {
+  display: block;
+  color: #8a3b2b;
+  margin-top: 6px;
+}
+.bf-contact .form {
+  margin-top: 18px;
+}
+.bf-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.bf-honeypot {
+  position: absolute !important;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+@media (max-width: 560px) {
+  .bf-intent,
+  .bf-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}

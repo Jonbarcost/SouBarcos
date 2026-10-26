@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { ShoppingBag, Store } from "lucide-react";
 import { AuthPage } from "@/components/auth-page";
 import { ActionForm } from "@/components/action-form";
+import { CaptchaField } from "@/components/captcha-field";
+import { captchaSiteKey } from "@/lib/captcha";
 import { signup } from "@/app/auth/actions";
 import { registrationEnabled } from "@/lib/config";
 export default function Signup() {
@@ -14,6 +17,25 @@ export default function Signup() {
         label="Criar minha conta"
         disabled={!registrationEnabled()}
       >
+        <fieldset className="bf-intent">
+          <legend>O que você quer fazer na Brasil Force?</legend>
+          <label className="bf-intent-option">
+            <input type="radio" name="intent" value="buyer" defaultChecked />
+            <span>
+              <ShoppingBag size={22} aria-hidden="true" />
+              <strong>Quero comprar</strong>
+              <small>Explorar e acompanhar a abertura do catálogo.</small>
+            </span>
+          </label>
+          <label className="bf-intent-option">
+            <input type="radio" name="intent" value="seller" />
+            <span>
+              <Store size={22} aria-hidden="true" />
+              <strong>Quero vender</strong>
+              <small>Criar a conta e solicitar habilitação.</small>
+            </span>
+          </label>
+        </fieldset>
         <label>
           Nome de exibição
           <input
@@ -53,6 +75,7 @@ export default function Signup() {
             <Link href="/privacidade">política de privacidade</Link>.
           </span>
         </label>
+        <CaptchaField siteKey={captchaSiteKey()} />
       </ActionForm>
       <p className="form-foot">
         Já possui conta? <Link href="/entrar">Entrar</Link>
