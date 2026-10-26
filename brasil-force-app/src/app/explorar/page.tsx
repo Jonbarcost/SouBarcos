@@ -3,7 +3,7 @@ import { PageTitle, Notice } from "@/components/shell";
 import { discoverySectors } from "@/lib/national-catalog";
 
 export const metadata = {
-  title: "Explore equipamentos e atividades | Brasil Force",
+  title: "Explore equipamentos e atividades",
   description: "Conheça os segmentos do Brasil Force e consulte os anúncios realmente cadastrados.",
 };
 

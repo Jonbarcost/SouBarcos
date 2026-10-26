@@ -640,3 +640,182 @@ html[data-bf-fx="on"] [data-reveal].is-visible {
     transparent 100%
   );
 }
+
+/* ---------- Site-wide finishing details ---------- */
+::selection {
+  background: #e9c98a;
+  color: #0f1f19;
+}
+html {
+  scroll-padding-top: 110px;
+}
+.header nav a[aria-current="page"] {
+  color: var(--bf-gold-bright);
+}
+
+/* Inner page titles: a small cinematic band instead of plain text. */
+.page-title {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  margin-bottom: 40px;
+  padding: clamp(28px, 4vw, 48px);
+  border: 1px solid #e9c98a2e;
+  border-bottom: 1px solid #e9c98a2e;
+  border-radius: 24px;
+  color: #f6efe0;
+  background:
+    radial-gradient(ellipse at 100% 0%, #3a6b4c 0%, transparent 55%),
+    linear-gradient(150deg, #173b2d, #0d211a 70%);
+  box-shadow: 0 24px 60px #0f241a24;
+}
+.page-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.18;
+  background: url("/images/hero/serra-dawn.webp") right 40% / cover no-repeat;
+  mask-image: linear-gradient(90deg, transparent 25%, #000);
+}
+.page-title > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--bf-gold);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.page-title > a::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+}
+.page-title > a:hover {
+  color: var(--bf-gold-bright);
+}
+.page-title h1 {
+  color: #fffaf0;
+  margin-block: 16px 12px;
+  text-wrap: balance;
+}
+.page-title p {
+  color: #c9d6cc;
+  margin: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-title {
+    animation: bf-rise 0.8s var(--bf-ease-out) both;
+  }
+}
+
+/* FAQ disclosures: cards with an animated plus/minus marker. */
+.page details {
+  margin-bottom: 12px;
+  padding: 0;
+  border: 1px solid #dcd8c9;
+  border-radius: 16px;
+  background: #fffdf7;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.page details:hover {
+  border-color: #c9b07a;
+}
+.page details[open] {
+  border-color: #c9b07a;
+  box-shadow: 0 14px 34px #10291c12;
+}
+.page summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 22px;
+  list-style: none;
+  font-weight: 800;
+  color: #173b2d;
+}
+.page summary::-webkit-details-marker {
+  display: none;
+}
+.page summary::after {
+  content: "";
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background:
+    linear-gradient(#173b2d, #173b2d) center / 11px 1.6px no-repeat,
+    linear-gradient(#173b2d, #173b2d) center / 1.6px 11px no-repeat,
+    #e9c98a40;
+  transition:
+    transform 0.35s var(--bf-ease-out),
+    background-color 0.25s ease;
+}
+.page details[open] summary::after {
+  transform: rotate(45deg);
+  background-color: #e9c98a;
+}
+.page details p {
+  margin: 0;
+  padding: 0 22px 22px;
+  color: #4f6155;
+  line-height: 1.7;
+}
+
+/* 404 */
+.bf-lost {
+  display: grid;
+  justify-items: start;
+  padding-block: clamp(60px, 10vw, 120px);
+  max-width: 760px;
+}
+.bf-lost-compass {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: 30px;
+  color: #3f7856;
+}
+.bf-lost-compass span {
+  font-size: clamp(90px, 16vw, 170px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #c9b07a;
+}
+.bf-lost-compass svg {
+  position: absolute;
+  animation: bf-compass 5s ease-in-out infinite;
+}
+.bf-lost h1 {
+  margin: 6px 0 12px;
+}
+.bf-lost p {
+  color: #4f6155;
+  font-size: 17px;
+  margin: 0 0 28px;
+}
+.bf-lost .actions {
+  align-items: center;
+}
+.bf-lost-secondary {
+  border: 1px solid #c9b07a;
+  color: #173b2d;
+}
+.bf-lost-secondary:hover {
+  background: #e9c98a26;
+}
+.bf-lost-help {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #3f7856;
+}

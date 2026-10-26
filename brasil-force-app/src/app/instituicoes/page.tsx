@@ -3,7 +3,7 @@ import { PageTitle, Notice } from "@/components/shell";
 import { brazilStates, verifiedInstitutions } from "@/lib/national-catalog";
 
 export const metadata = {
-  title: "Diretório de instituições | Brasil Force",
+  title: "Diretório de instituições",
   description: "Instituições verificadas em fontes oficiais, sem afirmar credenciamento ou compatibilidade de produtos.",
 };
 

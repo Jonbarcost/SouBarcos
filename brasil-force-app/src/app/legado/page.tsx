@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, BookOpen, Flag, GraduationCap, Shield, Compass } from "lucide-react";
 import type { Metadata } from "next";
-export const metadata: Metadata = {title:"Legado e tradições | Brasil Force",description:"Um espaço editorial sobre símbolos, tradições e formação das instituições militares e de segurança brasileiras."};
+export const metadata: Metadata = {title:"Legado e tradições",description:"Um espaço editorial sobre símbolos, tradições e formação das instituições militares e de segurança brasileiras."};
 const temas=[
 {title:"Forças Armadas",subtitle:"Marinha, Exército e Aeronáutica",icon:Flag,body:"História, bandeiras e tradições das três Forças, com referência a fontes institucionais.",href:"https://www.gov.br/defesa/pt-br"},
 {title:"Forças auxiliares",subtitle:"Polícias Militares e Corpos de Bombeiros",icon:Shield,body:"Conheça a diversidade de histórias e tradições estaduais. Conteúdos dependem de pesquisa e verificação por instituição.",href:"https://www.gov.br/pt-br"},

@@ -4,7 +4,7 @@ import { AssistantChat } from "@/components/assistant-chat";
 import { authConfigured } from "@/lib/config";
 
 export const metadata = {
-  title: "Assistente inteligente | Brasil Force",
+  title: "Assistente inteligente",
   description:
     "Converse sobre equipamentos, vendas e sua jornada no Brasil Force.",
 };

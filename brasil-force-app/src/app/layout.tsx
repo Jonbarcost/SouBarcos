@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Manrope } from "next/font/google";
 import { Header, Footer, AssistantDock } from "@/components/shell";
 import "./globals.css";
@@ -7,6 +7,7 @@ import "./experience.css";
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-manrope" });
 export const dynamic = "force-dynamic";
+export const viewport: Viewport = { themeColor: "#0f1f19" };
 export const metadata: Metadata = {
   title: {
     default: "Brasil Force — Sua missão. Seu equipamento.",

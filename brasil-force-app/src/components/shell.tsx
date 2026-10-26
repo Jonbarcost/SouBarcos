@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowUpRight, Sparkles, UserRound } from "lucide-react";
+import { ArrowUpRight, UserRound } from "lucide-react";
 import { Brand } from "./brand";
 import { FloatingAssistant } from "./floating-assistant";
+import { NavLinks } from "./nav-links";
 
 
 export function Header() {
@@ -9,12 +10,7 @@ export function Header() {
     <header className="header">
       <div className="container header-inner">
         <Brand />
-        <nav aria-label="Navegação principal">
-          <Link href="/catalogo">Catálogo</Link>
-          <Link className="bf-nav-ai" href="/assistente"><Sparkles size={15} aria-hidden="true" /> Assistente IA</Link>
-          <Link href="/vender">Como vender</Link>
-          <Link href="/ajuda">Ajuda</Link>
-        </nav>
+        <NavLinks />
         <Link className="account-link" href="/conta">
           <UserRound size={19} aria-hidden="true" />
           <span>Minha conta</span>
