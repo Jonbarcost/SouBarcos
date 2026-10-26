@@ -4,6 +4,7 @@ import { z } from "zod";
 import { authConfigured } from "@/lib/config";
 import { serverClient } from "@/lib/supabase/server";
 import { PageTitle, Notice } from "@/components/shell";
+import { AddToCart } from "@/components/add-to-cart";
 export default async function Product({
   params,
 }: {
@@ -54,9 +55,18 @@ export default async function Product({
           })}
         </strong>
         <p>Estoque informado: {data.stock}</p>
+        <AddToCart
+          product={{
+            id: data.id,
+            title: data.title,
+            priceCents: data.price_cents,
+            stock: data.stock,
+            category: data.category_slug,
+          }}
+        />
       </section>
       <Notice>
-        Compra e pagamento ainda indisponíveis. A aprovação do anúncio não
+        Você já pode montar seu carrinho; o pagamento será liberado na abertura. A aprovação do anúncio não
         comprova certificação ou credenciamento institucional.
       </Notice>
       <Link className="text-link" href="/assistente">

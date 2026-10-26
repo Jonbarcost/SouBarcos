@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AddToCart } from "@/components/add-to-cart";
 import { Search, PackageOpen } from "lucide-react";
 import { PageTitle, Notice } from "@/components/shell";
 import { authConfigured } from "@/lib/config";
@@ -27,13 +28,15 @@ export default async function Catalog({
     title: string;
     price_cents: number;
     condition: string;
+    stock: number;
+    category_slug: string;
   }[] = [];
   let failed = false;
   if (authConfigured()) {
     const db = await serverClient();
     let query = db
       .from("bf_public_listings")
-      .select("id,title,price_cents,condition")
+      .select("id,title,price_cents,condition,stock,category_slug")
       .gt("stock", 0)
       .limit(40);
     if (q) query = query.ilike("title", "%" + q.replace(/[%_\\]/g, "") + "%");
@@ -101,7 +104,16 @@ export default async function Catalog({
                   currency: "BRL",
                 }).format(p.price_cents / 100)}
               </strong>
-              <p>Compra ainda indisponível nesta fase.</p>
+              <AddToCart
+                compact
+                product={{
+                  id: p.id,
+                  title: p.title,
+                  priceCents: p.price_cents,
+                  stock: p.stock,
+                  category: p.category_slug,
+                }}
+              />
             </article>
           ))}
         </div>

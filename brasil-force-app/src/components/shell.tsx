@@ -3,6 +3,7 @@ import { ArrowUpRight, UserRound } from "lucide-react";
 import { Brand } from "./brand";
 import { FloatingAssistant } from "./floating-assistant";
 import { NavLinks } from "./nav-links";
+import { CartButton } from "./cart-button";
 
 
 export function Header() {
@@ -11,10 +12,13 @@ export function Header() {
       <div className="container header-inner">
         <Brand />
         <NavLinks />
-        <Link className="account-link" href="/conta">
-          <UserRound size={19} aria-hidden="true" />
-          <span>Minha conta</span>
-        </Link>
+        <div className="bf-header-actions">
+          <CartButton />
+          <Link className="account-link" href="/conta">
+            <UserRound size={19} aria-hidden="true" />
+            <span>Minha conta</span>
+          </Link>
+        </div>
       </div>
     </header>
   );

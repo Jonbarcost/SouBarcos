@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { HeroLandscape } from "@/components/hero-landscape";
 import { HomeExperience } from "@/components/home-experience";
+import { HeroHud } from "@/components/hero-hud";
+import { WorldRoutes } from "@/components/world-routes";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -211,8 +213,18 @@ export default function Home() {
               <span>BRASIL FORCE / ASSISTENTE</span>
               <Sparkles size={22} aria-hidden="true" />
             </div>
-            <div className="bf-mission-orbit" aria-hidden="true">
-              <Compass size={68} strokeWidth={1} />
+            <div className="bf-radar" aria-hidden="true">
+              <span className="bf-radar-sweep" />
+              <span className="bf-radar-blip" style={{ top: "28%", left: "64%" }} />
+              <span className="bf-radar-blip" style={{ top: "66%", left: "30%", animationDelay: "-1.6s" }} />
+              <span className="bf-radar-blip" style={{ top: "58%", left: "72%", animationDelay: "-2.7s" }} />
+              <b className="bf-radar-n">N</b>
+              <b className="bf-radar-e">L</b>
+              <b className="bf-radar-s">S</b>
+              <b className="bf-radar-w">O</b>
+              <span className="bf-radar-core">
+                <Compass size={30} strokeWidth={1.2} />
+              </span>
             </div>
             <h2>Uma boa jornada começa com a pergunta certa.</h2>
             <p>
@@ -228,10 +240,7 @@ export default function Home() {
             </span>
           </aside>
         </div>
-        <div className="container bf-hero-credit">
-          <span>BRASIL É O NOSSO PONTO DE PARTIDA.</span>
-          <span>Paisagem ilustrativa criada para Brasil Force</span>
-        </div>
+        <HeroHud />
       </section>
 
       <div className="bf-marquee" aria-hidden="true">
@@ -411,9 +420,8 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="bf-global-art" aria-hidden="true" data-reveal>
-          <Globe2 size={110} strokeWidth={0.8} />
-          <span>BR / GLOBAL SUPPLY</span>
+        <div className="bf-global-art" data-reveal>
+          <WorldRoutes />
         </div>
       </section>
       <section

@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Inter, JetBrains_Mono, Manrope } from "next/font/google";
 import { Header, Footer, AssistantDock } from "@/components/shell";
+import { CartProvider } from "@/components/cart-provider";
 import "./globals.css";
 import "./immersive.css";
 import "./experience.css";
+import "./tech.css";
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-manrope" });
+const mono = JetBrains_Mono({ subsets: ["latin"], display: "swap", variable: "--font-mono", weight: ["500", "700"] });
 export const dynamic = "force-dynamic";
 export const viewport: Viewport = { themeColor: "#0f1f19" };
 export const metadata: Metadata = {
@@ -23,8 +26,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${manrope.variable}`}>
+    <html lang="pt-BR" className={`${inter.variable} ${manrope.variable} ${mono.variable}`}>
       <body>
+        <CartProvider>
         <a className="skip" href="#conteudo">
           Pular para o conteúdo
         </a>
@@ -32,6 +36,7 @@ export default function RootLayout({
         <main id="conteudo">{children}</main>
         <AssistantDock />
         <Footer />
+        </CartProvider>
       </body>
     </html>
   );
