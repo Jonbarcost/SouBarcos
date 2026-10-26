@@ -914,3 +914,14 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+/* Headline sizing: each line must fit the copy column ("Seu equipamento."
+   wrapped at ~1600px with the old 6.4rem cap). */
+.bf-hero h1 {
+  font-size: clamp(2.6rem, 5.3vw, 5.5rem);
+}
+@media (min-width: 761px) {
+  .bf-line {
+    white-space: nowrap;
+  }
+}
