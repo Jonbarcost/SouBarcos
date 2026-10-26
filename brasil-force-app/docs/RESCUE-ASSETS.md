@@ -23,3 +23,11 @@ the repository.
 | `public/images/categories/colecionismo.webp` | https://unsplash.com/photos/jk8_Fz2cKqc | @irrabagon |
 | `public/images/categories/outdoor.webp` | https://unsplash.com/photos/TecP6VNueY0 | @tomjur |
 | `public/images/categories/servicos.webp` | https://unsplash.com/photos/X875kk9-rnU | @lifetime_leather |
+
+# World map
+
+`public/images/world-dots.svg` was generated once on 2026-10-26 with the
+[dotted-map](https://www.npmjs.com/package/dotted-map) package (MIT, land data
+bundled with the package) and written as a single path (~42 KB). Route pins in
+`src/components/world-routes.tsx` use that map's 136 × 65 coordinate space.
+The package is not a runtime dependency.
