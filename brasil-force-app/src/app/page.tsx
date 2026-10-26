@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeroLandscape } from "@/components/hero-landscape";
+import { HomeExperience } from "@/components/home-experience";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -8,6 +9,7 @@ import {
   Landmark,
   Compass,
   Fingerprint,
+  Flag,
   Mountain,
   ScanSearch,
   Search,
@@ -65,6 +67,42 @@ const categories = [
   },
 ] as const;
 
+const marquee = [
+  "Vestuário",
+  "Equipamentos de campo",
+  "Acessórios",
+  "Colecionismo",
+  "Outdoor & aventura",
+  "Serviços",
+  "Anúncios moderados",
+  "Vendedores analisados",
+  "Feito no Brasil",
+] as const;
+
+const pillars = [
+  {
+    title: "Anúncios moderados",
+    text: "Cada anúncio passa por revisão antes de ir ao ar, seguindo as regras de produtos permitidos.",
+    icon: ShieldCheck,
+    href: "/regras",
+    cta: "Ver produtos permitidos",
+  },
+  {
+    title: "Vendedores analisados",
+    text: "Fabricantes, lojistas e profissionais passam por avaliação antes de vender na plataforma.",
+    icon: Fingerprint,
+    href: "/vender",
+    cta: "Como funciona para vender",
+  },
+  {
+    title: "Identidade brasileira",
+    text: "Um marketplace nascido aqui, para quem serve, explora, coleciona e vive novas jornadas.",
+    icon: Flag,
+    href: null,
+    cta: null,
+  },
+] as const;
+
 function BrazilFlag({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -89,8 +127,12 @@ function BrazilFlag({ className = "" }: { className?: string }) {
 export default function Home() {
   return (
     <>
+      <HomeExperience />
       <section className="bf-hero" aria-labelledby="hero-title">
         <HeroLandscape />
+        <div className="bf-intro-curtain" aria-hidden="true">
+          <span />
+        </div>
         <div className="container bf-hero-grid">
           <div className="bf-hero-copy">
             <div className="bf-eyebrow">
@@ -98,9 +140,12 @@ export default function Home() {
               BRASIL
             </div>
             <h1 id="hero-title">
-              Sua missão.
-              <br />
-              <span>Seu equipamento.</span>
+              <span className="bf-line">
+                <span>Sua missão.</span>
+              </span>{" "}
+              <span className="bf-line bf-line-gold">
+                <span>Seu equipamento.</span>
+              </span>
             </h1>
             <p className="bf-hero-description">
               O marketplace de quem serve, explora e vai além. Equipamentos
@@ -159,6 +204,7 @@ export default function Home() {
           </div>
           <aside
             className="bf-mission-card"
+            data-tilt
             aria-label="Seu assistente na jornada"
           >
             <div className="bf-mission-top">
@@ -188,11 +234,23 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="bf-marquee" aria-hidden="true">
+        <div className="bf-marquee-track">
+          {[0, 1].map((copy) => (
+            <div className="bf-marquee-group" key={copy}>
+              {marquee.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <section
         className="container bf-section"
         aria-labelledby="categories-title"
       >
-        <div className="bf-section-heading">
+        <div className="bf-section-heading" data-reveal>
           <div>
             <span className="bf-kicker">ENCONTRE O QUE PROCURA</span>
             <h2 id="categories-title">Cada missão tem seu equipamento.</h2>
@@ -201,7 +259,7 @@ export default function Home() {
             Ver catálogo completo <ArrowUpRight size={18} aria-hidden="true" />
           </Link>
         </div>
-        <p className="bf-section-intro">
+        <p className="bf-section-intro" data-reveal>
           Seis universos. Encontre o seu. As imagens são ilustrativas das
           categorias, não ofertas de produtos.
         </p>
@@ -211,7 +269,11 @@ export default function Home() {
               className="bf-category-card"
               href={"/catalogo?categoria=" + slug}
               key={slug}
+              data-tilt
+              data-reveal
+              style={{ "--i": index } as React.CSSProperties}
             >
+              <span className="bf-card-glow" aria-hidden="true" />
               <span
                 className="bf-category-media"
                 style={{ backgroundImage: `url("${image}")` }}
@@ -231,8 +293,44 @@ export default function Home() {
         </div>
       </section>
 
+      <section
+        className="container bf-pillars"
+        aria-labelledby="pillars-title"
+      >
+        <div className="bf-pillars-heading" data-reveal>
+          <span className="bf-kicker">POR QUE BRASIL FORCE</span>
+          <h2 id="pillars-title">
+            Feito com rigor. <span>Pensado para quem vai além.</span>
+          </h2>
+        </div>
+        <div className="bf-pillars-grid">
+          {pillars.map(({ title, text, icon: Icon, href, cta }, index) => (
+            <article
+              className="bf-pillar"
+              key={title}
+              data-tilt
+              data-reveal
+              style={{ "--i": index } as React.CSSProperties}
+            >
+              <span className="bf-card-glow" aria-hidden="true" />
+              <span className="bf-pillar-index">0{index + 1}</span>
+              <span className="bf-pillar-icon">
+                <Icon size={26} strokeWidth={1.6} aria-hidden="true" />
+              </span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+              {href && (
+                <Link href={href} className="bf-pillar-link">
+                  {cta} <ArrowUpRight size={16} aria-hidden="true" />
+                </Link>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="bf-legacy-teaser" aria-labelledby="legacy-title">
-        <div className="container bf-legacy-teaser-inner">
+        <div className="container bf-legacy-teaser-inner" data-reveal>
           <div>
             <span className="bf-kicker bf-kicker-light">
               ALÉM DO EQUIPAMENTO
@@ -259,7 +357,7 @@ export default function Home() {
         className="container bf-assistant-section"
         aria-labelledby="assistant-title"
       >
-        <div className="bf-assistant-panel">
+        <div className="bf-assistant-panel" data-reveal>
           <div className="bf-assistant-symbol">
             <Sparkles size={36} strokeWidth={1.6} aria-hidden="true" />
           </div>
@@ -293,7 +391,7 @@ export default function Home() {
         className="container bf-global-section"
         aria-labelledby="global-title"
       >
-        <div className="bf-global-copy">
+        <div className="bf-global-copy" data-reveal>
           <span className="bf-kicker">BRASIL FORCE GLOBAL</span>
           <h2 id="global-title">Do Brasil para novas conexões.</h2>
           <p>
@@ -313,7 +411,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="bf-global-art" aria-hidden="true">
+        <div className="bf-global-art" aria-hidden="true" data-reveal>
           <Globe2 size={110} strokeWidth={0.8} />
           <span>BR / GLOBAL SUPPLY</span>
         </div>
@@ -321,6 +419,7 @@ export default function Home() {
       <section
         className="container bf-seller-section"
         aria-labelledby="seller-title"
+        data-reveal
       >
         <div>
           <span className="bf-kicker">FAÇA PARTE</span>
