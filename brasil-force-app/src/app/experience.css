@@ -221,7 +221,7 @@
   background: radial-gradient(ellipse at 50% 55%, #12291f 0%, #07110d 70%);
   animation: bf-curtain 1.25s cubic-bezier(0.7, 0, 0.2, 1) 0.35s both;
 }
-.bf-intro-curtain span {
+.bf-intro-curtain > .bf-intro-horizon {
   position: absolute;
   left: 50%;
   top: 55%;

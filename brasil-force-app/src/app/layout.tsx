@@ -2,10 +2,12 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Manrope } from "next/font/google";
 import { Header, Footer, AssistantDock } from "@/components/shell";
 import { CartProvider } from "@/components/cart-provider";
+import { SoundLayer } from "@/components/sound-layer";
 import "./globals.css";
 import "./immersive.css";
 import "./experience.css";
 import "./tech.css";
+import "./cinema.css";
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-manrope" });
 const mono = JetBrains_Mono({ subsets: ["latin"], display: "swap", variable: "--font-mono", weight: ["500", "700"] });
@@ -35,6 +37,7 @@ export default function RootLayout({
         <Header />
         <main id="conteudo">{children}</main>
         <AssistantDock />
+        <SoundLayer />
         <Footer />
         </CartProvider>
       </body>

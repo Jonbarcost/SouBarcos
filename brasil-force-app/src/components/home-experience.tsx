@@ -1,17 +1,40 @@
 "use client";
 
 import { useEffect } from "react";
+import { play } from "@/lib/sound";
 
 /**
  * Home page motion layer. Reveals sections on scroll, drives the hero parallax
  * and the card spotlight/tilt through CSS variables. Content is fully visible
  * without JavaScript or with reduced motion; nothing here changes behaviour.
  */
+// Development runs effects twice on mount: reuse the answer for a moment so
+// that double run agrees, while later visits in the same session count as seen.
+let introCheck: { seen: boolean; at: number } | null = null;
+/** Full mission-start opening once per browser session; quick entry after that. */
+function introAlreadySeen() {
+  const now = Date.now();
+  if (introCheck && now - introCheck.at < 1000) return introCheck.seen;
+  let seen = true;
+  try {
+    seen = window.sessionStorage.getItem("bf-intro") === "1";
+    window.sessionStorage.setItem("bf-intro", "1");
+  } catch {
+    seen = introCheck !== null;
+  }
+  introCheck = { seen, at: now };
+  return seen;
+}
+
 export function HomeExperience() {
   useEffect(() => {
     const root = document.documentElement;
+    const seen = introAlreadySeen();
+    if (seen) root.classList.add("bf-intro-seen");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
+    // Impact lands with the shockwave (curtain delay 0.35s + --bf-intro 0.95s).
+    const impact = seen ? 0 : window.setTimeout(() => play("impact", 0.8), 1300);
 
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const header = document.querySelector<HTMLElement>(".header");
@@ -98,6 +121,7 @@ export function HomeExperience() {
     }
 
     return () => {
+      window.clearTimeout(impact);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       window.removeEventListener("pointermove", onPointer);

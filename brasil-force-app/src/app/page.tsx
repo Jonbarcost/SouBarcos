@@ -3,6 +3,8 @@ import { HeroLandscape } from "@/components/hero-landscape";
 import { HomeExperience } from "@/components/home-experience";
 import { HeroHud } from "@/components/hero-hud";
 import { WorldRoutes } from "@/components/world-routes";
+import { Embers } from "@/components/embers";
+import { Insignia, type Tier } from "@/components/insignia";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -105,6 +107,12 @@ const pillars = [
   },
 ] as const;
 
+const ranks: { tier: Tier; title: string; rule: string }[] = [
+  { tier: "bronze", title: "Recruta", rule: "Conta criada e e-mail confirmado." },
+  { tier: "prata", title: "Operador", rule: "Primeira compra concluída na plataforma." },
+  { tier: "ouro", title: "Comandante", rule: "Vendedor aprovado com anúncios ativos." },
+];
+
 function BrazilFlag({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -132,9 +140,17 @@ export default function Home() {
       <HomeExperience />
       <section className="bf-hero" aria-labelledby="hero-title">
         <HeroLandscape />
+        <Embers />
         <div className="bf-intro-curtain" aria-hidden="true">
-          <span />
+          <div className="bf-intro-terminal">
+            <span>BRASIL FORCE // CENTRO DE OPERAÇÕES</span>
+            <span>ESTABELECENDO LINK SEGURO<b>...</b></span>
+            <span>BASE: S 15°48′ · O 47°53′</span>
+            <span className="bf-intro-go">MISSÃO INICIADA</span>
+          </div>
+          <span className="bf-intro-horizon" />
         </div>
+        <span className="bf-shockwave" aria-hidden="true" />
         <div className="container bf-hero-grid">
           <div className="bf-hero-copy">
             <div className="bf-eyebrow">
@@ -335,6 +351,34 @@ export default function Home() {
               )}
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="bf-ranks" aria-labelledby="ranks-title">
+        <div className="container">
+          <div className="bf-ranks-heading" data-reveal>
+            <span className="bf-kicker bf-kicker-light">PATENTES BRASIL FORCE</span>
+            <h2 id="ranks-title">
+              Cada etapa da jornada <span>vale uma insígnia.</span>
+            </h2>
+            <p>
+              Insígnias exclusivas, criadas para a comunidade Brasil Force. Em breve elas aparecem no seu perfil
+              conforme você avança.
+            </p>
+          </div>
+          <div className="bf-ranks-grid">
+            {ranks.map(({ tier, title, rule }, index) => (
+              <article className="bf-rank" key={tier} data-reveal style={{ "--i": index } as React.CSSProperties}>
+                <div className="bf-rank-medal">
+                  <Insignia tier={tier} />
+                  <span className="bf-rank-shine" aria-hidden="true" />
+                </div>
+                <span className="bf-rank-tier">{tier.toUpperCase()}</span>
+                <h3>{title}</h3>
+                <p>{rule}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

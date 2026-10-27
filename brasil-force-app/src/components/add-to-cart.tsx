@@ -5,6 +5,7 @@ import { Check, Minus, Plus, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { MAX_QTY } from "@/lib/cart";
 import { useCart } from "./cart-provider";
+import { emitSfx } from "@/lib/sound";
 
 type Product = { id: string; title: string; priceCents: number; stock: number; category?: string };
 
@@ -19,6 +20,7 @@ export function AddToCart({ product, compact = false }: { product: Product; comp
 
   const onAdd = () => {
     add(product, qty);
+    emitSfx("ping");
     setAdded(true);
     setQty(1);
     setTimeout(() => setAdded(false), 2200);
